@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", serif;
+  --color-nexa-red: #ef4136;
+  --color-bg: #ffffff;
+  --color-bg-dark: #1a1a1a;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+  --color-text-light: #999999;
+  --color-border: #e5e5e5;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+/* Tag pills - minimal */
+.tag-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  border: 1px solid #e5e5e5;
+  border-radius: 999px;
+  padding: 4px 12px;
+  letter-spacing: 0.01em;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-nexa-red);
+  color: #fff;
+}
+
+/* Nav underline reveal */
+.nav-link .nav-underline {
+  width: 0;
+  transition: width 350ms cubic-bezier(0.6, 0.05, 0.2, 1);
+}
+.nav-link:hover .nav-underline,
+.nav-link[data-active="true"] .nav-underline {
+  width: 100%;
+}
+
+/* Ping animation (for CTA dot) */
+@keyframes nexa-ping {
+  75%, 100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.animate-ping {
+  animation: nexa-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Hero — bold red background field with mouse-tracked spotlight */
+.hero-red {
+  position: relative;
+  background: #ef4136;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Base ambient gradient sheen on top of the red field */
+.hero-red::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 20% 0%,
+      rgba(255, 120, 80, 0.55) 0%,
+      rgba(239, 65, 54, 0) 60%
+    ),
+    radial-gradient(
+      ellipse 60% 80% at 100% 100%,
+      rgba(180, 20, 20, 0.6) 0%,
+      rgba(239, 65, 54, 0) 60%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+/* Mouse-tracked bright spotlight */
+.hero-spotlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-spotlight::before {
+  content: "";
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  left: var(--mx, 50%);
+  top: var(--my, 50%);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 230, 200, 0.65) 0%,
+    rgba(255, 150, 100, 0.4) 25%,
+    rgba(239, 65, 54, 0) 60%
+  );
+  filter: blur(20px);
+  mix-blend-mode: screen;
+  transition: left 500ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              top 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hero-spotlight::after {
+  content: "";
+  position: absolute;
+  width: 35vw;
+  height: 35vw;
+  max-width: 500px;
+  max-height: 500px;
+  left: calc(var(--mx, 50%) - 150px);
+  top: calc(var(--my, 50%) + 100px);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(140, 20, 30, 0.55) 0%,
+    rgba(140, 20, 30, 0.2) 35%,
+    rgba(239, 65, 54, 0) 65%
+  );
+  filter: blur(30px);
+  mix-blend-mode: multiply;
+  transition: left 800ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              top 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Hero word hover — colour shift on individual words */
+.hero-word {
+  display: inline-block;
+  transition: color 350ms ease, transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, color;
+}
+.hero-word:hover {
+  color: #1a1a1a;
+  transform: translateY(-4px);
+}
+.hero-word em {
+  font-style: italic;
+}
