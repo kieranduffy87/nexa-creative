@@ -8,8 +8,7 @@ const projects = [
     slug: "whatsexposed",
     title: "WhatsExposed",
     tags: ["Brand Strategy", "Naming", "Brand Identity", "Logo System", "Guidelines", "Web"],
-    image: "/projects/whatsexposed/landscape-light.svg",
-    imageBg: "#0a0a0a",
+    image: "/projects/whatsexposed/hero-laptop.webp",
     span: "md:col-span-7",
   },
   {

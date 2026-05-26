@@ -45,14 +45,11 @@ export default function ProjectPage() {
       {/* Hero image */}
       <section style={{ backgroundColor: project.heroBg }} className="pb-16 md:pb-24">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-          <div
-            className="aspect-[16/9] w-full flex items-center justify-center overflow-hidden"
-            style={{ backgroundColor: "#1a1a1a" }}
-          >
+          <div className="aspect-[16/9] w-full overflow-hidden bg-bg-dark">
             <img
               src={project.hero}
               alt={`${project.client} hero`}
-              className="w-3/4 max-w-[760px]"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
@@ -176,6 +173,64 @@ function Section({ section }) {
     );
   }
 
+  if (section.type === "image-cover") {
+    return (
+      <section style={{ backgroundColor: section.bg || "#f5f5f5" }} className="py-16 md:py-24">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="aspect-[16/9] w-full overflow-hidden bg-bg-dark"
+          >
+            <img
+              src={section.src}
+              alt={section.caption || ""}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+          {section.caption && (
+            <p className="text-white/50 text-xs font-medium tracking-[0.05em] mt-4">
+              {section.caption}
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  if (section.type === "video") {
+    return (
+      <section style={{ backgroundColor: section.bg || "#0a0a0a" }} className="py-16 md:py-24">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="aspect-[16/9] w-full overflow-hidden bg-bg-dark"
+          >
+            <video
+              src={section.src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+          {section.caption && (
+            <p className="text-white/50 text-xs font-medium tracking-[0.05em] mt-4">
+              {section.caption}
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   if (section.type === "image-grid") {
     return (
       <section style={{ backgroundColor: section.bg || "#f5f5f5" }} className="py-16 md:py-24">
@@ -196,6 +251,42 @@ function Section({ section }) {
                   <img src={item.src} alt={item.label} className="w-1/2 max-w-[320px]" />
                 </div>
                 <p className="text-xs font-medium tracking-[0.05em] uppercase text-text-muted">
+                  {item.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (section.type === "image-grid-cover") {
+    const isDark = section.bg && section.bg !== "#fff" && section.bg !== "#f5f5f5";
+    return (
+      <section style={{ backgroundColor: section.bg || "#f5f5f5" }} className="py-16 md:py-24">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+            {section.items.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <div className="aspect-[4/3] overflow-hidden mb-4 bg-bg-dark">
+                  <img
+                    src={item.src}
+                    alt={item.label}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <p
+                  className={`text-xs font-medium tracking-[0.05em] uppercase ${
+                    isDark ? "text-white/50" : "text-text-muted"
+                  }`}
+                >
                   {item.label}
                 </p>
               </motion.div>
