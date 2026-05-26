@@ -22,21 +22,21 @@ export default function ProjectPage() {
         <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16 z-10">
           <Link
             to="/work"
-            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/70 hover:text-white tracking-[0.12em] uppercase mb-12 transition-colors"
+            className="inline-flex items-center gap-1.5 text-[12px] font-medium text-text-muted hover:text-text tracking-[0.12em] uppercase mb-12 transition-colors"
           >
             <ArrowLeft size={14} />
             All Work
           </Link>
-          <p className="text-white/60 text-xs font-medium tracking-[0.12em] uppercase mb-6">
+          <p className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-6">
             {project.client}
           </p>
           <h1
             style={{ fontFamily: "var(--font-serif)" }}
-            className="text-[40px] sm:text-[56px] md:text-[80px] lg:text-[96px] font-normal text-white leading-[0.95] tracking-[-0.02em] mb-10 max-w-[1100px]"
+            className="text-[40px] sm:text-[56px] md:text-[80px] lg:text-[96px] font-normal text-text leading-[0.95] tracking-[-0.02em] mb-10 max-w-[1100px]"
           >
             {project.title}
           </h1>
-          <p className="text-white/75 text-base md:text-lg max-w-2xl leading-relaxed">
+          <p className="text-text text-base md:text-lg max-w-2xl leading-relaxed">
             {project.summary}
           </p>
         </div>
@@ -191,7 +191,7 @@ function Section({ section }) {
             />
           </motion.div>
           {section.caption && (
-            <p className="text-white/50 text-xs font-medium tracking-[0.05em] mt-4">
+            <p className="text-text-muted text-xs font-medium tracking-[0.05em] mt-4">
               {section.caption}
             </p>
           )}
@@ -222,7 +222,7 @@ function Section({ section }) {
             />
           </motion.div>
           {section.caption && (
-            <p className="text-white/50 text-xs font-medium tracking-[0.05em] mt-4">
+            <p className="text-text-muted text-xs font-medium tracking-[0.05em] mt-4">
               {section.caption}
             </p>
           )}
@@ -262,7 +262,7 @@ function Section({ section }) {
   }
 
   if (section.type === "image-grid-cover") {
-    const isDark = section.bg && section.bg !== "#fff" && section.bg !== "#f5f5f5";
+    const isDark = section.bg && section.bg !== "#fff" && section.bg !== "#ffffff" && section.bg !== "#f5f5f5";
     return (
       <section style={{ backgroundColor: section.bg || "#f5f5f5" }} className="py-16 md:py-24">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">

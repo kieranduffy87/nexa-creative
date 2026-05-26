@@ -1,3 +1,5 @@
+import { asset } from "../lib/asset";
+
 export const projects = {
   whatsexposed: {
     slug: "whatsexposed",
@@ -11,9 +13,9 @@ export const projects = {
     deliverables: ["Logo system", "Typography", "Colour", "Guidelines", "Web design"],
     team: ["Kieran Duffy", "Aoife Murphy", "Ciaran Walsh"],
     partners: ["WhatsExposed Founders"],
-    heroBg: "#0a0a0a",
+    heroBg: "#ffffff",
     accent: "#ef4136",
-    hero: "/projects/whatsexposed/hero-laptop.webp",
+    hero: asset("/projects/whatsexposed/hero-laptop.webp"),
     sections: [
       {
         type: "overview",
@@ -25,8 +27,8 @@ export const projects = {
       },
       {
         type: "image-cover",
-        src: "/projects/whatsexposed/presentation.webp",
-        bg: "#0a0a0a",
+        src: asset("/projects/whatsexposed/presentation.webp"),
+        bg: "#ffffff",
         caption: "Brand presentation — Your Brand, Our Expertise.",
       },
       {
@@ -40,16 +42,16 @@ export const projects = {
       },
       {
         type: "image-grid-cover",
-        bg: "#0a0a0a",
+        bg: "#ffffff",
         items: [
-          { src: "/projects/whatsexposed/mobile-portrait.webp", label: "Mobile · Securing your digital world" },
-          { src: "/projects/whatsexposed/mobile-menu.webp", label: "Mobile · Navigation" },
+          { src: asset("/projects/whatsexposed/mobile-portrait.webp"), label: "Mobile · Securing your digital world" },
+          { src: asset("/projects/whatsexposed/mobile-menu.webp"), label: "Mobile · Navigation" },
         ],
       },
       {
         type: "video",
-        src: "/projects/whatsexposed/animation.mp4",
-        bg: "#0a0a0a",
+        src: asset("/projects/whatsexposed/animation.mp4"),
+        bg: "#ffffff",
         caption: "Animated brand sequence.",
       },
       {
@@ -63,16 +65,16 @@ export const projects = {
       },
       {
         type: "image-cover",
-        src: "/projects/whatsexposed/tablet.webp",
-        bg: "#0a0a0a",
+        src: asset("/projects/whatsexposed/tablet.webp"),
+        bg: "#ffffff",
         caption: "Tablet — See what they have to say.",
       },
       {
         type: "image-grid-cover",
-        bg: "#0a0a0a",
+        bg: "#ffffff",
         items: [
-          { src: "/projects/whatsexposed/business-cards.webp", label: "Business cards" },
-          { src: "/projects/whatsexposed/stationery.webp", label: "Stationery system" },
+          { src: asset("/projects/whatsexposed/business-cards.webp"), label: "Business cards" },
+          { src: asset("/projects/whatsexposed/stationery.webp"), label: "Stationery system" },
         ],
       },
       {
@@ -85,22 +87,22 @@ export const projects = {
       },
       {
         type: "image-grid-cover",
-        bg: "#0a0a0a",
+        bg: "#ffffff",
         items: [
-          { src: "/projects/whatsexposed/rollup-banner.webp", label: "Roll-up banner · Don't know what's exposed" },
-          { src: "/projects/whatsexposed/rollup-banner-alt.webp", label: "Roll-up banner · We do" },
+          { src: asset("/projects/whatsexposed/rollup-banner.webp"), label: "Roll-up banner · Don't know what's exposed" },
+          { src: asset("/projects/whatsexposed/rollup-banner-alt.webp"), label: "Roll-up banner · We do" },
         ],
       },
       {
         type: "image-cover",
-        src: "/projects/whatsexposed/lanyard.webp",
-        bg: "#0a0a0a",
+        src: asset("/projects/whatsexposed/lanyard.webp"),
+        bg: "#ffffff",
         caption: "Event lanyard and access pass.",
       },
       {
         type: "image-cover",
-        src: "/projects/whatsexposed/brand-book.webp",
-        bg: "#0a0a0a",
+        src: asset("/projects/whatsexposed/brand-book.webp"),
+        bg: "#ffffff",
         caption: "Printed brand book.",
       },
       {
@@ -108,7 +110,7 @@ export const projects = {
         label: "Download",
         heading: "Want to see the full guidelines?",
         body: "We've published the full brand guidelines as a downloadable PDF — colour, typography, lockup geometry, and usage rules.",
-        href: "/projects/whatsexposed/brand-guides.pdf",
+        href: asset("/projects/whatsexposed/brand-guides.pdf"),
         cta: "Download brand guides",
       },
     ],

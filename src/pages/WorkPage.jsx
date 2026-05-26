@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "../components/PageHero";
+import { asset } from "../lib/asset";
 
 const projects = [
   {
     slug: "whatsexposed",
     title: "WhatsExposed",
     tags: ["Brand Strategy", "Naming", "Brand Identity", "Logo System", "Guidelines", "Web"],
-    image: "/projects/whatsexposed/hero-laptop.webp",
+    image: asset("/projects/whatsexposed/hero-laptop.webp"),
     span: "md:col-span-7",
   },
   {

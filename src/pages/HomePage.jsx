@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { BackgroundVideo } from "../components/BackgroundVideo";
+import { asset } from "../lib/asset";
 
 const workPreview = [
   {
     title: "WhatsExposed",
     tags: ["Brand Strategy", "Naming", "Brand Identity", "Logo System", "Guidelines", "Web"],
-    image: "/projects/whatsexposed/hero-laptop.webp",
+    image: asset("/projects/whatsexposed/hero-laptop.webp"),
     span: "md:col-span-7",
     href: "/work/whatsexposed",
   },
@@ -93,7 +94,7 @@ export default function HomePage() {
       >
         {/* Background video */}
         <video
-          src="/hero.mp4"
+          src={asset("/hero.mp4")}
           autoPlay
           muted
           loop
