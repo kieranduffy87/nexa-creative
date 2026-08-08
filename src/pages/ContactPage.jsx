@@ -87,8 +87,8 @@ export default function ContactPage() {
                     <p
                       className="text-2xl md:text-3xl text-text leading-tight"
                     >
-                      Mon — Fri<br />
-                      9am — 6pm
+                      Mon to Fri<br />
+                      9am to 6pm
                     </p>
                   </div>
                 </div>
@@ -177,9 +177,9 @@ export default function ContactPage() {
                       >
                         <option value="">Select budget</option>
                         <option value="under-2k">Under €2,000</option>
-                        <option value="2k-5k">€2,000 — €5,000</option>
-                        <option value="5k-10k">€5,000 — €10,000</option>
-                        <option value="10k-25k">€10,000 — €25,000</option>
+                        <option value="2k-5k">€2,000 to €5,000</option>
+                        <option value="5k-10k">€5,000 to €10,000</option>
+                        <option value="10k-25k">€10,000 to €25,000</option>
                         <option value="25k+">€25,000+</option>
                       </select>
                     </div>

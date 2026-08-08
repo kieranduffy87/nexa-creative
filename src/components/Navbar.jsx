@@ -29,7 +29,7 @@ export function Navbar() {
           <Link
             to="/"
             className="shrink-0 text-nexa-red transition-colors duration-300 hover:text-ink"
-            aria-label="Nexa Creative — home"
+            aria-label="Nexa Creative home"
           >
             <NexaLogo className="h-5 w-auto" />
           </Link>

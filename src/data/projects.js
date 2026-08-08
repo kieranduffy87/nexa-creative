@@ -2,6 +2,7 @@ import { asset } from "../lib/asset";
 
 const we = (f) => asset(`projects/whatsexposed/${f}`);
 const qi = (f) => asset(`projects/quinnit/${f}`);
+const gk = (f) => asset(`projects/gallagher/${f}`);
 
 export const projects = [
   {
@@ -20,7 +21,7 @@ export const projects = [
     heroPoster: we("we-overview.jpg"),
 
     summary:
-      "WhatsExposed is a cybersecurity company built on a simple promise: find what is exposed, then help fix it. We built the brand from the ground up — the mark and wordmark, the full identity toolkit and guidelines, the website, the campaign platform, and every piece of print, event and social material the company goes to market with.",
+      "WhatsExposed is a cybersecurity company built on a simple promise: find what is exposed, then help fix it. We built the brand from the ground up: the mark and wordmark, the full identity toolkit and guidelines, the website, the campaign platform, and every piece of print, event and social material the company goes to market with.",
 
     scope: [
       "Brand Strategy",
@@ -70,7 +71,7 @@ export const projects = [
         title: "A W that moves",
         body: [
           "The brandmark is a W built from flowing forms rather than drawn letters, because the subject is data in motion. It reads as a monogram at a glance and as a current when you look closer, which gives a security company something rare in the category: a mark that suggests movement instead of padlocks and shields.",
-          "The gradient carries the argument. Colour runs from alarm to calm across the mark, so the identity states the proposition before a single word is read — exposure resolved, threat turned into a secure environment.",
+          "The gradient carries the argument. Colour runs from alarm to calm across the mark, so the identity states the proposition before a single word is read. Exposure resolved, threat turned into a secure environment.",
         ],
       },
       {
@@ -86,7 +87,7 @@ export const projects = [
         title: "Built for the floor",
         body: [
           "Cybersecurity is sold in person, at expos and summits, so the brand had to survive a trade floor. We designed the event system around the same idea as the identity: one strong image, one plain sentence, no clutter.",
-          "The campaign line the stand leads with came from that principle — real-time findings, not PDFs — with the supporting line explaining that clients see criticals as they are discovered and start fixing before the engagement ends. It is a positioning argument compressed into a sentence a passer-by can read in three seconds, and it works at stage scale, on a billboard, and cropped into a social post.",
+          "The campaign line the stand leads with came from that principle: real-time findings, not PDFs. The supporting line explains that clients see criticals as they are discovered and start fixing before the engagement ends. It is a positioning argument compressed into a sentence a passer-by can read in three seconds, and it works at stage scale, on a billboard, and cropped into a social post.",
         ],
       },
       {
@@ -99,7 +100,7 @@ export const projects = [
         type: "text",
         title: "Print, stationery and the physical estate",
         body: [
-          "The identity extends into a full print estate: stationery, presentation folders, data sheets, posters, exhibition graphics and large-format outdoor. Each format uses the same three ingredients in different proportions — the gradient field, one portrait, and one line of plain speech.",
+          "The identity extends into a full print estate: stationery, presentation folders, data sheets, posters, exhibition graphics and large-format outdoor. Each format uses the same three ingredients in different proportions: the gradient field, one portrait, and one line of plain speech.",
           "Working across so many pieces is where a guideline earns its keep. Because construction, clearspace, colour roles and typography are all fixed, new collateral gets produced quickly and still looks like it came from the same company.",
         ],
       },
@@ -116,8 +117,8 @@ export const projects = [
         type: "text",
         title: "One brand, four lockups",
         body: [
-          "Security brands live in awkward spaces: a square avatar, a sponsor wall, an event backdrop, a partner footer. Rather than force one lockup everywhere, we built four — a core horizontal lockup for general use, a stacked version for square and small formats, a variant carrying the industry descriptor for moments when the logo appears with no supporting context, and a mono set for single-colour print.",
-          "Every variant is drawn on the same construction grid, with clearspace measured in multiples of the mark itself, so the system scales without anyone needing to redraw it. The guidelines set minimum sizes for screen and print, and show the misuse cases explicitly — that is where brands usually come apart once they leave the designer.",
+          "Security brands live in awkward spaces: a square avatar, a sponsor wall, an event backdrop, a partner footer. Rather than force one lockup everywhere, we built four. A core horizontal lockup for general use, a stacked version for square and small formats, a variant carrying the industry descriptor for moments when the logo appears with no supporting context, and a mono set for single-colour print.",
+          "Every variant is drawn on the same construction grid, with clearspace measured in multiples of the mark itself, so the system scales without anyone needing to redraw it. The guidelines set minimum sizes for screen and print, and show the misuse cases explicitly, because that is where brands usually come apart once they leave the designer.",
         ],
       },
       {
@@ -218,7 +219,7 @@ export const projects = [
       },
       {
         title: "Plain speech as a design constraint",
-        body: "The brand voice bans jargon, so the layouts had to make that easy to obey. Short headline slots, generous space and one image per message mean there is nowhere for a wall of acronyms to hide. The campaign line — real-time findings rather than PDFs — is the clearest test of it: a technical differentiator stated in a sentence a stranger can read from across a trade floor.",
+        body: "The brand voice bans jargon, so the layouts had to make that easy to obey. Short headline slots, generous space and one image per message mean there is nowhere for a wall of acronyms to hide. The campaign line, real-time findings rather than PDFs, is the clearest test of it: a technical differentiator stated in a sentence a stranger can read from across a trade floor.",
       },
     ],
 
@@ -253,7 +254,7 @@ export const projects = [
     heroPoster: qi("qi-3dlayers.jpg"),
 
     summary:
-      "Quinn IT is a technology and digital services company: managed IT, managed security, and compliance work for businesses that cannot afford downtime. We built the brand from the mark up — a geometric identity in vibrant blue that holds together across 3D, motion, vehicle livery and the uniform the engineers actually turn up in.",
+      "Quinn IT is a technology and digital services company: managed IT, managed security, and compliance work for businesses that cannot afford downtime. We built the brand from the mark up: a geometric identity in vibrant blue that holds together across 3D, motion, vehicle livery and the uniform the engineers actually turn up in.",
 
     scope: [
       "Brand Strategy",
@@ -287,7 +288,7 @@ export const projects = [
         title: "A mark you can turn",
         body: [
           "The mark is a Q built from interlocking planes rather than drawn as a letter. Read flat it is a monogram; read in three dimensions it becomes an object with depth, edges and a light source, which is what lets it live as a rotating 3D form without ever being redrawn.",
-          "Construction is geometric throughout. The mark and the wordmark are both set out on the same grid, so proportions, angles and optical spacing hold at any size — from a browser tab to the side of a van.",
+          "Construction is geometric throughout. The mark and the wordmark are both set out on the same grid, so proportions, angles and optical spacing hold at any size, from a browser tab to the side of a van.",
         ],
       },
       {
@@ -326,7 +327,7 @@ export const projects = [
         body: [
           "Because the mark was constructed as an object rather than a flat shape, it could be rendered as glass and turned in light. Refraction picks up the blue and throws the lime through it, so the animation demonstrates the brand's own palette rather than decorating with it.",
           "The same asset covers a lot of ground: a loading state, a screen-filling moment on a stand, a social sting, or the last frame of a video. One build, used everywhere motion is needed.",
-          "Pulled in close, the same forms stop reading as a logo and start reading as material — blue glass with lime caught in the bevels. That gives the brand an abstract layer it can use as background and art direction, drawn from its own geometry rather than a stock gradient.",
+          "Pulled in close, the same forms stop reading as a logo and start reading as material: blue glass with lime caught in the bevels. That gives the brand an abstract layer it can use as background and art direction, drawn from its own geometry rather than a stock gradient.",
         ],
       },
       {
@@ -392,7 +393,7 @@ export const projects = [
         body: [
           "The site opens on the 3D work rather than a stock header image, so the first thing a visitor sees is the brand's own geometry moving. The interface is kept dark throughout, which lets the blue carry the structure and leaves the lime free to mark the few things that matter: the enquiry button, an active state, a highlighted figure.",
           "Underneath that, the content is deliberately plain. Services are broken into named, scannable cards rather than paragraphs of jargon, photography shows real engineers in real server rooms, and the contact action stays pinned within reach on every screen. It reads the way the company describes itself: practical, and available when something breaks.",
-          "The layout holds together down to tablet and phone, where the mark crops in rather than shrinking away, and the same system carries onto social. Profile artwork uses the glass renders as the banner and the mark alone as the avatar, so the account is recognisable at the size people actually see it — a 40 pixel circle in a feed.",
+          "The layout holds together down to tablet and phone, where the mark crops in rather than shrinking away, and the same system carries onto social. Profile artwork uses the glass renders as the banner and the mark alone as the avatar, so the account is recognisable at the size people actually see it, a 40 pixel circle in a feed.",
         ],
       },
       {
@@ -460,12 +461,150 @@ export const projects = [
 
     principles: [
       { name: "Geometry", body: "planes, not drawn letters" },
-      { name: "Depth", body: "an object, rendered — never redrawn" },
+      { name: "Depth", body: "an object, rendered not redrawn" },
       { name: "Restraint", body: "one loud blue, one rationed accent" },
     ],
   },
-];
 
+  {
+    slug: "gallagher-kitchens",
+    name: "Gallagher Kitchens",
+    tagline: "Elegance uncovered",
+    year: "2020",
+    client: "Gallagher Kitchens",
+    sector: "Bespoke Joinery & Retail",
+    tags: ["Brand Identity", "Digital Design", "Signage"],
+    accent: "#12100e",
+
+    thumb: gk("gk-kitchen-1.jpg"),
+    heroVideo: gk("gk-hero.mp4"),
+    heroPoster: gk("gk-kitchen-1.jpg"),
+
+    summary:
+      "For over thirty-two years, family-run Gallagher Kitchens has designed and built bespoke kitchens and wardrobes from its Dublin showrooms. To grow beyond its local base, the company needed a new identity and a digital presence that could carry its craftsmanship to Leinster and beyond.",
+
+    scope: [
+      "Brand Identity",
+      "Web Design & Development",
+      "Vehicle & Building Signage",
+      "Digital Marketing",
+      "Print Collateral",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "image",
+        src: gk("gk-brand.jpg"),
+      },
+      {
+        type: "text",
+        title: "Tradition, contemporised",
+        body: [
+          "Research into why customers choose one kitchen maker over another shaped the direction: marry the company's history and expertise with a modern audience. We drew on the existing heraldic coat of arms and contemporised it, pairing the motif with a richer palette of black, gold and white for strength, tradition and contemporary elegance.",
+          "The result keeps everything the family had earned over three decades and drops nothing that still worked. The crest is recognisably the same company, drawn with a lighter hand.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: gk("gk-experience.jpg"),
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: gk("gk-kitchen-1.jpg") },
+          { kind: "image", src: gk("gk-kitchen-2.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "A more engaging website",
+        body: [
+          "We designed a responsive platform with a custom theme, using the new palette to separate content from calls to action and make the site effortless to read and use on any device.",
+          "Kitchens are bought slowly and visually, so the site is built the way people actually shop for them: large photography, room to compare, and an enquiry never more than a tap away.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: gk("gk-kitchen-3.jpg") },
+          { kind: "image", src: gk("gk-kitchen-4.jpg") },
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: gk("gk-vans.jpg"),
+      },
+      {
+        type: "text",
+        title: "Identity on the move",
+        body: [
+          "To embed the new look, we adapted the branding into eye-catching signage for the van fleet, building exteriors and showrooms: a comprehensive, uniform identity wherever the company appears.",
+          "For a business that fits kitchens across Leinster, the fleet does more advertising than any campaign. The client's verdict was that the work linked their tradition to the modern customer, and that they were busier than ever.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: gk("gk-stationery.jpg") },
+          { kind: "image", src: gk("gk-detail.jpg") },
+        ],
+      },
+    ],
+
+    process: [
+      {
+        title: "Research",
+        body: "Understanding why customers pick one kitchen maker over another, and what thirty-two years of reputation was already worth.",
+      },
+      {
+        title: "Identity",
+        body: "The existing heraldic crest redrawn for a modern audience, paired with black, gold and white.",
+      },
+      {
+        title: "Digital platform",
+        body: "A responsive custom theme built around large photography and an enquiry that is always within reach.",
+      },
+      {
+        title: "Applied estate",
+        body: "Vehicle livery, building and showroom signage, print collateral and digital marketing.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "Evolve the crest, do not replace it",
+        body: "The easy move was a clean sans-serif wordmark and a fresh start. But three decades of local reputation sat in that coat of arms, and throwing it away would have discarded the one thing a new competitor cannot buy. Contemporising it kept the equity and still read as a change.",
+      },
+      {
+        title: "Gold as structure, not decoration",
+        body: "Black and white carry the layouts and gold marks the moments that matter, so the palette signals quality without tipping into the gloss the category usually reaches for. Used sparingly, it reads as craft rather than luxury pastiche.",
+      },
+      {
+        title: "Treat the fleet as the main channel",
+        body: "A kitchen company fits kitchens in the neighbourhoods it wants more work in, so the vans are seen far more often than any advert. Designing the livery as a primary application rather than an afterthought turned the existing fleet into the campaign.",
+      },
+    ],
+
+    palette: [
+      { name: "Black", hex: "#12100e" },
+      { name: "Gold", hex: "#b08d3f" },
+      { name: "Warm White", hex: "#f5f1ea" },
+      { name: "Stone", hex: "#cfc7ba" },
+    ],
+
+    principles: [
+      { name: "Heritage", body: "thirty-two years, redrawn not discarded" },
+      { name: "Restraint", body: "gold for emphasis, never for show" },
+      { name: "Presence", body: "the fleet is the campaign" },
+    ],
+  },
+];
 export const getProject = (slug) => projects.find((p) => p.slug === slug);
 
 export const getAdjacent = (slug) => {

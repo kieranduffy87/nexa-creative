@@ -89,7 +89,7 @@ function Section({ section }) {
     return (
       <div className="shell">
         <div className="grid gap-6 md:grid-cols-12 md:gap-10">
-          {/* Sticky must sit on the grid item itself — a wrapper sized to its
+          {/* Sticky must sit on the grid item itself. A wrapper sized to its
               own content has no travel to stick within. */}
           <Reveal className="md:col-span-5 md:sticky md:top-32 md:self-start">
             <h2 className="t-h2 text-balance">{section.title}</h2>

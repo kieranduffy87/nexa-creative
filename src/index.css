@@ -22,10 +22,11 @@
   --color-ink-text-muted: rgba(255, 255, 255, 0.55);
   --color-ink-border: rgba(255, 255, 255, 0.14);
 
-  /* Three radii. That's the whole set. */
+  /* Pills stay pills. Everything else shares the panel rounding, so an image
+     sits at the same radius as the panel it lives inside. */
   --radius-pill: 999px;
-  --radius-card: 12px;
-  --radius-image: 8px;
+  --radius-card: var(--panel-radius);
+  --radius-image: var(--panel-radius);
 }
 
 :root {
@@ -282,15 +283,6 @@ html.lenis body {
   .nav-link[data-active="true"]::after {
     transform: scaleX(1);
     transform-origin: left;
-  }
-
-  /* Nav sitting on a dark hero */
-  .nav-link-invert {
-    color: rgba(255, 255, 255, 0.68);
-  }
-  .nav-link-invert:hover,
-  .nav-link-invert[data-active="true"] {
-    color: #fff;
   }
 
   .tag-pill {

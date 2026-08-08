@@ -78,7 +78,7 @@ const APPROACH = [
 const STEPS = [
   {
     title: "Kick off",
-    body: "A working session to agree the problem, the audience and what success looks like — before anyone opens a design tool.",
+    body: "A working session to agree the problem, the audience and what success looks like, before anyone opens a design tool.",
   },
   {
     title: "Strategy & routes",
@@ -90,7 +90,7 @@ const STEPS = [
   },
   {
     title: "Launch & extend",
-    body: "Rollout across print, motion, environment and social — then we stay available as the brand grows into new formats.",
+    body: "Rollout across print, motion, environment and social. Then we stay available as the brand grows into new formats.",
   },
 ];
 
@@ -134,7 +134,7 @@ export default function HomePage() {
           </Suspense>
         </div>
 
-        {/* Legibility scrim — weighted to the left so the headline stays
+        {/* Legibility scrim, weighted to the left so the headline stays
             readable without flattening the composition behind it */}
         <div
           className="pointer-events-none absolute inset-0 z-[1]"
@@ -187,7 +187,7 @@ export default function HomePage() {
 
           <Reveal duration={1.1} className="mt-8 max-w-5xl">
             <p className="t-h1 text-balance">
-              We make brands that hold their nerve — built as systems, written
+              We make brands that hold their nerve. Built as systems, written
               in plain speech, and designed to still look right on the hundredth
               piece of collateral.
             </p>
@@ -209,7 +209,7 @@ export default function HomePage() {
               were never in the room.
             </p>
             <p className="t-body">
-              So we design for that moment instead of the presentation — and the
+              So we design for that moment instead of the presentation, and the
               work gets sharper, not looser, as it scales.
             </p>
           </Reveal>
@@ -279,7 +279,7 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Our work"
             title="Case studies."
-            body="Two brands built end to end — identity, guidelines, digital, motion and the applied estate."
+            body="Three brands built end to end: identity, guidelines, digital, motion and the applied estate."
             action={<PillButton to="/work">View all work</PillButton>}
           />
 
@@ -332,7 +332,7 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Our approach"
             title="Where your ambition meets velocity."
-            body="Five principles that decide how the work gets made — and what we turn down."
+            body="Five principles that decide how the work gets made, and what we turn down."
             action={<PillButton to="/about">About the studio</PillButton>}
           />
 

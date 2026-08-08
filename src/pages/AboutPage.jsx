@@ -50,7 +50,7 @@ export default function AboutPage() {
                 <p>
                   Our team combines creative design thinking with deep technical
                   expertise and data-driven marketing strategy. We don&apos;t just make
-                  things look good — we make them work.
+                  things look good. We make them work.
                 </p>
               </motion.div>
             </div>

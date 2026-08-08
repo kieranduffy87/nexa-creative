@@ -18,7 +18,7 @@ export default function WorkPage() {
 
         <Reveal delay={0.12} className="mt-8 max-w-xl">
           <p className="t-body-lg text-text-muted">
-            Brands built end to end — identity and guidelines, digital
+            Brands built end to end: identity and guidelines, digital
             platforms, motion, and the printed and physical estate that follows.
           </p>
         </Reveal>

@@ -27,7 +27,7 @@ export function Footer() {
             <Link
               to="/"
               className="inline-block text-nexa-red transition-colors duration-300 hover:text-white"
-              aria-label="Nexa Creative — home"
+              aria-label="Nexa Creative home"
             >
               <NexaLogo className="h-9 w-auto" />
             </Link>
