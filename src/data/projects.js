@@ -589,11 +589,6 @@ export const projects = [
           { kind: "image", src: gk("gk-survey-pad.jpg") },
         ],
       },
-      {
-        type: "media",
-        kind: "image",
-        src: gk("gk-detail.jpg"),
-      },
     ],
 
     process: [
@@ -631,10 +626,12 @@ export const projects = [
     ],
 
     palette: [
-      { name: "Black", hex: "#12100e" },
-      { name: "Gold", hex: "#b08d3f" },
-      { name: "Warm White", hex: "#f5f1ea" },
-      { name: "Stone", hex: "#cfc7ba" },
+      { name: "Company Green", hex: "#003D3B" },
+      { name: "Company Ink", hex: "#072334" },
+      { name: "Copper 01", hex: "#FDCB9D" },
+      { name: "Copper 02", hex: "#FBBC8F" },
+      { name: "Copper 03", hex: "#D88561" },
+      { name: "Copper 04", hex: "#BF6849" },
     ],
 
     principles: [
