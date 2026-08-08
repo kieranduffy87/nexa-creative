@@ -498,6 +498,14 @@ export const projects = [
         src: gk("gk-brand.jpg"),
       },
       {
+        type: "media",
+        kind: "video",
+        src: gk("gk-3dlogo.mp4"),
+        poster: gk("gk-3dlogo-poster.jpg"),
+        bg: "#022017",
+        caption: "The contemporised crest, rendered and turned in light.",
+      },
+      {
         type: "text",
         title: "Tradition, contemporised",
         body: [
