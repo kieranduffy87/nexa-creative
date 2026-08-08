@@ -297,7 +297,7 @@ const clearGlass = () =>
     iridescenceIOR: 1.4,
     clearcoat: 1,
     clearcoatRoughness: 0.02,
-    envMapIntensity: 3,
+    envMapIntensity: 2,
   });
 
 const clearGlassThin = () => {
@@ -319,7 +319,7 @@ const frostedGlass = () =>
     iridescence: 0.2,
     clearcoat: 1,
     clearcoatRoughness: 0.35,
-    envMapIntensity: 2.4,
+    envMapIntensity: 1.7,
   });
 
 const frostedCopper = () => {
@@ -344,7 +344,7 @@ const markGlass = () =>
     iridescence: 0.28,
     clearcoat: 1,
     clearcoatRoughness: 0.16,
-    envMapIntensity: 2.6,
+    envMapIntensity: 1.8,
   });
 
 const copperGlass = () =>
@@ -361,7 +361,7 @@ const copperGlass = () =>
     iridescence: 0.3,
     clearcoat: 1,
     clearcoatRoughness: 0.03,
-    envMapIntensity: 2.8,
+    envMapIntensity: 1.9,
   });
 
 /* ------------------------------------------------------------- satellites --- */
@@ -490,7 +490,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = light ? 0.82 : 1.25;
+    renderer.toneMappingExposure = light ? 0.82 : 1.05;
     // Every transmissive mesh costs a scene re-render; halving the resolution
     // of that pass is invisible through refraction and roughly doubles the fps.
     renderer.transmissionResolutionScale = 0.5;
@@ -517,7 +517,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
         hdrEnv = pmrem.fromEquirectangular(hdrTex).texture;
         pmrem.dispose();
         scene.environment = hdrEnv;
-        scene.environmentIntensity = light ? 0.72 : 1.5;
+        scene.environmentIntensity = light ? 0.7 : 1.05;
       })
       .catch(() => {
         // Painted fallback is already in place — nothing to do
@@ -529,9 +529,9 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     composer.addPass(new RenderPass(scene, camera));
     const bloom = new UnrealBloomPass(
       new THREE.Vector2(1, 1),
-      light ? 0.22 : 0.55, // strength
-      0.7, // radius
-      light ? 0.95 : 0.84, // threshold
+      light ? 0.16 : 0.3, // strength
+      0.65, // radius
+      light ? 0.96 : 0.9, // threshold
     );
     composer.addPass(bloom);
     composer.addPass(new OutputPass());
@@ -572,15 +572,15 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     group.rotation.set(...cfg.markTilt);
 
     // Direct light on top of the environment sharpens the bevel edges
-    const key = new THREE.DirectionalLight(0xffffff, light ? 1.6 : 2.4);
+    const key = new THREE.DirectionalLight(0xffffff, light ? 0.7 : 0.85);
     key.position.set(3, 4, 5);
     scene.add(key);
 
-    const warm = new THREE.DirectionalLight(0xff7a30, light ? 0.9 : 3.2);
+    const warm = new THREE.DirectionalLight(0xff7a30, light ? 0.5 : 1.15);
     warm.position.set(-4, -2, 2);
     scene.add(warm);
 
-    const warmBack = new THREE.PointLight(0xff6a24, light ? 6 : 26, 22, 2);
+    const warmBack = new THREE.PointLight(0xff6a24, light ? 4 : 11, 22, 2);
     warmBack.position.set(1.5, 0.5, -3.5);
     scene.add(warmBack);
 
