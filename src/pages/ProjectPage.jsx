@@ -46,12 +46,12 @@ function MediaFrame({ children, className = "" }) {
   );
 }
 
-function MediaBlock({ kind, src, bg, caption }) {
+function MediaBlock({ kind, src, poster, bg, caption }) {
   return (
     <MediaFrame>
       <figure>
         <div className="media" style={bg ? { background: bg } : undefined}>
-          <Media kind={kind} src={src} className="w-full" />
+          <Media kind={kind} src={src} poster={poster} className="w-full" />
         </div>
         {caption && (
           <figcaption className="t-body mt-4 !text-[13px]">

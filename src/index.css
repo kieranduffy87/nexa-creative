@@ -18,6 +18,11 @@
   /* Single accent */
   --color-nexa-red: #ef4136;
 
+  /* The opposite of the page. Flips with the theme; --color-ink does not,
+     because bg-ink sections are meant to stay dark in both. */
+  --color-contrast: #000000;
+  --color-contrast-on: #ffffff;
+
   /* On dark surfaces */
   --color-ink-text-muted: rgba(255, 255, 255, 0.55);
   --color-ink-border: rgba(255, 255, 255, 0.14);
@@ -45,6 +50,34 @@
     --frame-gap: 1rem;
     --panel-radius: 32px;
   }
+}
+
+/* Dark theme. Set by the inline script in index.html before first paint, so
+   there is never a flash of the wrong theme. */
+:root[data-theme="dark"] {
+  --color-bg: #121214;
+  --color-text: #f4f4f5;
+  --color-text-muted: rgba(255, 255, 255, 0.56);
+  --color-text-light: rgba(255, 255, 255, 0.38);
+  --color-mist: #1c1c20;
+  --color-bone: #17171a;
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border-strong: rgba(255, 255, 255, 0.22);
+  --color-contrast: #fafafa;
+  --color-contrast-on: #0a0a0b;
+  color-scheme: dark;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* Only the themeable surfaces transition, so a toggle feels deliberate rather
+   than making every hover on the page lag behind the cursor. */
+body,
+.page-frame > section,
+.page-frame > footer {
+  transition: background-color 400ms ease, color 400ms ease;
 }
 
 html {
@@ -208,8 +241,8 @@ html.lenis body {
     height: 1.5rem;
     flex: none;
     border-radius: var(--radius-pill);
-    background: var(--color-ink);
-    color: #fff;
+    background: var(--color-contrast);
+    color: var(--color-contrast-on);
     transition: transform 400ms var(--ease-out-expo),
       background-color 300ms ease;
   }
@@ -225,12 +258,12 @@ html.lenis body {
     letter-spacing: -0.02em;
     line-height: 1;
     background: var(--color-mist);
-    color: var(--color-ink);
+    color: var(--color-text);
     transition: background-color 300ms ease, color 300ms ease;
   }
   .btn-pill:hover {
-    background: var(--color-ink);
-    color: #fff;
+    background: var(--color-contrast);
+    color: var(--color-contrast-on);
   }
   .btn-pill:hover .arrow-dot {
     background: var(--color-nexa-red);
@@ -246,12 +279,12 @@ html.lenis body {
     color: var(--color-nexa-red);
   }
   .btn-pill-accent:hover {
-    background: var(--color-ink);
-    color: #fff;
+    background: var(--color-contrast);
+    color: var(--color-contrast-on);
   }
   .btn-pill-accent:hover .arrow-dot {
-    background: #fff;
-    color: var(--color-ink);
+    background: var(--color-contrast-on);
+    color: var(--color-contrast);
   }
 
   /* Nav link with a wipe-in underline */
@@ -277,7 +310,7 @@ html.lenis body {
   }
   .nav-link:hover,
   .nav-link[data-active="true"] {
-    color: var(--color-ink);
+    color: var(--color-text);
   }
   .nav-link:hover::after,
   .nav-link[data-active="true"]::after {

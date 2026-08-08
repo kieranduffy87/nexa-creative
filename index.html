@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nexa Creative | Branding, Web Design & Digital Marketing Agency</title>
     <meta name="description" content="Nexa Creative is a full-service digital agency specialising in branding, website design & development, SEO, Google Ads, Meta Ads, social marketing, and video production." />
+    <script>
+      // Resolve the theme before first paint. Running this in <head> rather
+      // than in React is what stops a white flash on a dark-theme load.
+      (function () {
+        try {
+          var saved = localStorage.getItem("nexa-theme");
+          var dark =
+            saved === "dark" ||
+            (!saved &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          if (dark) document.documentElement.setAttribute("data-theme", "dark");
+        } catch (e) {
+          /* private browsing */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

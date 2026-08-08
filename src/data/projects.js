@@ -519,6 +519,14 @@ export const projects = [
         ],
       },
       {
+        type: "media",
+        kind: "video",
+        src: gk("gk-web.mp4"),
+        poster: gk("gk-web-poster.jpg"),
+        bg: "#12100e",
+        caption: "The live site, top to bottom.",
+      },
+      {
         type: "text",
         title: "A more engaging website",
         body: [
