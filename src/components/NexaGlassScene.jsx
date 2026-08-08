@@ -43,26 +43,36 @@ function markShapes() {
   return markShapesCache;
 }
 
+const MARK_SCALE = 2 / 72.46;
+
 /**
- * Extrudes the mark and normalises it: SVG space is Y-down and 72 units wide,
- * so it gets flipped and scaled to roughly 2 world units before use.
+ * Extrudes the mark and normalises it into world units.
+ *
+ * Everything here is specified in the SVG's own 72-unit space and scaled
+ * uniformly at the end. Scaling X and Y but not Z — as this did originally —
+ * shrinks the bevel to about a thousandth of a unit in plan while leaving it
+ * full size in depth, which is why the mark came out razor-edged next to the
+ * pillowy satellites.
  */
-function buildMarkGeometry({ depth = 0.34, bevel = 0.055 } = {}) {
+function buildMarkGeometry({ depth = 13, bevel = 3.4 } = {}) {
   const geo = new THREE.ExtrudeGeometry(markShapes(), {
     depth,
     bevelEnabled: true,
     bevelThickness: bevel,
     bevelSize: bevel,
     bevelOffset: 0,
-    bevelSegments: 6,
-    curveSegments: 12,
+    bevelSegments: 14, // a soft roll rather than a visible chamfer
+    curveSegments: 20,
   });
 
   geo.center();
-  // SVG Y grows downward; flip so the mark reads the right way up
-  geo.scale(1, -1, 1);
-  const SCALE = 2 / 72.46;
-  geo.scale(SCALE, SCALE, 1);
+  geo.scale(MARK_SCALE, MARK_SCALE, MARK_SCALE);
+
+  // SVG space is Y-down. A 180° turn about X corrects it without the mirrored
+  // winding a negative scale would introduce — the slab is symmetric in Z, so
+  // swapping front for back is invisible.
+  geo.rotateX(Math.PI);
+
   geo.computeVertexNormals();
   return geo;
 }
@@ -320,6 +330,23 @@ const frostedCopper = () => {
   return m;
 };
 
+const markGlass = () =>
+  new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    metalness: 0,
+    roughness: 0.19,
+    transmission: 1,
+    thickness: 1.3,
+    ior: 1.5,
+    dispersion: 8,
+    attenuationColor: new THREE.Color(0xff5f22),
+    attenuationDistance: 1.55,
+    iridescence: 0.28,
+    clearcoat: 1,
+    clearcoatRoughness: 0.16,
+    envMapIntensity: 2.6,
+  });
+
 const copperGlass = () =>
   new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
@@ -436,8 +463,8 @@ function buildSatellites(variant, materials) {
 
 const VARIANTS = {
   stack: { markMaterial: "frostedCopper", markTilt: [-0.62, 0.42, 0.24], fill: 0.58 },
-  shards: { markMaterial: "copper", markTilt: [0.06, -0.16, 0.04], fill: 0.8 },
-  bouquet: { markMaterial: "copper", markTilt: [-0.5, 0.36, 0.5], fill: 0.6 },
+  shards: { markMaterial: "mark", markTilt: [0.06, -0.16, 0.04], fill: 0.8 },
+  bouquet: { markMaterial: "mark", markTilt: [-0.5, 0.36, 0.5], fill: 0.6 },
 };
 
 /* ------------------------------------------------------------------ scene --- */
@@ -515,6 +542,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
       copper: copperGlass(),
       frosted: frostedGlass(),
       frostedCopper: frostedCopper(),
+      mark: markGlass(),
     };
 
     const backdrop = buildBackdrop(variant);
@@ -525,7 +553,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     scene.add(group);
 
     // The mark itself
-    const markGeo = buildMarkGeometry({ depth: light ? 0.3 : 0.42 });
+    const markGeo = buildMarkGeometry({ depth: light ? 11 : 14 });
     const mark = new THREE.Mesh(markGeo, materials[cfg.markMaterial]);
     mark.scale.setScalar(2.25);
     group.add(mark);
