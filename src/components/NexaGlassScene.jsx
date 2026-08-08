@@ -5,6 +5,8 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { asset } from "../lib/asset";
 
 /**
  * The Nexa mark, extruded from its real path data and rendered as dispersive
@@ -21,6 +23,16 @@ const MARK_PATH =
   "M0,0V72.45H72.46V0ZM29,58H14.49V14.49L29,29Zm29,0h0L43.47,43.47v-29H58Z";
 
 let markShapesCache = null;
+let hdrPromise = null;
+
+function loadStudioHdr() {
+  if (!hdrPromise) {
+    hdrPromise = new Promise((resolve, reject) => {
+      new RGBELoader().load(asset("hdr/studio.hdr"), resolve, undefined, reject);
+    });
+  }
+  return hdrPromise;
+}
 
 function markShapes() {
   if (markShapesCache) return markShapesCache;
@@ -187,8 +199,8 @@ function buildBackdrop(variant) {
   if (light) {
     const g = ctx.createLinearGradient(0, 0, W, H);
     g.addColorStop(0, "#ffffff");
-    g.addColorStop(0.55, "#f1ece5");
-    g.addColorStop(1, "#e2dad0");
+    g.addColorStop(0.5, "#ece5db");
+    g.addColorStop(1, "#cfc4b5");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
   }
@@ -202,8 +214,8 @@ function buildBackdrop(variant) {
     H * 0.38,
     W * 0.55,
   );
-  warm.addColorStop(0, light ? "rgba(255,150,80,0.5)" : "rgba(255,132,58,0.9)");
-  warm.addColorStop(0.28, light ? "rgba(240,110,60,0.14)" : "rgba(198,68,26,0.32)");
+  warm.addColorStop(0, light ? "rgba(255,150,80,0.5)" : "rgba(255,124,46,0.95)");
+  warm.addColorStop(0.28, light ? "rgba(240,110,60,0.14)" : "rgba(198,60,18,0.45)");
   warm.addColorStop(1, "rgba(150,45,12,0)");
   ctx.fillStyle = warm;
   ctx.fillRect(0, 0, W, H);
@@ -236,8 +248,8 @@ function buildBackdrop(variant) {
     const core = ctx.createRadialGradient(
       W * 0.5, H * 0.46, 0, W * 0.5, H * 0.46, W * 0.34,
     );
-    core.addColorStop(0, "rgba(255,180,130,0.6)");
-    core.addColorStop(0.3, "rgba(255,110,50,0.32)");
+    core.addColorStop(0, "rgba(255,168,110,0.8)");
+    core.addColorStop(0.3, "rgba(255,96,36,0.55)");
     core.addColorStop(1, "rgba(120,35,10,0)");
     ctx.fillStyle = core;
     ctx.fillRect(0, 0, W, H);
@@ -264,7 +276,7 @@ function buildBackdrop(variant) {
 
 const clearGlass = () =>
   new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
+    color: 0xfff2ea,
     metalness: 0,
     roughness: 0.01,
     transmission: 1,
@@ -302,9 +314,9 @@ const frostedGlass = () =>
 
 const frostedCopper = () => {
   const m = frostedGlass();
-  m.attenuationColor = new THREE.Color(0xff6a2e);
-  m.attenuationDistance = 3.2;
-  m.thickness = 0.9;
+  m.attenuationColor = new THREE.Color(0xff5f22);
+  m.attenuationDistance = 1.3;
+  m.thickness = 1.2;
   return m;
 };
 
@@ -314,11 +326,11 @@ const copperGlass = () =>
     metalness: 0,
     roughness: 0.03,
     transmission: 1,
-    thickness: 0.75,
+    thickness: 1.15,
     ior: 1.5,
     dispersion: 11,
-    attenuationColor: new THREE.Color(0xff6a2e),
-    attenuationDistance: 4.5,
+    attenuationColor: new THREE.Color(0xff5f22),
+    attenuationDistance: 1.5,
     iridescence: 0.3,
     clearcoat: 1,
     clearcoatRoughness: 0.03,
@@ -423,9 +435,9 @@ function buildSatellites(variant, materials) {
 }
 
 const VARIANTS = {
-  stack: { markMaterial: "clear", markTilt: [-0.62, 0.42, 0.24], fill: 0.86 },
+  stack: { markMaterial: "frostedCopper", markTilt: [-0.62, 0.42, 0.24], fill: 0.58 },
   shards: { markMaterial: "copper", markTilt: [0.06, -0.16, 0.04], fill: 0.8 },
-  bouquet: { markMaterial: "copper", markTilt: [-0.5, 0.36, 0.5], fill: 0.84 },
+  bouquet: { markMaterial: "copper", markTilt: [-0.5, 0.36, 0.5], fill: 0.6 },
 };
 
 /* ------------------------------------------------------------------ scene --- */
@@ -451,7 +463,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = light ? 1.0 : 1.25;
+    renderer.toneMappingExposure = light ? 0.82 : 1.25;
     // Every transmissive mesh costs a scene re-render; halving the resolution
     // of that pass is invisible through refraction and roughly doubles the fps.
     renderer.transmissionResolutionScale = 0.5;
@@ -464,6 +476,25 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
 
     const envMap = buildEnvironment(renderer, variant);
     scene.environment = envMap;
+
+    // A photographic studio HDRI has hundreds of distinct sources; a painted
+    // canvas has a handful of blurred rectangles. That difference is most of
+    // what separates real-looking glass from plausible-looking glass.
+    let hdrEnv = null;
+    let disposed = false;
+
+    loadStudioHdr()
+      .then((hdrTex) => {
+        if (disposed) return;
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        hdrEnv = pmrem.fromEquirectangular(hdrTex).texture;
+        pmrem.dispose();
+        scene.environment = hdrEnv;
+        scene.environmentIntensity = light ? 0.72 : 1.5;
+      })
+      .catch(() => {
+        // Painted fallback is already in place — nothing to do
+      });
 
     // Bloom is doing a lot of the "this was rendered offline" work: hot
     // specular edges bleed light the way they do in a path tracer.
@@ -517,9 +548,13 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     key.position.set(3, 4, 5);
     scene.add(key);
 
-    const warm = new THREE.DirectionalLight(0xff8a3c, light ? 0.8 : 2.0);
+    const warm = new THREE.DirectionalLight(0xff7a30, light ? 0.9 : 3.2);
     warm.position.set(-4, -2, 2);
     scene.add(warm);
+
+    const warmBack = new THREE.PointLight(0xff6a24, light ? 6 : 26, 22, 2);
+    warmBack.position.set(1.5, 0.5, -3.5);
+    scene.add(warmBack);
 
     scene.add(new THREE.AmbientLight(0xffffff, light ? 0.7 : 0.25));
 
@@ -613,7 +648,9 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
       backdrop.userData.texture.dispose();
       satelliteGeometries.forEach((g) => g.dispose());
       Object.values(materials).forEach((m) => m.dispose());
+      disposed = true;
       envMap.dispose();
+      if (hdrEnv) hdrEnv.dispose();
       composer.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) {
