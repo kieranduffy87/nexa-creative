@@ -6,6 +6,11 @@ import { ArrowIcon, Eyebrow } from "../components/ui";
 const HeroObject = lazy(() =>
   import("../components/HeroObject").then((m) => ({ default: m.HeroObject })),
 );
+const NexaGlassScene = lazy(() =>
+  import("../components/NexaGlassScene").then((m) => ({
+    default: m.NexaGlassScene,
+  })),
+);
 
 /**
  * Not linked from the site. A scratch route for comparing hero treatments
@@ -14,19 +19,46 @@ const HeroObject = lazy(() =>
 
 const OBJECTS = [
   {
+    id: "shards",
+    kind: "mark",
+    label: "Mark — shards",
+    prefers: "dark",
+    note: "The Nexa mark extruded from its real path data, copper-tinted, with angular glass fragments drifting around it on black.",
+  },
+  {
+    id: "bouquet",
+    kind: "mark",
+    label: "Mark — bouquet",
+    prefers: "dark",
+    note: "Same mark, surrounded by curved glass lenses and clear spheres arranged radially. The busiest and most refractive of the three.",
+  },
+  {
+    id: "stack",
+    kind: "mark",
+    label: "Mark — stack",
+    prefers: "white",
+    note: "Clear tiles laid flat and overlapping on white, one copper accent, mark reading through the middle. The calmest option.",
+  },
+  {
     id: "glass",
-    label: "Glass",
-    note: "Transmission, dispersion and red attenuation. Light bends through it and splits at the facet edges.",
+    kind: "form",
+    label: "Abstract glass",
+    prefers: "bone",
+    note: "The earlier faceted form. Transmission, dispersion and red attenuation, no logo geometry.",
   },
   {
     id: "chrome",
-    label: "Liquid chrome",
-    note: "Fully metallic, near-zero roughness. The environment is the entire surface, so it reads as polished metal.",
+    kind: "form",
+    label: "Abstract chrome",
+    prefers: "dark",
+    note: "Fully metallic, near-zero roughness. The environment is the entire surface.",
   },
   {
     id: "mineral",
-    label: "Weathered mineral",
-    note: "Rough, faceted, barely metallic. Closest to the rock on your reference site — tactile rather than slick.",
+    kind: "form",
+    label: "Abstract mineral",
+    prefers: "bone",
+    note: "Rough, faceted, barely metallic. Tactile rather than slick.",
   },
 ];
 
@@ -58,13 +90,20 @@ function Toggle({ items, value, onChange }) {
 }
 
 export default function HeroLabPage() {
-  const [obj, setObj] = useState("glass");
-  const [bg, setBg] = useState("bone");
+  const [obj, setObj] = useState("shards");
+  const [bg, setBg] = useState("dark");
   const [grain, setGrain] = useState(true);
 
-  const backdrop = BACKDROPS.find((b) => b.id === bg);
   const object = OBJECTS.find((o) => o.id === obj);
+  const backdrop = BACKDROPS.find((b) => b.id === bg);
   const onDark = backdrop.dark;
+
+  // Picking an object snaps the backdrop to the one it was designed against
+  const pickObject = (id) => {
+    setObj(id);
+    const next = OBJECTS.find((o) => o.id === id);
+    if (next?.prefers) setBg(next.prefers);
+  };
 
   return (
     <>
@@ -74,12 +113,34 @@ export default function HeroLabPage() {
           grain ? "hero-grain" : ""
         } ${onDark ? "text-white" : ""}`}
       >
-        {/* Full opacity at every width — this is a lab, not the real layout */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full lg:w-[46%]">
+        {/* The mark scenes are full-bleed compositions, like the references.
+            The abstract forms stay in their own column beside the type. */}
+        <div
+          className={`pointer-events-none absolute inset-0 z-0 ${
+            object.kind === "mark" ? "" : "left-auto w-full lg:w-[52%]"
+          }`}
+        >
           <Suspense fallback={null}>
-            <HeroObject variant={obj} dark={onDark} className="h-full w-full" />
+            {object.kind === "mark" ? (
+              <NexaGlassScene variant={obj} className="h-full w-full" />
+            ) : (
+              <HeroObject variant={obj} dark={onDark} className="h-full w-full" />
+            )}
           </Suspense>
         </div>
+
+        {/* Legibility scrim — keeps the headline readable over the scene
+            without flattening the composition behind it */}
+        {object.kind === "mark" && (
+          <div
+            className="pointer-events-none absolute inset-0 z-[1]"
+            style={{
+              background: onDark
+                ? "linear-gradient(100deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 34%, rgba(0,0,0,0) 62%)"
+                : "linear-gradient(100deg, rgba(247,244,239,0.9) 0%, rgba(247,244,239,0.6) 34%, rgba(247,244,239,0) 62%)",
+            }}
+          />
+        )}
 
         <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
           <h1 className="t-display max-w-[46rem] text-balance">
@@ -129,7 +190,11 @@ export default function HeroLabPage() {
             <div className="md:col-span-7">
               <p className="t-eyebrow">Object</p>
               <div className="mt-4">
-                <Toggle items={OBJECTS} value={obj} onChange={setObj} />
+                <Toggle
+                  items={OBJECTS}
+                  value={obj}
+                  onChange={pickObject}
+                />
               </div>
               <p className="t-body mt-4 max-w-md">{object.note}</p>
 
@@ -169,8 +234,8 @@ export default function HeroLabPage() {
                 ))}
               </dl>
               <p className="t-body mt-6">
-                Scroll back up after each change — the hero above is live, not a
-                screenshot.
+                The hero above is live, not a screenshot — move the cursor across
+                it and the whole assembly leans with you.
               </p>
             </div>
           </div>
