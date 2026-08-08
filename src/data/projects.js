@@ -506,6 +506,14 @@ export const projects = [
         caption: "The contemporised crest, rendered and turned in light.",
       },
       {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: gk("gk-cards-desk.jpg") },
+          { kind: "image", src: gk("gk-cards-detail.jpg") },
+        ],
+      },
+      {
         type: "text",
         title: "Tradition, contemporised",
         body: [
