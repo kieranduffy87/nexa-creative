@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass.js";
 
 /**
  * The Nexa mark, extruded from its real path data and rendered as dispersive
@@ -69,13 +73,16 @@ function roundedRectShape(w, h, r) {
 }
 
 function plateGeometry(w, h, thickness = 0.1, radius = 0.16) {
+  // Bevel scales with the slab so big pieces get the fat, pillowy edge the
+  // references have rather than a hairline chamfer
+  const bevel = Math.min(0.14, thickness * 0.55, radius * 0.6);
   const geo = new THREE.ExtrudeGeometry(roundedRectShape(w, h, radius), {
     depth: thickness,
     bevelEnabled: true,
-    bevelThickness: 0.06,
-    bevelSize: 0.06,
-    bevelSegments: 5,
-    curveSegments: 10,
+    bevelThickness: bevel,
+    bevelSize: bevel,
+    bevelSegments: 8,
+    curveSegments: 16,
   });
   geo.center();
   return geo;
@@ -229,14 +236,14 @@ function buildBackdrop(variant) {
     const core = ctx.createRadialGradient(
       W * 0.5, H * 0.46, 0, W * 0.5, H * 0.46, W * 0.34,
     );
-    core.addColorStop(0, "rgba(255,196,150,0.85)");
-    core.addColorStop(0.35, "rgba(255,120,55,0.5)");
+    core.addColorStop(0, "rgba(255,180,130,0.6)");
+    core.addColorStop(0.3, "rgba(255,110,50,0.32)");
     core.addColorStop(1, "rgba(120,35,10,0)");
     ctx.fillStyle = core;
     ctx.fillRect(0, 0, W, H);
   }
 
-  const vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.44, W / 2, H / 2, W * 0.82);
+  const vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.72);
   vig.addColorStop(0, light ? "rgba(244,241,236,0)" : "rgba(5,5,5,0)");
   vig.addColorStop(1, light ? "rgba(244,241,236,1)" : "rgba(5,5,5,1)");
   ctx.fillStyle = vig;
@@ -263,8 +270,8 @@ const clearGlass = () =>
     transmission: 1,
     thickness: 0.3,
     ior: 1.5,
-    dispersion: 9,
-    iridescence: 0.4,
+    dispersion: 14,
+    iridescence: 0.55,
     iridescenceIOR: 1.4,
     clearcoat: 1,
     clearcoatRoughness: 0.02,
@@ -278,6 +285,29 @@ const clearGlassThin = () => {
   return m;
 };
 
+const frostedGlass = () =>
+  new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    metalness: 0,
+    roughness: 0.42,
+    transmission: 1,
+    thickness: 0.5,
+    ior: 1.5,
+    dispersion: 3,
+    iridescence: 0.2,
+    clearcoat: 1,
+    clearcoatRoughness: 0.35,
+    envMapIntensity: 2.4,
+  });
+
+const frostedCopper = () => {
+  const m = frostedGlass();
+  m.attenuationColor = new THREE.Color(0xff6a2e);
+  m.attenuationDistance = 3.2;
+  m.thickness = 0.9;
+  return m;
+};
+
 const copperGlass = () =>
   new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
@@ -286,7 +316,7 @@ const copperGlass = () =>
     transmission: 1,
     thickness: 0.75,
     ior: 1.5,
-    dispersion: 7,
+    dispersion: 11,
     attenuationColor: new THREE.Color(0xff6a2e),
     attenuationDistance: 4.5,
     iridescence: 0.3,
@@ -301,22 +331,32 @@ function buildSatellites(variant, materials) {
   const items = [];
   const r = rng(20260808);
 
+  // Pieces are deliberately pushed past the frame edge. The references are
+  // extreme close-ups where nothing is fully contained, and that cropping is
+  // most of why they feel like a photograph rather than a diagram.
+
   if (variant === "stack") {
-    // Tiles lying in a shared plane, overlapping like scattered glass coasters
+    // Chunky tiles lying in a shared plane, overlapping like scattered glass
     const layout = [
-      [-2.5, 1.5, 1.5, 1.5, 0],
-      [0.4, 2.2, 2.6, 1.0, 0],
-      [2.9, 1.7, 2.0, 1.6, 1],
-      [-3.0, -0.9, 2.2, 1.4, 0],
-      [2.6, -1.3, 2.4, 1.8, 1],
-      [-0.6, -2.4, 2.8, 1.2, 0],
-      [1.4, -2.9, 1.6, 1.3, 0],
+      [-4.6, 2.9, 3.4, 3.4, 0],
+      [0.2, 3.9, 5.0, 2.0, 0],
+      [5.2, 3.1, 4.0, 3.0, 1],
+      [-5.4, -1.4, 4.2, 2.7, 0],
+      [4.7, -2.3, 4.4, 3.4, 1],
+      [-1.1, -4.3, 5.2, 2.3, 2],
+      [2.7, -5.2, 3.2, 2.6, 0],
+      [-3.4, 0.6, 2.6, 2.6, 2],
     ];
-    layout.forEach(([x, y, w, h, tinted], i) => {
+    layout.forEach(([x, y, w, h, kind], i) => {
       items.push({
-        geometry: plateGeometry(w, h, 0.16, 0.22),
-        material: tinted ? materials.copper : materials.clear,
-        position: [x, y, -0.35 - i * 0.06],
+        geometry: plateGeometry(w, h, 0.5, 0.55),
+        material:
+          kind === 1
+            ? materials.copper
+            : kind === 2
+              ? materials.frosted
+              : materials.clear,
+        position: [x, y, -0.7 - i * 0.14],
         rotation: [0, 0, 0],
       });
     });
@@ -324,56 +364,58 @@ function buildSatellites(variant, materials) {
   }
 
   if (variant === "shards") {
-    // Angular fragments at loose orientations, drifting around the mark
-    for (let i = 0; i < 11; i++) {
-      const w = 0.7 + r() * 2.4;
-      const h = 0.6 + r() * 2.0;
-      const angle = (i / 11) * Math.PI * 2 + r() * 0.5;
-      const dist = 2.4 + r() * 2.2;
+    // Angular fragments at loose orientations, crowding in around the mark
+    for (let i = 0; i < 14; i++) {
+      const w = 1.6 + r() * 4.2;
+      const h = 1.3 + r() * 3.4;
+      const angle = (i / 14) * Math.PI * 2 + r() * 0.6;
+      const dist = 4.6 + r() * 3.2;
+      const pick = r();
       items.push({
-        geometry: plateGeometry(w, h, 0.07, 0.05),
-        material: r() > 0.65 ? materials.copper : materials.clear,
+        geometry: plateGeometry(w, h, 0.24, 0.12),
+        material:
+          pick > 0.72
+            ? materials.copper
+            : pick > 0.55
+              ? materials.frostedCopper
+              : materials.clear,
         position: [
           Math.cos(angle) * dist,
-          Math.sin(angle) * dist * 0.75,
-          -1.2 - r() * 2.2,
+          Math.sin(angle) * dist * 0.78,
+          -2.2 - r() * 3.6,
         ],
-        rotation: [r() * 1.4 - 0.7, r() * 1.4 - 0.7, r() * Math.PI],
+        rotation: [r() * 1.5 - 0.75, r() * 1.5 - 0.75, r() * Math.PI],
       });
     }
     return items;
   }
 
-  // bouquet — curved lenses radiating outward, with a few clear spheres
-  for (let i = 0; i < 7; i++) {
-    const angle = (i / 7) * Math.PI * 2;
+  // bouquet — curved lenses radiating outward, with clear spheres between them
+  for (let i = 0; i < 9; i++) {
+    const angle = (i / 9) * Math.PI * 2;
     const arc = new THREE.CylinderGeometry(
-      1.5 + r() * 0.6,
-      1.5 + r() * 0.6,
-      1.8 + r() * 1.4,
-      28,
+      2.6 + r() * 1.2,
+      2.6 + r() * 1.2,
+      3.4 + r() * 2.4,
+      36,
       1,
       true,
       0,
-      Math.PI * 0.55,
+      Math.PI * 0.5,
     );
     items.push({
       geometry: arc,
-      material: materials.clearThin,
-      position: [Math.cos(angle) * 2.3, Math.sin(angle) * 1.9, -1.4 - r() * 1.2],
+      material: r() > 0.75 ? materials.frosted : materials.clearThin,
+      position: [Math.cos(angle) * 4.6, Math.sin(angle) * 3.8, -2.6 - r() * 2.2],
       rotation: [Math.PI / 2 + r() * 0.5, r() * Math.PI, angle],
     });
   }
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 5; i++) {
     items.push({
-      geometry: new THREE.SphereGeometry(0.32 + r() * 0.26, 32, 24),
+      geometry: new THREE.SphereGeometry(0.55 + r() * 0.55, 40, 28),
       material: materials.clear,
-      position: [
-        (r() - 0.5) * 6.5,
-        (r() - 0.5) * 4.5,
-        -0.6 - r() * 1.6,
-      ],
+      position: [(r() - 0.5) * 12, (r() - 0.5) * 8.5, -1.6 - r() * 2.6],
       rotation: [0, 0, 0],
     });
   }
@@ -381,9 +423,9 @@ function buildSatellites(variant, materials) {
 }
 
 const VARIANTS = {
-  stack: { markMaterial: "clear", markTilt: [-0.62, 0.42, 0.24], fill: 0.62 },
-  shards: { markMaterial: "copper", markTilt: [0.06, -0.16, 0.04], fill: 0.5 },
-  bouquet: { markMaterial: "copper", markTilt: [-0.5, 0.36, 0.5], fill: 0.52 },
+  stack: { markMaterial: "clear", markTilt: [-0.62, 0.42, 0.24], fill: 0.86 },
+  shards: { markMaterial: "copper", markTilt: [0.06, -0.16, 0.04], fill: 0.8 },
+  bouquet: { markMaterial: "copper", markTilt: [-0.5, 0.36, 0.5], fill: 0.84 },
 };
 
 /* ------------------------------------------------------------------ scene --- */
@@ -400,7 +442,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -409,7 +451,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = light ? 1.05 : 1.5;
+    renderer.toneMappingExposure = light ? 1.0 : 1.25;
     // Every transmissive mesh costs a scene re-render; halving the resolution
     // of that pass is invisible through refraction and roughly doubles the fps.
     renderer.transmissionResolutionScale = 0.5;
@@ -423,10 +465,25 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     const envMap = buildEnvironment(renderer, variant);
     scene.environment = envMap;
 
+    // Bloom is doing a lot of the "this was rendered offline" work: hot
+    // specular edges bleed light the way they do in a path tracer.
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloom = new UnrealBloomPass(
+      new THREE.Vector2(1, 1),
+      light ? 0.22 : 0.55, // strength
+      0.7, // radius
+      light ? 0.95 : 0.84, // threshold
+    );
+    composer.addPass(bloom);
+    composer.addPass(new OutputPass());
+
     const materials = {
       clear: clearGlass(),
       clearThin: clearGlassThin(),
       copper: copperGlass(),
+      frosted: frostedGlass(),
+      frostedCopper: frostedCopper(),
     };
 
     const backdrop = buildBackdrop(variant);
@@ -439,7 +496,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     // The mark itself
     const markGeo = buildMarkGeometry({ depth: light ? 0.3 : 0.42 });
     const mark = new THREE.Mesh(markGeo, materials[cfg.markMaterial]);
-    mark.scale.setScalar(1.55);
+    mark.scale.setScalar(2.25);
     group.add(mark);
 
     // Satellites
@@ -475,6 +532,8 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
       const { clientWidth: w, clientHeight: h } = mount;
       if (!w || !h) return;
       renderer.setSize(w, h, false);
+      composer.setSize(w, h);
+      bloom.setSize(w, h);
       const aspect = w / h;
       camera.aspect = aspect;
       const needed = radius / (cfg.fill * 2);
@@ -527,7 +586,7 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
         scene.environmentRotation.y = -t * 0.05;
       }
 
-      renderer.render(scene, camera);
+      composer.render();
     };
     tick();
 
@@ -553,10 +612,9 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
       backdrop.material.dispose();
       backdrop.userData.texture.dispose();
       satelliteGeometries.forEach((g) => g.dispose());
-      materials.clear.dispose();
-      materials.clearThin.dispose();
-      materials.copper.dispose();
+      Object.values(materials).forEach((m) => m.dispose());
       envMap.dispose();
+      composer.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === mount) {
         mount.removeChild(renderer.domElement);
