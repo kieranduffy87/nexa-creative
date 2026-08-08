@@ -535,6 +535,11 @@ export const projects = [
         caption: "The site in use.",
       },
       {
+        type: "media",
+        kind: "image",
+        src: gk("gk-mobile.jpg"),
+      },
+      {
         type: "text",
         title: "A more engaging website",
         body: [
