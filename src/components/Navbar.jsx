@@ -24,13 +24,17 @@ export function Navbar() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  const onDarkHero = pathname === "/" && !scrolled;
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 pointer-events-none">
       <div className="shell flex items-center justify-between gap-4 py-4 md:py-5">
         {/* Logo — red, goes black on hover */}
         <Link
           to="/"
-          className="pointer-events-auto shrink-0 text-nexa-red transition-colors duration-300 hover:text-ink"
+          className={`pointer-events-auto shrink-0 text-nexa-red transition-colors duration-300 ${
+            onDarkHero ? "hover:text-white" : "hover:text-ink"
+          }`}
           aria-label="Nexa Creative — home"
         >
           <NexaLogo className="h-8 w-auto md:h-9" />
@@ -41,14 +45,16 @@ export function Navbar() {
           className={`pointer-events-auto hidden items-center gap-8 rounded-pill px-7 py-3 transition-all duration-500 md:flex ${
             scrolled
               ? "bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
-              : "bg-black/[0.04] backdrop-blur-sm"
+              : onDarkHero
+                ? "bg-white/10 backdrop-blur-md"
+                : "bg-black/[0.04] backdrop-blur-sm"
           }`}
         >
           {LINKS.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
-              className="nav-link"
+              className={`nav-link ${onDarkHero ? "nav-link-invert" : ""}`}
               data-active={pathname.startsWith(l.to) ? "true" : "false"}
             >
               {l.label}
@@ -60,7 +66,11 @@ export function Navbar() {
           <Link
             to="/contact"
             className={`btn-pill hidden sm:inline-flex ${
-              scrolled ? "bg-white/80 backdrop-blur-xl" : ""
+              scrolled
+                ? "bg-white/80 backdrop-blur-xl"
+                : onDarkHero
+                  ? "!bg-white/10 !text-white backdrop-blur-md hover:!bg-white hover:!text-ink"
+                  : ""
             }`}
           >
             <span>Start a project</span>
@@ -75,7 +85,9 @@ export function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="btn-pill px-4 md:hidden"
+            className={`btn-pill px-4 md:hidden ${
+              onDarkHero ? "!bg-white/10 !text-white backdrop-blur-md" : ""
+            }`}
           >
             <span className="flex flex-col gap-[3px]">
               <span

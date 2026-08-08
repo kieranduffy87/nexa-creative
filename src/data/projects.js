@@ -36,11 +36,19 @@ export const projects = [
 
     sections: [
       {
-        type: "text",
-        title: "A W that moves",
-        body: [
-          "The brandmark is a W built from flowing forms rather than drawn letters, because the subject is data in motion. It reads as a monogram at a glance and as a current when you look closer, which gives a security company something rare in the category: a mark that suggests movement instead of padlocks and shields.",
-          "The gradient carries the argument. Colour runs from alarm to calm across the mark, so the identity states the proposition before a single word is read — exposure resolved, threat turned into a secure environment.",
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: we("we-core.jpg") },
+          { kind: "image", src: we("we-grid-1.jpg") },
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: we("we-grid-2.jpg") },
+          { kind: "image", src: we("we-type-colour.jpg") },
         ],
       },
       {
@@ -52,27 +60,25 @@ export const projects = [
         caption: "The mark rendered in three dimensions, gradient running alarm to calm.",
       },
       {
-        type: "media-grid",
-        cols: 2,
-        items: [
-          { kind: "image", src: we("we-core.jpg") },
-          { kind: "image", src: we("we-type-colour.jpg") },
-        ],
+        type: "media",
+        kind: "image",
+        src: we("we-appicon-phone.jpg"),
+        width: "wide",
       },
       {
         type: "text",
-        title: "One brand, four lockups",
+        title: "A W that moves",
         body: [
-          "Security brands live in awkward spaces: a square avatar, a sponsor wall, an event backdrop, a partner footer. Rather than force one lockup everywhere, we built four — a core horizontal lockup for general use, a stacked version for square and small formats, a variant carrying the industry descriptor for moments when the logo appears with no supporting context, and a mono set for single-colour print.",
-          "Every variant is drawn on the same construction grid, with clearspace measured in multiples of the mark itself, so the system scales without anyone needing to redraw it. The guidelines set minimum sizes for screen and print, and show the misuse cases explicitly — that is where brands usually come apart once they leave the designer.",
+          "The brandmark is a W built from flowing forms rather than drawn letters, because the subject is data in motion. It reads as a monogram at a glance and as a current when you look closer, which gives a security company something rare in the category: a mark that suggests movement instead of padlocks and shields.",
+          "The gradient carries the argument. Colour runs from alarm to calm across the mark, so the identity states the proposition before a single word is read — exposure resolved, threat turned into a secure environment.",
         ],
       },
       {
         type: "media-grid",
         cols: 2,
         items: [
-          { kind: "image", src: we("we-grid-1.jpg") },
-          { kind: "image", src: we("we-grid-2.jpg") },
+          { kind: "image", src: we("we-billboard.jpg") },
+          { kind: "image", src: we("we-poster.jpg") },
         ],
       },
       {
@@ -86,16 +92,8 @@ export const projects = [
       {
         type: "media",
         kind: "image",
-        src: we("we-billboard.jpg"),
+        src: we("we-conference.jpg"),
         width: "full",
-      },
-      {
-        type: "media-grid",
-        cols: 2,
-        items: [
-          { kind: "image", src: we("we-conference.jpg") },
-          { kind: "image", src: we("we-banner.jpg") },
-        ],
       },
       {
         type: "text",
@@ -110,16 +108,24 @@ export const projects = [
         cols: 3,
         items: [
           { kind: "image", src: we("we-stationery-1.jpg") },
-          { kind: "image", src: we("we-folder.jpg") },
           { kind: "image", src: we("we-stationery-2.jpg") },
+          { kind: "image", src: we("we-folder.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "One brand, four lockups",
+        body: [
+          "Security brands live in awkward spaces: a square avatar, a sponsor wall, an event backdrop, a partner footer. Rather than force one lockup everywhere, we built four — a core horizontal lockup for general use, a stacked version for square and small formats, a variant carrying the industry descriptor for moments when the logo appears with no supporting context, and a mono set for single-colour print.",
+          "Every variant is drawn on the same construction grid, with clearspace measured in multiples of the mark itself, so the system scales without anyone needing to redraw it. The guidelines set minimum sizes for screen and print, and show the misuse cases explicitly — that is where brands usually come apart once they leave the designer.",
         ],
       },
       {
         type: "media-grid",
         cols: 2,
         items: [
-          { kind: "image", src: we("we-poster.jpg") },
-          { kind: "image", src: we("we-lanyard.jpg") },
+          { kind: "image", src: we("we-appicon.jpg") },
+          { kind: "image", src: we("we-social.jpg") },
         ],
       },
       {
@@ -129,6 +135,13 @@ export const projects = [
           "The palette is a graduated core of red, teal, yellow and purple, anchored by a deep navy and white. The gradient is the brand's primary expression and the solids do the structural work: navy for ground and confidence, white for clarity, the core colours for emphasis and calls to action.",
           "That split keeps a wide, energetic palette from turning noisy. Gradients carry emotion and movement, solids carry hierarchy, and the pattern and secondary graphic system stays deliberately supporting. The rule written into the guidelines is that decoration never competes with the message.",
         ],
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: we("we-social-motion.mp4"),
+        width: "wide",
+        bg: "#1a1048",
       },
       {
         type: "text",
@@ -141,18 +154,9 @@ export const projects = [
       {
         type: "media",
         kind: "video",
-        src: we("we-social-motion.mp4"),
+        src: we("we-web-motion.mp4"),
         width: "wide",
         bg: "#1a1048",
-      },
-      {
-        type: "media-grid",
-        cols: 3,
-        items: [
-          { kind: "image", src: we("we-social.jpg") },
-          { kind: "image", src: we("we-appicon.jpg") },
-          { kind: "image", src: we("we-appicon-phone.jpg") },
-        ],
       },
       {
         type: "text",
@@ -163,18 +167,19 @@ export const projects = [
         ],
       },
       {
-        type: "media",
-        kind: "video",
-        src: we("we-web-motion.mp4"),
-        width: "wide",
-        bg: "#1a1048",
-      },
-      {
         type: "media-grid",
         cols: 2,
         items: [
           { kind: "image", src: we("we-web-1.jpg") },
           { kind: "image", src: we("we-web-2.jpg") },
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: we("we-banner.jpg") },
+          { kind: "image", src: we("we-lanyard.jpg") },
         ],
       },
     ],
@@ -244,7 +249,7 @@ export const projects = [
     accent: "#3200e8",
 
     thumb: qi("qi-widescreen.jpg"),
-    heroVideo: qi("qi-3dlayers.mp4"),
+    heroVideo: qi("qi-3dlayers-logo.mp4"),
     heroPoster: qi("qi-3dlayers.jpg"),
 
     summary:
@@ -264,19 +269,10 @@ export const projects = [
 
     sections: [
       {
-        type: "text",
-        title: "A mark you can turn",
-        body: [
-          "The mark is a Q built from interlocking planes rather than drawn as a letter. Read flat it is a monogram; read in three dimensions it becomes an object with depth, edges and a light source, which is what lets it live as a rotating 3D form without ever being redrawn.",
-          "Construction is geometric throughout. The mark and the wordmark are both set out on the same grid, so proportions, angles and optical spacing hold at any size — from a browser tab to the side of a van.",
-        ],
-      },
-      {
         type: "media",
-        kind: "video",
-        src: qi("qi-3dlayers-logo.mp4"),
-        width: "wide",
-        bg: "#050505",
+        kind: "image",
+        src: qi("qi-widescreen.jpg"),
+        width: "full",
       },
       {
         type: "media-grid",
@@ -288,11 +284,10 @@ export const projects = [
       },
       {
         type: "text",
-        title: "Vibrant blue, cut with lime",
+        title: "A mark you can turn",
         body: [
-          "The palette runs on one dominant colour: a vibrant blue that is deliberately more saturated than the corporate blues the IT sector defaults to. Black and grey do the structural work, and a vibrant lime provides the accent that stops the whole thing reading as another blue technology brand.",
-          "Lime is rationed on purpose. It appears as an edge, a highlight or a single call to action rather than a second brand colour, which keeps the blue dominant and makes the accent mean something when it does appear.",
-          "Typography follows the same rule as the mark. Bifftron is squared and technical, drawn from straight cuts and right angles rather than curves, so headline type sits on the same geometry as the logo instead of arguing with it.",
+          "The mark is a Q built from interlocking planes rather than drawn as a letter. Read flat it is a monogram; read in three dimensions it becomes an object with depth, edges and a light source, which is what lets it live as a rotating 3D form without ever being redrawn.",
+          "Construction is geometric throughout. The mark and the wordmark are both set out on the same grid, so proportions, angles and optical spacing hold at any size — from a browser tab to the side of a van.",
         ],
       },
       {
@@ -305,11 +300,11 @@ export const projects = [
       },
       {
         type: "text",
-        title: "Motion as proof of depth",
+        title: "Vibrant blue, cut with lime",
         body: [
-          "Because the mark was constructed as an object rather than a flat shape, it could be rendered as glass and turned in light. Refraction picks up the blue and throws the lime through it, so the animation demonstrates the brand's own palette rather than decorating with it.",
-          "The same asset covers a lot of ground: a loading state, a screen-filling moment on a stand, a social sting, or the last frame of a video. One build, used everywhere motion is needed.",
-          "Pulled in close, the same forms stop reading as a logo and start reading as material — blue glass with lime caught in the bevels. That gives the brand an abstract layer it can use as background and art direction, drawn from its own geometry rather than a stock gradient.",
+          "The palette runs on one dominant colour: a vibrant blue that is deliberately more saturated than the corporate blues the IT sector defaults to. Black and grey do the structural work, and a vibrant lime provides the accent that stops the whole thing reading as another blue technology brand.",
+          "Lime is rationed on purpose. It appears as an edge, a highlight or a single call to action rather than a second brand colour, which keeps the blue dominant and makes the accent mean something when it does appear.",
+          "Typography follows the same rule as the mark. Bifftron is squared and technical, drawn from straight cuts and right angles rather than curves, so headline type sits on the same geometry as the logo instead of arguing with it.",
         ],
       },
       {
@@ -320,20 +315,18 @@ export const projects = [
         bg: "#050505",
       },
       {
-        type: "media-grid",
-        cols: 2,
-        items: [
-          { kind: "image", src: qi("qi-blocks.jpg") },
-          { kind: "image", src: qi("qi-3dlayers-card.jpg") },
-        ],
+        type: "media",
+        kind: "image",
+        src: qi("qi-blocks.jpg"),
+        width: "wide",
       },
       {
         type: "text",
-        title: "A brand that arrives in a van",
+        title: "Motion as proof of depth",
         body: [
-          "For a field IT company the fleet is the most-seen piece of the identity, so the livery was designed as a considered application rather than a logo stuck on a door. The mark is used large and cropped, letting the geometry read as pattern at distance while the wordmark and web address stay legible up close.",
-          "It is drawn to work across vehicle sizes, from a full transit panel to a small van, without redrawing the artwork each time.",
-          "Signage takes the mark the other way. Lit from within and built with real depth, it turns the same geometry into an object on a wall: outside as a solid glass block catching daylight, inside as a blue-lit form that sets the tone of the room. The brand reads as permanent at the front door and on the road alike.",
+          "Because the mark was constructed as an object rather than a flat shape, it could be rendered as glass and turned in light. Refraction picks up the blue and throws the lime through it, so the animation demonstrates the brand's own palette rather than decorating with it.",
+          "The same asset covers a lot of ground: a loading state, a screen-filling moment on a stand, a social sting, or the last frame of a video. One build, used everywhere motion is needed.",
+          "Pulled in close, the same forms stop reading as a logo and start reading as material — blue glass with lime caught in the bevels. That gives the brand an abstract layer it can use as background and art direction, drawn from its own geometry rather than a stock gradient.",
         ],
       },
       {
@@ -344,19 +337,20 @@ export const projects = [
       },
       {
         type: "media-grid",
-        cols: 2,
+        cols: 3,
         items: [
           { kind: "image", src: qi("qi-van-2.jpg") },
           { kind: "image", src: qi("qi-wallsign.jpg") },
+          { kind: "image", src: qi("qi-office.jpg") },
         ],
       },
       {
         type: "text",
-        title: "Print you can hand over",
+        title: "A brand that arrives in a van",
         body: [
-          "The brochure ships in a flocked blue presentation box, so the first thing a prospect handles is the brand colour at full strength before a single word is read. The cover carries the same glass render used in the 3D and motion work, which keeps the identity consistent whether it arrives on a screen or across a table.",
-          "Business cards are duplexed, grey and white against a solid blue band, with a QR straight to the site instead of a printed list of services. The only line of copy on the card is a plain statement of what the company does, which is the same restraint the rest of the system runs on.",
-          "Staff ID badges run the other way round: a full-bleed glass render, the mark small in the corner, and the engineer's name set in the brand typeface. On site that badge is often the first piece of the identity a client reads up close, so it was designed with the same care as anything that gets printed and posted.",
+          "For a field IT company the fleet is the most-seen piece of the identity, so the livery was designed as a considered application rather than a logo stuck on a door. The mark is used large and cropped, letting the geometry read as pattern at distance while the wordmark and web address stay legible up close.",
+          "It is drawn to work across vehicle sizes, from a full transit panel to a small van, without redrawing the artwork each time.",
+          "Signage takes the mark the other way. Lit from within and built with real depth, it turns the same geometry into an object on a wall: outside as a solid glass block catching daylight, inside as a blue-lit form that sets the tone of the room. The brand reads as permanent at the front door and on the road alike.",
         ],
       },
       {
@@ -370,11 +364,11 @@ export const projects = [
       },
       {
         type: "text",
-        title: "A website made of the same parts",
+        title: "Print you can hand over",
         body: [
-          "The site opens on the 3D work rather than a stock header image, so the first thing a visitor sees is the brand's own geometry moving. The interface is kept dark throughout, which lets the blue carry the structure and leaves the lime free to mark the few things that matter: the enquiry button, an active state, a highlighted figure.",
-          "Underneath that, the content is deliberately plain. Services are broken into named, scannable cards rather than paragraphs of jargon, photography shows real engineers in real server rooms, and the contact action stays pinned within reach on every screen. It reads the way the company describes itself: practical, and available when something breaks.",
-          "The layout holds together down to tablet and phone, where the mark crops in rather than shrinking away, and the same system carries onto social. Profile artwork uses the glass renders as the banner and the mark alone as the avatar, so the account is recognisable at the size people actually see it — a 40 pixel circle in a feed.",
+          "The brochure ships in a flocked blue presentation box, so the first thing a prospect handles is the brand colour at full strength before a single word is read. The cover carries the same glass render used in the 3D and motion work, which keeps the identity consistent whether it arrives on a screen or across a table.",
+          "Business cards are duplexed, grey and white against a solid blue band, with a QR straight to the site instead of a printed list of services. The only line of copy on the card is a plain statement of what the company does, which is the same restraint the rest of the system runs on.",
+          "Staff ID badges run the other way round: a full-bleed glass render, the mark small in the corner, and the engineer's name set in the brand typeface. On site that badge is often the first piece of the identity a client reads up close, so it was designed with the same care as anything that gets printed and posted.",
         ],
       },
       {
@@ -394,19 +388,27 @@ export const projects = [
       },
       {
         type: "text",
-        title: "The people who turn up",
+        title: "A website made of the same parts",
         body: [
-          "The last mile of this brand is a person in a server room at eight in the morning. Uniform, laptop and on-site presence were treated as part of the identity, so the same mark that appears in the 3D animation is the one on the polo shirt in a data centre.",
-          "Photography direction follows the palette: deep blacks, hard blue light and a lime accent, so imagery of real environments still sits inside the brand world.",
+          "The site opens on the 3D work rather than a stock header image, so the first thing a visitor sees is the brand's own geometry moving. The interface is kept dark throughout, which lets the blue carry the structure and leaves the lime free to mark the few things that matter: the enquiry button, an active state, a highlighted figure.",
+          "Underneath that, the content is deliberately plain. Services are broken into named, scannable cards rather than paragraphs of jargon, photography shows real engineers in real server rooms, and the contact action stays pinned within reach on every screen. It reads the way the company describes itself: practical, and available when something breaks.",
+          "The layout holds together down to tablet and phone, where the mark crops in rather than shrinking away, and the same system carries onto social. Profile artwork uses the glass renders as the banner and the mark alone as the avatar, so the account is recognisable at the size people actually see it — a 40 pixel circle in a feed.",
         ],
       },
       {
         type: "media-grid",
-        cols: 3,
+        cols: 2,
         items: [
           { kind: "image", src: qi("qi-server.jpg") },
           { kind: "image", src: qi("qi-tshirt.jpg") },
-          { kind: "image", src: qi("qi-office.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "The people who turn up",
+        body: [
+          "The last mile of this brand is a person in a server room at eight in the morning. Uniform, laptop and on-site presence were treated as part of the identity, so the same mark that appears in the 3D animation is the one on the polo shirt in a data centre.",
+          "Photography direction follows the palette: deep blacks, hard blue light and a lime accent, so imagery of real environments still sits inside the brand world.",
         ],
       },
     ],

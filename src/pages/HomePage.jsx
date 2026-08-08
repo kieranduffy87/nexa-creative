@@ -4,8 +4,10 @@ import { Reveal } from "../lib/motion";
 
 // Three.js is ~700kB of the bundle and nothing above the fold depends on it,
 // so it loads as its own chunk after the page has painted.
-const HeroScene = lazy(() =>
-  import("../components/HeroScene").then((m) => ({ default: m.HeroScene })),
+const NexaGlassScene = lazy(() =>
+  import("../components/NexaGlassScene").then((m) => ({
+    default: m.NexaGlassScene,
+  })),
 );
 import {
   ArrowIcon,
@@ -123,14 +125,24 @@ export default function HomePage() {
   return (
     <>
       {/* ── 1. Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        {/* 3D centrepiece. Below lg it sits behind the copy at low opacity —
-            above lg it gets its own column so it never crowds the type. */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full opacity-15 lg:w-[46%] lg:opacity-100">
+      <section className="hero-bg-dark hero-grain relative overflow-hidden text-white">
+        {/* Full-bleed glass composition: the Nexa mark extruded from its own
+            path data, with glass fragments crowding in around it. */}
+        <div className="pointer-events-none absolute inset-0 z-0">
           <Suspense fallback={null}>
-            <HeroScene className="h-full w-full" />
+            <NexaGlassScene variant="shards" className="h-full w-full" />
           </Suspense>
         </div>
+
+        {/* Legibility scrim — weighted to the left so the headline stays
+            readable without flattening the composition behind it */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1]"
+          style={{
+            background:
+              "linear-gradient(100deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 34%, rgba(0,0,0,0) 62%)",
+          }}
+        />
 
         <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
           <Reveal duration={1.3} className="max-w-[46rem]">
@@ -147,15 +159,17 @@ export default function HomePage() {
             <PillButton to="/contact" accent>
               Start a project
             </PillButton>
-            <PillButton to="/work">See the work</PillButton>
+            <PillButton to="/work" className="!bg-white/10 !text-white">
+              See the work
+            </PillButton>
           </Reveal>
 
           <Reveal
             variant="fade"
             delay={0.3}
-            className="mt-14 max-w-md border-t border-border pt-5"
+            className="mt-14 max-w-md border-t border-white/15 pt-5"
           >
-            <p className="t-body">
+            <p className="t-body !text-white/55">
               A Dublin studio building identities, websites and motion for
               companies that need to be taken seriously.
             </p>

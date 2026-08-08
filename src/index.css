@@ -244,6 +244,15 @@ html.lenis body {
     transform-origin: left;
   }
 
+  /* Nav sitting on a dark hero */
+  .nav-link-invert {
+    color: rgba(255, 255, 255, 0.68);
+  }
+  .nav-link-invert:hover,
+  .nav-link-invert[data-active="true"] {
+    color: #fff;
+  }
+
   .tag-pill {
     display: inline-block;
     border-radius: var(--radius-pill);
@@ -300,7 +309,7 @@ html.lenis body {
   }
 
   /* ---- Hero backdrops --------------------------------------------------
-     Each pairs with the generated environment map in HeroObject, so the
+     Each pairs with the environment map in NexaGlassScene, so the
      reflections on the form agree with the page behind it.                */
 
   .hero-bg-bone {

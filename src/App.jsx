@@ -6,7 +6,6 @@ import WorkPage from "./pages/WorkPage";
 import ProjectPage from "./pages/ProjectPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
-import HeroLabPage from "./pages/HeroLabPage";
 
 const router = createHashRouter([
   {
@@ -18,8 +17,6 @@ const router = createHashRouter([
       { path: "/work/:slug", element: <ProjectPage /> },
       { path: "/about", element: <AboutPage /> },
       { path: "/contact", element: <ContactPage /> },
-      // Unlinked scratch route for comparing hero treatments
-      { path: "/hero-lab", element: <HeroLabPage /> },
     ],
   },
 ]);
