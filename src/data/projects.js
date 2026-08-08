@@ -524,6 +524,11 @@ export const projects = [
       {
         type: "media",
         kind: "image",
+        src: gk("gk-guidelines.jpg"),
+      },
+      {
+        type: "media",
+        kind: "image",
         src: gk("gk-experience.jpg"),
       },
       {
@@ -581,8 +586,13 @@ export const projects = [
         cols: 2,
         items: [
           { kind: "image", src: gk("gk-stationery.jpg") },
-          { kind: "image", src: gk("gk-detail.jpg") },
+          { kind: "image", src: gk("gk-survey-pad.jpg") },
         ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: gk("gk-detail.jpg"),
       },
     ],
 
