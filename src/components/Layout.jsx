@@ -18,10 +18,10 @@ export function Layout() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-bg">
       <Navbar />
-      <main>
+      <main className="page-frame">
         <Outlet />
+        <Footer />
       </main>
-      <Footer />
     </div>
   );
 }

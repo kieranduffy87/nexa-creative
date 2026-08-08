@@ -230,11 +230,26 @@ export default function ProjectPage() {
         </div>
       </section>
 
-      {/* ── Body ────────────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-20 pb-24 md:gap-28 md:pb-32">
-        {project.sections.map((s, i) => (
-          <Section key={i} section={s} />
-        ))}
+      {/* ── Body ────────────────────────────────────────────────────────────
+          Two spacing rhythms. Consecutive media blocks sit at the same gap the
+          grids use internally, so a stacked pair reads identically to a
+          side-by-side pair. Anything touching a text block gets real air. */}
+      <div className="pb-24 md:pb-32">
+        {project.sections.map((s, i) => {
+          const isMedia = (x) => x && x.type !== "text";
+          const runOfMedia = isMedia(project.sections[i - 1]) && isMedia(s);
+
+          return (
+            <div
+              key={i}
+              className={
+                i === 0 ? "" : runOfMedia ? "mt-4 md:mt-6" : "mt-20 md:mt-28"
+              }
+            >
+              <Section section={s} />
+            </div>
+          );
+        })}
       </div>
 
       {/* ── Process notes ───────────────────────────────────────────────── */}

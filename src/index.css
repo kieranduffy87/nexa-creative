@@ -31,6 +31,19 @@
 :root {
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-h: 56px;
+
+  /* Page frame */
+  --frame-inset: 0.75rem;
+  --frame-gap: 0.75rem;
+  --panel-radius: 24px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --frame-inset: 1rem;
+    --frame-gap: 1rem;
+    --panel-radius: 32px;
+  }
 }
 
 html {
@@ -154,6 +167,33 @@ html.lenis body {
   .hairline {
     height: 1px;
     background: var(--color-border);
+  }
+
+  /* ---- Page frame ------------------------------------------------------
+     Content sits inset from the viewport as a stack of rounded panels, so
+     there is always a white gutter running around the edge of the page.
+
+     Radius only — no overflow rule. Backgrounds clip to the border box for
+     free, and forcing `overflow: hidden` here would kill the sticky section
+     headings on the case study pages. Sections that genuinely need clipping
+     (the hero canvas) set it themselves.                                   */
+
+  .page-frame {
+    display: flex;
+    flex-direction: column;
+    gap: var(--frame-gap);
+    padding: var(--frame-inset);
+  }
+
+  .page-frame > section,
+  .page-frame > footer,
+  .page-frame > .panel {
+    border-radius: var(--panel-radius);
+  }
+
+  /* Full-height panels have to give back the frame's top and bottom inset */
+  .panel-full {
+    min-height: calc(100svh - (var(--frame-inset) * 2));
   }
 
   /* ---- Controls -------------------------------------------------------- */

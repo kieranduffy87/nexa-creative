@@ -144,7 +144,7 @@ export default function HomePage() {
           }}
         />
 
-        <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
+        <div className="panel-full shell relative z-10 flex flex-col justify-end pb-16 pt-36 md:pb-20">
           <Reveal duration={1.3} className="max-w-[46rem]">
             <h1 className="t-display text-balance">
               Brand and digital design
