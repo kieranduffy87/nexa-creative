@@ -33,7 +33,7 @@ export function Navbar() {
           className="pointer-events-auto shrink-0 text-nexa-red transition-colors duration-300 hover:text-ink"
           aria-label="Nexa Creative — home"
         >
-          <NexaLogo className="h-4 w-auto md:h-[18px]" />
+          <NexaLogo className="h-8 w-auto md:h-9" />
         </Link>
 
         {/* Centre pill */}

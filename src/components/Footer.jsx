@@ -29,7 +29,7 @@ export function Footer() {
               className="inline-block text-nexa-red transition-colors duration-300 hover:text-white"
               aria-label="Nexa Creative — home"
             >
-              <NexaLogo className="h-[18px] w-auto" />
+              <NexaLogo className="h-9 w-auto" />
             </Link>
             <p className="t-body mt-6 max-w-xs !text-white/50">
               Brand and digital design studio. Dublin, Ireland.

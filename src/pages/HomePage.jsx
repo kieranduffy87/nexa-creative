@@ -18,10 +18,7 @@ import {
 import { projects } from "../data/projects";
 import { asset } from "../lib/asset";
 
-/* ---------------------------------------------------------------------------
-   Content. Anything marked PLACEHOLDER is a slot for real copy — invented
-   numbers and client quotes deliberately left blank rather than fabricated.
---------------------------------------------------------------------------- */
+/* --------------------------------------------------------------- content --- */
 
 const LOGOS = [
   "Group-copy.svg",
@@ -95,29 +92,6 @@ const STEPS = [
   },
 ];
 
-// PLACEHOLDER — swap `value` for real figures before launch.
-const STATS = [
-  { label: "Projects delivered", value: null },
-  { label: "Years in Dublin", value: null },
-  { label: "Average turnaround", value: null },
-  { label: "Client retention", value: null },
-  { label: "Sectors served", value: null },
-  { label: "Awards", value: null },
-];
-
-// PLACEHOLDER — real client quotes and attributions to be added.
-const TESTIMONIALS = [
-  { quote: null, name: null, role: "WhatsExposed" },
-  { quote: null, name: null, role: "Quinn IT" },
-  { quote: null, name: null, role: "MJ Flood" },
-];
-
-// PLACEHOLDER — team names, roles and portraits to be added.
-const TEAM = [
-  { name: null, role: "Founder & Creative Director" },
-  { name: null, role: "Design Director" },
-];
-
 /* ------------------------------------------------------------------------- */
 
 function ServiceIcon({ kind }) {
@@ -159,10 +133,6 @@ export default function HomePage() {
         </div>
 
         <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
-          <Reveal variant="fade" duration={1.2}>
-            <Eyebrow className="mb-8">Nexa Creative — Dublin</Eyebrow>
-          </Reveal>
-
           <Reveal duration={1.3} className="max-w-[46rem]">
             <h1 className="t-display text-balance">
               Brand and digital design
@@ -403,101 +373,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 8. Key stats ────────────────────────────────────────────────── */}
-      <section className="section-y">
-        <div className="shell">
-          <SectionHeader
-            eyebrow="Key stats"
-            title="The studio in numbers."
-            body="A short record of what we have shipped and who we have shipped it with."
-            action={<PillButton to="/contact">Get in touch</PillButton>}
-          />
-
-          <Reveal
-            className="mt-16 grid gap-px overflow-hidden rounded-card bg-border sm:grid-cols-2 lg:grid-cols-3"
-            stagger
-          >
-            {STATS.map((s) => (
-              <div key={s.label} className="bg-bg p-8 md:p-10">
-                <p className="t-display !text-[clamp(2.5rem,5vw,3.75rem)]">
-                  {s.value ?? (
-                    <span className="text-border-strong" title="Add figure">
-                      —
-                    </span>
-                  )}
-                </p>
-                <p className="t-body mt-3">{s.label}</p>
-              </div>
-            ))}
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── 9. Testimonials ─────────────────────────────────────────────── */}
-      <section className="section-y bg-mist">
-        <div className="shell">
-          <SectionHeader
-            eyebrow="Testimonials"
-            title="Hear it from our clients themselves."
-            align="left"
-          />
-
-          <Reveal className="mt-16 grid gap-6 md:grid-cols-3" stagger>
-            {TESTIMONIALS.map((t) => (
-              <figure
-                key={t.role}
-                className="flex flex-col rounded-card border border-border bg-bg p-8"
-              >
-                <Asterisk className="h-4 w-4 text-nexa-red" />
-                <blockquote className="t-h4 mt-8 flex-1 text-balance">
-                  {t.quote ?? (
-                    <span className="text-text-light">
-                      Client quote to be added.
-                    </span>
-                  )}
-                </blockquote>
-                <figcaption className="mt-8 border-t border-border pt-5">
-                  <p className="text-[15px] font-medium tracking-[-0.02em]">
-                    {t.name ?? (
-                      <span className="text-text-light">Name to be added</span>
-                    )}
-                  </p>
-                  <p className="t-body mt-0.5 !text-[13px]">{t.role}</p>
-                </figcaption>
-              </figure>
-            ))}
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── 10. People ──────────────────────────────────────────────────── */}
-      <section className="section-y">
-        <div className="shell">
-          <SectionHeader
-            eyebrow="People"
-            title="Meet the team."
-            body="Small on purpose. The people who pitch the work are the people who make it."
-          />
-
-          <Reveal className="mt-16 grid gap-6 sm:grid-cols-2 md:gap-8" stagger>
-            {TEAM.map((m) => (
-              <div key={m.role}>
-                <div className="media flex aspect-[4/5] items-center justify-center bg-bone">
-                  <Asterisk className="h-8 w-8 text-black/10" />
-                </div>
-                <h3 className="t-h4 mt-5">
-                  {m.name ?? (
-                    <span className="text-text-light">Name to be added</span>
-                  )}
-                </h3>
-                <p className="t-body mt-1">{m.role}</p>
-              </div>
-            ))}
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── 11. Closing CTA ─────────────────────────────────────────────── */}
+      {/* ── 8. Closing CTA ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-nexa-red text-white">
         <div className="shell relative z-10 py-24 text-center md:py-36">
           <Reveal duration={1.2}>
