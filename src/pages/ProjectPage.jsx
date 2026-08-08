@@ -30,40 +30,42 @@ function Media({ kind, src, poster, className = "" }) {
   return <img src={src} alt="" loading="lazy" className={className} />;
 }
 
-const WIDTHS = {
-  full: "shell",
-  wide: "shell",
-  inset: "shell",
-};
-
-function MediaBlock({ kind, src, width = "wide", bg, caption }) {
-  const inner = (
-    <figure>
-      <div
-        className="media"
-        style={bg ? { background: bg } : undefined}
-      >
-        <Media kind={kind} src={src} className="w-full" />
-      </div>
-      {caption && (
-        <figcaption className="t-body mt-4 !text-[13px]">{caption}</figcaption>
-      )}
-    </figure>
+/**
+ * One frame for every piece of media on the page.
+ *
+ * Singles and grids previously sat in different containers — 1600px with tight
+ * padding versus the 1400px shell — so a pair of images was visibly narrower
+ * than the full-width shot above it. Everything now shares this width, and the
+ * left and right edges line up all the way down the page.
+ */
+function MediaFrame({ children, className = "" }) {
+  return (
+    <div className={`px-5 md:px-10 xl:px-16 ${className}`}>
+      <div className="mx-auto max-w-[1600px]">{children}</div>
+    </div>
   );
+}
 
-  if (width === "full") {
-    return (
-      <div className="px-5 md:px-10 xl:px-16">
-        <div className="mx-auto max-w-[1600px]">{inner}</div>
-      </div>
-    );
-  }
-  return <div className={WIDTHS[width]}>{inner}</div>;
+function MediaBlock({ kind, src, bg, caption }) {
+  return (
+    <MediaFrame>
+      <figure>
+        <div className="media" style={bg ? { background: bg } : undefined}>
+          <Media kind={kind} src={src} className="w-full" />
+        </div>
+        {caption && (
+          <figcaption className="t-body mt-4 !text-[13px]">
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    </MediaFrame>
+  );
 }
 
 function MediaGrid({ items, cols = 2 }) {
   return (
-    <div className="shell">
+    <MediaFrame>
       <Reveal
         className={`grid gap-4 md:gap-6 ${
           cols === 3 ? "sm:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"
@@ -76,7 +78,7 @@ function MediaGrid({ items, cols = 2 }) {
           </div>
         ))}
       </Reveal>
-    </div>
+    </MediaFrame>
   );
 }
 
