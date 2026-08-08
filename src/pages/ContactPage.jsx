@@ -24,7 +24,7 @@ export default function ContactPage() {
     <>
       <PageHero
         tag="Contact"
-        title={<>Let&apos;s start your <em>next project</em>.</>}
+        title={<>Let&apos;s start your next project.</>}
         subtitle="Ready to elevate your brand and grow your business? Get in touch and we'll get back to you within 24 hours."
       />
 
@@ -48,7 +48,6 @@ export default function ContactPage() {
                     <h3 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-3">Email</h3>
                     <a
                       href="mailto:hello@nexacreative.ie"
-                      style={{ fontFamily: "var(--font-serif)" }}
                       className="text-2xl md:text-3xl text-text hover:text-text-muted transition-colors"
                     >
                       hello@nexacreative.ie
@@ -59,7 +58,6 @@ export default function ContactPage() {
                     <h3 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-3">Phone</h3>
                     <a
                       href="tel:+353123456789"
-                      style={{ fontFamily: "var(--font-serif)" }}
                       className="text-2xl md:text-3xl text-text hover:text-text-muted transition-colors"
                     >
                       +353 1 234 5678
@@ -69,7 +67,6 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-3">Visit</h3>
                     <p
-                      style={{ fontFamily: "var(--font-serif)" }}
                       className="text-2xl md:text-3xl text-text leading-tight mb-2"
                     >
                       Dublin 2,<br />
@@ -88,7 +85,6 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-3">Hours</h3>
                     <p
-                      style={{ fontFamily: "var(--font-serif)" }}
                       className="text-2xl md:text-3xl text-text leading-tight"
                     >
                       Mon — Fri<br />

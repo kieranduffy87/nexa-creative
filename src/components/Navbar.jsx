@@ -1,108 +1,122 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { NexaLogo } from "./NexaLogo";
+import { ArrowIcon } from "./ui";
 
-const navLinks = [
-  { label: "Services", to: "/services" },
-  { label: "Work", to: "/work" },
-  { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
+const LINKS = [
+  { to: "/services", label: "Services" },
+  { to: "/work", label: "Work" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
-  const isHome = location.pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    setMobileOpen(false);
-  }, [location]);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <nav className="fixed top-3 md:top-5 left-3 right-3 md:left-5 md:right-5 z-50">
-      <div className="mx-auto max-w-[1400px] bg-white/80 backdrop-blur-xl border border-border/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-full px-4 md:px-6 lg:px-8 h-12 md:h-14 flex items-center justify-between">
-        {/* Logo */}
+    <header className="fixed inset-x-0 top-0 z-50 pointer-events-none">
+      <div className="shell flex items-center justify-between gap-4 py-4 md:py-5">
+        {/* Logo — red, goes black on hover */}
         <Link
           to="/"
-          className="flex items-center shrink-0 group text-nexa-red hover:text-text transition-colors duration-300"
+          className="pointer-events-auto shrink-0 text-nexa-red transition-colors duration-300 hover:text-ink"
+          aria-label="Nexa Creative — home"
         >
-          <NexaLogo className="h-5 sm:h-6 w-auto" />
+          <NexaLogo className="h-4 w-auto md:h-[18px]" />
         </Link>
 
-        {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-7 lg:gap-9 text-[13px] font-medium tracking-wide">
-          {navLinks.map((link) => {
-            const active = location.pathname === link.to;
-            return (
-              <Link
-                key={link.label}
-                to={link.to}
-                className="nav-link relative inline-flex items-center group"
-                data-active={active}
-              >
-                <span
-                  className={`relative transition-colors duration-300 ${
-                    active ? "text-text" : "text-text-muted group-hover:text-text"
-                  }`}
-                >
-                  {link.label}
-                  <span className="nav-underline absolute left-0 -bottom-1 h-px bg-text" />
-                </span>
-              </Link>
-            );
-          })}
-          {/* CTA pill */}
+        {/* Centre pill */}
+        <nav
+          className={`pointer-events-auto hidden items-center gap-8 rounded-pill px-7 py-3 transition-all duration-500 md:flex ${
+            scrolled
+              ? "bg-white/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+              : "bg-black/[0.04] backdrop-blur-sm"
+          }`}
+        >
+          {LINKS.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className="nav-link"
+              data-active={pathname.startsWith(l.to) ? "true" : "false"}
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="pointer-events-auto flex items-center gap-2">
           <Link
             to="/contact"
-            className="ml-2 inline-flex items-center gap-2 rounded-full bg-nexa-red text-white px-4 py-1.5 text-[12px] tracking-wide hover:bg-text transition-colors duration-300"
+            className={`btn-pill hidden sm:inline-flex ${
+              scrolled ? "bg-white/80 backdrop-blur-xl" : ""
+            }`}
           >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-80 animate-ping" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
+            <span>Start a project</span>
+            <span className="arrow-dot">
+              <ArrowIcon />
             </span>
-            Start a project
           </Link>
-        </div>
 
-        {/* Mobile menu button */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden text-text text-[13px] font-medium tracking-wide cursor-pointer"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? "Close" : "Menu"}
-        </button>
+          {/* Mobile trigger */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={open ? "Close menu" : "Open menu"}
+            className="btn-pill px-4 md:hidden"
+          >
+            <span className="flex flex-col gap-[3px]">
+              <span
+                className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                  open ? "translate-y-[4px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`block h-px w-4 bg-current transition-opacity duration-200 ${
+                  open ? "opacity-0" : ""
+                }`}
+              />
+              <span
+                className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                  open ? "-translate-y-[4px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden border-t border-border/50 bg-white overflow-hidden"
-          >
-            <div className="px-6 py-6 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  className={`py-3 text-[15px] font-medium transition-colors border-b border-border/30 ${
-                    location.pathname === link.to
-                      ? "text-text"
-                      : "text-text-muted hover:text-text"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+      {/* Mobile sheet */}
+      <div
+        className={`pointer-events-auto shell overflow-hidden transition-[max-height,opacity] duration-500 md:hidden ${
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <nav className="mt-1 rounded-card bg-white/85 p-2 shadow-[0_8px_30px_rgba(0,0,0,0.08)] backdrop-blur-xl">
+          {LINKS.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className="flex items-center justify-between rounded-[8px] px-4 py-3 text-[15px] tracking-[-0.02em] transition-colors hover:bg-black/[0.04]"
+            >
+              {l.label}
+              <ArrowIcon className="h-3 w-3 text-text-light" />
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+    </header>
   );
 }

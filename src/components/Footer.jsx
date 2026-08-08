@@ -1,141 +1,105 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { NexaLogo } from "./NexaLogo";
+import { ArrowIcon } from "./ui";
+
+const DISCOVER = [
+  { label: "Home", to: "/" },
+  { label: "Services", to: "/services" },
+  { label: "Work", to: "/work" },
+  { label: "About", to: "/about" },
+  { label: "Contact", to: "/contact" },
+];
+
+// PLACEHOLDER — point these at the studio's real profiles.
+const SOCIALS = [
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "LinkedIn", href: "https://linkedin.com" },
+  { label: "X", href: "https://x.com" },
+];
 
 export function Footer() {
   return (
-    <footer className="relative">
-      {/* Big CTA */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16 pt-20 md:pt-32 pb-16 md:pb-24 border-t border-border">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
-          <div className="md:col-span-3">
-            <p className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase">
-              Get in Touch
-            </p>
-          </div>
-          <div className="md:col-span-9">
-            <h2
-              style={{ fontFamily: "var(--font-serif)" }}
-              className="text-[36px] sm:text-[56px] md:text-[80px] lg:text-[104px] font-normal text-text leading-[0.95] tracking-[-0.02em] mb-8 md:mb-10"
+    <footer className="bg-ink text-white">
+      <div className="shell py-16 md:py-20">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-10">
+          {/* Identity */}
+          <div className="md:col-span-4">
+            <Link
+              to="/"
+              className="inline-block text-nexa-red transition-colors duration-300 hover:text-white"
+              aria-label="Nexa Creative — home"
             >
-              Build Your <em>New Future</em> With Us
-            </h2>
-            <p className="text-text-muted text-base md:text-lg max-w-2xl leading-relaxed">
-              Nexa Creative is a Dublin-based creative agency helping organizations
-              navigate growth, reinvention, and change through strategy, design,
-              and digital.
+              <NexaLogo className="h-[18px] w-auto" />
+            </Link>
+            <p className="t-body mt-6 max-w-xs !text-white/50">
+              Brand and digital design studio. Dublin, Ireland.
             </p>
           </div>
-        </div>
-      </div>
 
-      {/* Footer grid */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16 border-t border-border py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-10">
-          {/* Sitemap */}
-          <div className="md:col-span-3">
-            <h4 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-5">
-              Sitemap
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: "Home", to: "/" },
-                { label: "Services", to: "/services" },
-                { label: "Work", to: "/work" },
-                { label: "About", to: "/about" },
-                { label: "Contact", to: "/contact" },
-              ].map((link) => (
-                <li key={link.label}>
+          {/* Discover */}
+          <nav className="md:col-span-3">
+            <p className="t-eyebrow !text-white/40">Discover</p>
+            <ul className="mt-5 space-y-3">
+              {DISCOVER.map((l) => (
+                <li key={l.to}>
                   <Link
-                    to={link.to}
-                    className="text-text hover:text-text-muted transition-colors text-sm"
+                    to={l.to}
+                    className="text-[15px] tracking-[-0.02em] text-white/70 transition-colors hover:text-white"
                   >
-                    {link.label}
+                    {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          {/* Visit */}
-          <div className="md:col-span-3">
-            <h4 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-5">
-              Visit
-            </h4>
-            <p className="text-text text-sm leading-relaxed mb-3">
-              Dublin 2,<br />
-              Ireland
-            </p>
-            <a
-              href="https://maps.google.com/?q=Dublin+Ireland"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 text-text-muted hover:text-text transition-colors text-sm"
-            >
-              Google Maps <ArrowUpRight size={12} />
-            </a>
-          </div>
-
-          {/* Work With Us */}
-          <div className="md:col-span-3">
-            <h4 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-5">
-              Work With Us
-            </h4>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="mailto:hello@nexacreative.ie"
-                  className="text-text hover:text-text-muted transition-colors text-sm"
-                >
-                  hello@nexacreative.ie
-                </a>
-              </li>
-              <li>
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-1 text-text hover:text-text-muted transition-colors text-sm"
-                >
-                  Schedule a call <ArrowUpRight size={12} />
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div className="md:col-span-3">
-            <h4 className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase mb-5">
-              Follow
-            </h4>
-            <ul className="space-y-2.5">
-              {[
-                { label: "Instagram", href: "https://instagram.com" },
-                { label: "LinkedIn", href: "https://linkedin.com" },
-                { label: "TikTok", href: "https://tiktok.com" },
-                { label: "X", href: "https://x.com" },
-              ].map((s) => (
+          {/* Socials */}
+          <nav className="md:col-span-2">
+            <p className="t-eyebrow !text-white/40">Socials</p>
+            <ul className="mt-5 space-y-3">
+              {SOCIALS.map((s) => (
                 <li key={s.label}>
                   <a
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-text hover:text-text-muted transition-colors text-sm"
+                    className="inline-flex items-center gap-1.5 text-[15px] tracking-[-0.02em] text-white/70 transition-colors hover:text-white"
                   >
-                    {s.label} <ArrowUpRight size={12} />
+                    {s.label}
+                    <ArrowIcon className="h-2.5 w-2.5" />
                   </a>
                 </li>
               ))}
             </ul>
+          </nav>
+
+          {/* Contact */}
+          <div className="md:col-span-3">
+            <p className="t-eyebrow !text-white/40">Work with us</p>
+            <a
+              href="mailto:hello@nexacreative.ie"
+              className="mt-5 block text-[15px] tracking-[-0.02em] text-white/70 transition-colors hover:text-white"
+            >
+              hello@nexacreative.ie
+            </a>
+            <Link
+              to="/contact"
+              className="btn-pill mt-6 !bg-white/10 !text-white hover:!bg-white hover:!text-ink"
+            >
+              <span>Start a project</span>
+              <span className="arrow-dot !bg-nexa-red !text-white">
+                <ArrowIcon />
+              </span>
+            </Link>
           </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16 border-t border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-text-muted text-xs">
-          &copy; {new Date().getFullYear()} Nexa Creative. All rights reserved.
-        </p>
-        <p className="text-text-muted text-xs">
-          Dublin, Ireland
-        </p>
+        <div className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[13px] text-white/40">
+            © {new Date().getFullYear()} Nexa Creative. All rights reserved.
+          </p>
+          <p className="text-[13px] text-white/40">Dublin, Ireland</p>
+        </div>
       </div>
     </footer>
   );

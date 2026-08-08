@@ -1,363 +1,522 @@
-import { useRef } from "react";
+import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
-import { BackgroundVideo } from "../components/BackgroundVideo";
+import { Reveal } from "../lib/motion";
+
+// Three.js is ~700kB of the bundle and nothing above the fold depends on it,
+// so it loads as its own chunk after the page has painted.
+const HeroScene = lazy(() =>
+  import("../components/HeroScene").then((m) => ({ default: m.HeroScene })),
+);
+import {
+  ArrowIcon,
+  Asterisk,
+  Eyebrow,
+  Ordinal,
+  PillButton,
+  SectionHeader,
+} from "../components/ui";
+import { projects } from "../data/projects";
 import { asset } from "../lib/asset";
 
-const workPreview = [
+/* ---------------------------------------------------------------------------
+   Content. Anything marked PLACEHOLDER is a slot for real copy — invented
+   numbers and client quotes deliberately left blank rather than fabricated.
+--------------------------------------------------------------------------- */
+
+const LOGOS = [
+  "Group-copy.svg",
+  "Group-1-copy.svg",
+  "Group-2-copy.svg",
+  "Group-3-copy.svg",
+  "Group-4-copy.svg",
+  "Group-5-copy.svg",
+  "Group-6-copy.svg",
+  "Group-567-copy.svg",
+  "Group-568-copy.svg",
+];
+
+const SERVICES = [
   {
-    title: "WhatsExposed",
-    tags: ["Brand Strategy", "Naming", "Brand Identity", "Logo System", "Guidelines", "Web"],
-    image: asset("/projects/whatsexposed/hero-laptop.webp"),
-    span: "md:col-span-7",
-    href: "/work/whatsexposed",
+    title: "Brand",
+    body: "Positioning, naming, identity systems and the guidelines that hold them together. We build brands as toolkits, so the tenth piece of collateral looks like the first.",
+    icon: "asterisk",
   },
   {
-    title: "Meridian Property Group",
-    tags: ["Brand Strategy", "Naming", "Logo", "Digital Experience", "Web", "Engineering"],
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=80",
-    span: "md:col-span-5",
-    href: "/work",
+    title: "Digital",
+    body: "Websites and products designed and built in the same room. Plain language, real content, and interfaces that stay fast on the connection your customer actually has.",
+    icon: "channel",
   },
   {
-    title: "Wild Atlantic Tours",
-    tags: ["Brand Strategy", "Research", "Brand Identity", "Logo", "Guidelines", "Campaigns", "Motion & Video"],
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=2200&q=80",
-    span: "md:col-span-12",
-    href: "/work",
-  },
-  {
-    title: "Bloom Wellness Studio",
-    tags: ["Brand Strategy", "Naming", "Brand Identity", "Logo", "Guidelines", "Campaigns"],
-    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1400&q=80",
-    span: "md:col-span-5",
-    href: "/work",
-  },
-  {
-    title: "Harbour Coffee Roasters",
-    tags: ["Naming", "Research", "Brand Identity", "Logo", "Guidelines", "Campaigns", "Packaging"],
-    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80",
-    span: "md:col-span-7",
-    href: "/work",
+    title: "Motion",
+    body: "3D, animation and campaign film drawn from the identity rather than bolted on. One build, reused everywhere motion is needed.",
+    icon: "border",
   },
 ];
 
-const insights = [
+const APPROACH = [
   {
-    title: "The Future of Digital Marketing in Ireland",
-    days: "12 days ago",
-    category: "Opinion",
-    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1200&q=80",
+    title: "Evidence first",
+    body: "We start with the category, the competitors and the people who actually buy. Positioning before pixels.",
   },
   {
-    title: "Nexa Creative featured in Irish Design Awards",
-    days: "47 days ago",
-    category: "Press",
-    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1200&q=80",
+    title: "Systems, not artefacts",
+    body: "Every brand ships as a system with rules, so it survives being handed to a marketing team.",
   },
   {
-    title: "Why Every Business Needs an AI SEO Strategy",
-    days: "82 days ago",
-    category: "Insights",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
+    title: "Built to be built",
+    body: "Design and development sit together. Nothing gets approved that cannot ship.",
+  },
+  {
+    title: "Plain speech",
+    body: "Jargon is a design failure. If a stranger cannot read it in three seconds, it goes back.",
+  },
+  {
+    title: "One studio",
+    body: "The people who pitch the work are the people who make it. No handover, no dilution.",
   },
 ];
+
+const STEPS = [
+  {
+    title: "Kick off",
+    body: "A working session to agree the problem, the audience and what success looks like — before anyone opens a design tool.",
+  },
+  {
+    title: "Strategy & routes",
+    body: "Category research, positioning, then two or three distinct creative routes with the reasoning attached.",
+  },
+  {
+    title: "Build the system",
+    body: "The chosen route developed into a full identity, digital platform and toolkit, with guidelines written as we go.",
+  },
+  {
+    title: "Launch & extend",
+    body: "Rollout across print, motion, environment and social — then we stay available as the brand grows into new formats.",
+  },
+];
+
+// PLACEHOLDER — swap `value` for real figures before launch.
+const STATS = [
+  { label: "Projects delivered", value: null },
+  { label: "Years in Dublin", value: null },
+  { label: "Average turnaround", value: null },
+  { label: "Client retention", value: null },
+  { label: "Sectors served", value: null },
+  { label: "Awards", value: null },
+];
+
+// PLACEHOLDER — real client quotes and attributions to be added.
+const TESTIMONIALS = [
+  { quote: null, name: null, role: "WhatsExposed" },
+  { quote: null, name: null, role: "Quinn IT" },
+  { quote: null, name: null, role: "MJ Flood" },
+];
+
+// PLACEHOLDER — team names, roles and portraits to be added.
+const TEAM = [
+  { name: null, role: "Founder & Creative Director" },
+  { name: null, role: "Design Director" },
+];
+
+/* ------------------------------------------------------------------------- */
+
+function ServiceIcon({ kind }) {
+  const common = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.2,
+    strokeLinecap: "round",
+  };
+  if (kind === "channel") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-8 w-8" {...common}>
+        <path d="M4 12h16M4 6h10M4 18h7" />
+      </svg>
+    );
+  }
+  if (kind === "border") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-8 w-8" {...common}>
+        <rect x="3.5" y="3.5" width="17" height="17" rx="1" />
+        <path d="M12 3.5v17" />
+      </svg>
+    );
+  }
+  return <Asterisk className="h-8 w-8" />;
+}
 
 export default function HomePage() {
-  const heroRef = useRef(null);
-
-  const handleHeroMouseMove = (e) => {
-    const el = heroRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    el.style.setProperty("--mx", `${x}px`);
-    el.style.setProperty("--my", `${y}px`);
-  };
-
-  const heroWords = [
-    { text: "Transforming", italic: true },
-    { text: "Brands," },
-    { text: "Building", break: true },
-    { text: "Futures", italic: true },
-  ];
-
   return (
     <>
-      {/* Hero - video background with red spotlight + mouse-tracked overlays */}
-      <section
-        ref={heroRef}
-        onMouseMove={handleHeroMouseMove}
-        className="hero-red relative pt-32 md:pt-44 lg:pt-52 pb-32 md:pb-44 lg:pb-52"
-      >
-        {/* Background video */}
-        <video
-          src={asset("/hero.mp4")}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          aria-hidden="true"
-        />
-        {/* Red tint overlay for brand cohesion + text contrast */}
-        <div
-          className="absolute inset-0 z-[1] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(239,65,54,0.55) 0%, rgba(239,65,54,0.45) 50%, rgba(140,20,20,0.65) 100%)",
-            mixBlendMode: "multiply",
-          }}
-          aria-hidden="true"
-        />
-        <div className="hero-spotlight" aria-hidden="true" />
-        <div className="relative max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16 z-10">
-          <h1
-            style={{ fontFamily: "var(--font-serif)" }}
-            className="text-[44px] sm:text-[68px] md:text-[96px] lg:text-[128px] xl:text-[144px] font-normal text-white leading-[0.92] tracking-[-0.025em] mb-10 md:mb-14"
+      {/* ── 1. Hero ─────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        {/* 3D centrepiece. Below lg it sits behind the copy at low opacity —
+            above lg it gets its own column so it never crowds the type. */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full opacity-15 lg:w-[46%] lg:opacity-100">
+          <Suspense fallback={null}>
+            <HeroScene className="h-full w-full" />
+          </Suspense>
+        </div>
+
+        <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
+          <Reveal variant="fade" duration={1.2}>
+            <Eyebrow className="mb-8">Nexa Creative — Dublin</Eyebrow>
+          </Reveal>
+
+          <Reveal duration={1.3} className="max-w-[46rem]">
+            <h1 className="t-display text-balance">
+              Brand and digital design
+              <br className="hidden sm:block" /> that earns attention.
+            </h1>
+          </Reveal>
+
+          <Reveal
+            delay={0.15}
+            className="mt-10 flex flex-wrap items-center gap-3"
           >
-            {heroWords.map((w, i) => (
-              <span key={i}>
-                <span className="hero-word">
-                  {w.italic ? <em>{w.text}</em> : w.text}
-                </span>
-                {w.break ? <br className="hidden sm:block" /> : " "}
-              </span>
+            <PillButton to="/contact" accent>
+              Start a project
+            </PillButton>
+            <PillButton to="/work">See the work</PillButton>
+          </Reveal>
+
+          <Reveal
+            variant="fade"
+            delay={0.3}
+            className="mt-14 max-w-md border-t border-border pt-5"
+          >
+            <p className="t-body">
+              A Dublin studio building identities, websites and motion for
+              companies that need to be taken seriously.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 2. Studio statement ─────────────────────────────────────────── */}
+      <section className="section-y">
+        <div className="shell">
+          <Reveal variant="fade" duration={0.8}>
+            <div className="hairline mb-4" />
+            <Eyebrow>Our studio</Eyebrow>
+          </Reveal>
+
+          <Reveal duration={1.1} className="mt-8 max-w-5xl">
+            <p className="t-h1 text-balance">
+              We make brands that hold their nerve — built as systems, written
+              in plain speech, and designed to still look right on the hundredth
+              piece of collateral.
+            </p>
+          </Reveal>
+
+          <Reveal
+            delay={0.1}
+            className="mt-12 grid gap-10 md:grid-cols-3 md:gap-16"
+            stagger
+          >
+            <p className="t-body">
+              Most studios hand over a logo and a PDF. We hand over a working
+              system: construction grids, colour roles, lockups for the awkward
+              formats, and rules that survive being handed to a marketing team.
+            </p>
+            <p className="t-body">
+              That matters because a brand is rarely broken by its identity. It
+              is broken by the two hundred things made afterwards by people who
+              were never in the room.
+            </p>
+            <p className="t-body">
+              So we design for that moment instead of the presentation — and the
+              work gets sharper, not looser, as it scales.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 3. Clients ──────────────────────────────────────────────────── */}
+      <section className="border-y border-border bg-mist py-16 md:py-20">
+        <div className="shell">
+          <Reveal variant="fade">
+            <Eyebrow className="text-center">Clients</Eyebrow>
+            <h2 className="t-h2 mt-6 text-center text-balance">
+              Trusted by companies that cannot afford to look small.
+            </h2>
+          </Reveal>
+        </div>
+
+        <div className="marquee-mask mt-12 overflow-hidden">
+          <div className="marquee-track flex w-max items-center gap-16 px-8 md:gap-24">
+            {[...LOGOS, ...LOGOS].map((file, i) => (
+              <img
+                key={`${file}-${i}`}
+                src={asset(`logos/${file}`)}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                className="h-6 w-auto shrink-0 opacity-40 md:h-8"
+              />
             ))}
-          </h1>
-          <p className="text-white/85 text-base md:text-lg max-w-xl leading-relaxed">
-            A Dublin-based creative agency working across strategy, design, and digital.
-          </p>
+          </div>
         </div>
       </section>
 
-      {/* Ambition section with video */}
-      <section className="pt-24 md:pt-40 pb-20 md:pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 mb-10 md:mb-16">
-            <div className="md:col-span-3">
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase"
-              >
-                Ambition
-              </motion.p>
-            </div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              style={{ fontFamily: "var(--font-serif)" }}
-              className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-normal text-text leading-[1.05] tracking-[-0.02em]"
-            >
-              We exist to make the <em>new possible</em>. New brands. New growth. New <em>futures</em>.
-            </motion.h2>
-          </div>
+      {/* ── 4. Services ─────────────────────────────────────────────────── */}
+      <section className="section-y">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="Services"
+            title="Three disciplines, run out of one studio."
+            body="Visually stunning work is the easy part. Holding it together across every format a company actually needs is the job."
+            action={<PillButton to="/services">All services</PillButton>}
+          />
 
-          {/* 16:9 Video */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="aspect-video w-full overflow-hidden bg-black"
+          <Reveal
+            className="mt-16 grid gap-px overflow-hidden rounded-card bg-border md:grid-cols-3"
+            stagger
           >
-            <BackgroundVideo />
-          </motion.div>
+            {SERVICES.map((s) => (
+              <div
+                key={s.title}
+                className="group flex flex-col bg-bg p-8 transition-colors duration-500 hover:bg-mist md:p-10"
+              >
+                <span className="text-nexa-red transition-transform duration-700 group-hover:rotate-90">
+                  <ServiceIcon kind={s.icon} />
+                </span>
+                <h3 className="t-h3 mt-10">{s.title}</h3>
+                <p className="t-body mt-4 flex-1">{s.body}</p>
+              </div>
+            ))}
+          </Reveal>
         </div>
       </section>
 
-      {/* Selected Work */}
-      <section className="pb-20 md:pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-          {/* Header */}
-          <div className="border-t border-border pt-10 md:pt-14 mb-10 md:mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end">
-              <div className="md:col-span-3">
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase"
-                >
-                  Selected Work
-                </motion.p>
-              </div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                style={{ fontFamily: "var(--font-serif)" }}
-                className="md:col-span-6 text-[28px] sm:text-[36px] md:text-[44px] lg:text-[52px] font-normal text-text leading-[1.1] tracking-[-0.02em]"
-              >
-                Work created at moments where change becomes <em>inevitable by design</em>.
-              </motion.h2>
-              <div className="md:col-span-3 md:justify-self-end">
-                <Link
-                  to="/work"
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium text-text hover:text-text-muted transition-colors group"
-                >
-                  All Work
-                  <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </div>
+      {/* ── 5. Case studies ─────────────────────────────────────────────── */}
+      <section className="section-y bg-bone">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="Our work"
+            title="Case studies."
+            body="Two brands built end to end — identity, guidelines, digital, motion and the applied estate."
+            action={<PillButton to="/work">View all work</PillButton>}
+          />
 
-          {/* Asymmetric work grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-14 md:gap-y-20">
-            {workPreview.map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: (i % 2) * 0.1 }}
-                className={project.span}
-              >
-                <Link to={project.href} className="block group">
+          <div className="mt-16 grid gap-6 md:grid-cols-2 md:gap-8">
+            {projects.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.08}>
+                <Link to={`/work/${p.slug}`} className="group block">
                   <div
-                    className="aspect-[3/2] overflow-hidden mb-5 md:mb-6 flex items-center justify-center"
-                    style={{ backgroundColor: project.imageBg || "#1a1a1a" }}
+                    className="media media-zoom aspect-[4/3]"
+                    style={{ background: p.accent }}
                   >
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className={
-                        project.imageBg
-                          ? "w-2/3 max-w-[420px] group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-                          : "w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                      }
+                    <video
+                      src={p.heroVideo}
+                      poster={p.heroPoster}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
                     />
                   </div>
-                  <h3
-                    style={{ fontFamily: "var(--font-serif)" }}
-                    className="text-2xl md:text-3xl font-normal text-text leading-tight mb-3"
-                  >
-                    {project.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-x-1.5 gap-y-1.5">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="tag-pill">{tag}</span>
+
+                  <div className="mt-5 flex items-start justify-between gap-6">
+                    <div>
+                      <h3 className="t-h3">{p.name}</h3>
+                      <p className="t-body mt-1.5">{p.tagline}</p>
+                    </div>
+                    <span className="arrow-dot mt-1 transition-transform duration-500 group-hover:translate-x-1">
+                      <ArrowIcon />
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <span key={t} className="tag-pill">
+                        {t}
+                      </span>
                     ))}
                   </div>
                 </Link>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Approach - full-width image with text */}
-      <section className="pb-20 md:pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-          <Link to="/services" className="block group">
-            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-bg-dark">
-              <img
-                src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=2400&q=80"
-                alt="Our approach"
-                className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  style={{ fontFamily: "var(--font-serif)" }}
-                  className="text-[32px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-normal text-white leading-[0.95] tracking-[-0.02em] mb-6 md:mb-8 max-w-4xl"
-                >
-                  Growing Brands by <br />
-                  <em>Redefining Strategy</em>.
-                </motion.h2>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium text-white"
-                >
-                  Our Approach
-                  <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </motion.span>
+      {/* ── 6. Approach ─────────────────────────────────────────────────── */}
+      <section className="section-y">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="Our approach"
+            title="Where your ambition meets velocity."
+            body="Five principles that decide how the work gets made — and what we turn down."
+            action={<PillButton to="/about">About the studio</PillButton>}
+          />
+
+          <Reveal
+            className="mt-16 grid gap-px overflow-hidden rounded-card bg-border sm:grid-cols-2 lg:grid-cols-3"
+            stagger
+          >
+            {APPROACH.map((a, i) => (
+              <div key={a.title} className="bg-bg p-8 md:p-10">
+                <Ordinal n={i + 1} className="text-nexa-red" />
+                <h3 className="t-h4 mt-6">{a.title}</h3>
+                <p className="t-body mt-3">{a.body}</p>
               </div>
+            ))}
+            {/* Sixth cell keeps the 3-col grid square */}
+            <div className="hidden bg-bg p-8 md:p-10 lg:flex lg:items-end">
+              <PillButton to="/contact" accent>
+                Work with us
+              </PillButton>
             </div>
-          </Link>
+          </Reveal>
         </div>
       </section>
 
-      {/* Insights */}
-      <section className="pb-20 md:pb-32">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-          <div className="border-t border-border pt-10 md:pt-14 mb-10 md:mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end">
-              <div className="md:col-span-3">
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-text-muted text-xs font-medium tracking-[0.12em] uppercase"
-                >
-                  Insights
-                </motion.p>
-              </div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                style={{ fontFamily: "var(--font-serif)" }}
-                className="md:col-span-6 text-[28px] sm:text-[36px] md:text-[44px] lg:text-[52px] font-normal text-text leading-[1.1] tracking-[-0.02em]"
-              >
-                The latest from <em>our world and beyond</em>.
-              </motion.h2>
-              <div className="md:col-span-3 md:justify-self-end">
-                <Link
-                  to="/about"
-                  className="inline-flex items-center gap-1.5 text-[13px] font-medium text-text hover:text-text-muted transition-colors group"
-                >
-                  Explore All
-                  <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </div>
+      {/* ── 7. How it works ─────────────────────────────────────────────── */}
+      <section className="section-y bg-ink text-white">
+        <div className="shell">
+          <Reveal variant="fade" duration={0.8}>
+            <div className="h-px bg-ink-border" />
+            <p className="t-eyebrow mt-4 text-white/45">How it works</p>
+          </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {insights.map((post, i) => (
-              <motion.div
-                key={post.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="group cursor-pointer"
-              >
-                <div className="aspect-[4/3] overflow-hidden mb-4 md:mb-5 bg-bg-dark">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-                  />
+          <Reveal duration={1.1} className="mt-8 max-w-3xl">
+            <h2 className="t-h1 text-balance">
+              Four stages, and you are in the room for all of them.
+            </h2>
+          </Reveal>
+
+          <div className="mt-16 divide-y divide-white/10 border-t border-white/10">
+            {STEPS.map((s, i) => (
+              <Reveal key={s.title} variant="left" delay={i * 0.06}>
+                <div className="grid items-start gap-4 py-8 md:grid-cols-12 md:gap-8 md:py-10">
+                  <Ordinal n={i + 1} className="text-nexa-red md:col-span-1" />
+                  <h3 className="t-h3 md:col-span-4">{s.title}</h3>
+                  <p className="t-body !text-white/55 md:col-span-7">
+                    {s.body}
+                  </p>
                 </div>
-                <h3
-                  style={{ fontFamily: "var(--font-serif)" }}
-                  className="text-xl md:text-2xl font-normal text-text leading-tight mb-3"
-                >
-                  {post.title}
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 8. Key stats ────────────────────────────────────────────────── */}
+      <section className="section-y">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="Key stats"
+            title="The studio in numbers."
+            body="A short record of what we have shipped and who we have shipped it with."
+            action={<PillButton to="/contact">Get in touch</PillButton>}
+          />
+
+          <Reveal
+            className="mt-16 grid gap-px overflow-hidden rounded-card bg-border sm:grid-cols-2 lg:grid-cols-3"
+            stagger
+          >
+            {STATS.map((s) => (
+              <div key={s.label} className="bg-bg p-8 md:p-10">
+                <p className="t-display !text-[clamp(2.5rem,5vw,3.75rem)]">
+                  {s.value ?? (
+                    <span className="text-border-strong" title="Add figure">
+                      —
+                    </span>
+                  )}
+                </p>
+                <p className="t-body mt-3">{s.label}</p>
+              </div>
+            ))}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 9. Testimonials ─────────────────────────────────────────────── */}
+      <section className="section-y bg-mist">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="Testimonials"
+            title="Hear it from our clients themselves."
+            align="left"
+          />
+
+          <Reveal className="mt-16 grid gap-6 md:grid-cols-3" stagger>
+            {TESTIMONIALS.map((t) => (
+              <figure
+                key={t.role}
+                className="flex flex-col rounded-card border border-border bg-bg p-8"
+              >
+                <Asterisk className="h-4 w-4 text-nexa-red" />
+                <blockquote className="t-h4 mt-8 flex-1 text-balance">
+                  {t.quote ?? (
+                    <span className="text-text-light">
+                      Client quote to be added.
+                    </span>
+                  )}
+                </blockquote>
+                <figcaption className="mt-8 border-t border-border pt-5">
+                  <p className="text-[15px] font-medium tracking-[-0.02em]">
+                    {t.name ?? (
+                      <span className="text-text-light">Name to be added</span>
+                    )}
+                  </p>
+                  <p className="t-body mt-0.5 !text-[13px]">{t.role}</p>
+                </figcaption>
+              </figure>
+            ))}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 10. People ──────────────────────────────────────────────────── */}
+      <section className="section-y">
+        <div className="shell">
+          <SectionHeader
+            eyebrow="People"
+            title="Meet the team."
+            body="Small on purpose. The people who pitch the work are the people who make it."
+          />
+
+          <Reveal className="mt-16 grid gap-6 sm:grid-cols-2 md:gap-8" stagger>
+            {TEAM.map((m) => (
+              <div key={m.role}>
+                <div className="media flex aspect-[4/5] items-center justify-center bg-bone">
+                  <Asterisk className="h-8 w-8 text-black/10" />
+                </div>
+                <h3 className="t-h4 mt-5">
+                  {m.name ?? (
+                    <span className="text-text-light">Name to be added</span>
+                  )}
                 </h3>
-                <div className="flex items-center gap-2.5 text-text-muted text-xs">
-                  <span>{post.days}</span>
-                  <span>·</span>
-                  <span>{post.category}</span>
-                </div>
-              </motion.div>
+                <p className="t-body mt-1">{m.role}</p>
+              </div>
             ))}
-          </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 11. Closing CTA ─────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-nexa-red text-white">
+        <div className="shell relative z-10 py-24 text-center md:py-36">
+          <Reveal duration={1.2}>
+            <h2 className="t-display mx-auto max-w-4xl text-balance">
+              Ready to make your brand work harder?
+            </h2>
+          </Reveal>
+
+          <Reveal variant="fade" delay={0.15} className="mt-10">
+            <Link
+              to="/contact"
+              className="btn-pill !bg-white !text-ink hover:!bg-ink hover:!text-white"
+            >
+              <span>Start a project</span>
+              <span className="arrow-dot !bg-nexa-red !text-white">
+                <ArrowIcon />
+              </span>
+            </Link>
+          </Reveal>
         </div>
       </section>
     </>

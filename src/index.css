@@ -1,187 +1,332 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", serif;
-  --color-nexa-red: #ef4136;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Monochrome core — the reference palette */
   --color-bg: #ffffff;
-  --color-bg-dark: #1a1a1a;
-  --color-text: #1a1a1a;
-  --color-text-muted: #666666;
-  --color-text-light: #999999;
-  --color-border: #e5e5e5;
+  --color-ink: #000000;
+  --color-bone: #ebe9e5;
+  --color-mist: #f1f1f1;
+  --color-text: #000000;
+  --color-text-muted: #6b6b6b;
+  --color-text-light: #9a9a9a;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.18);
+
+  /* Single accent */
+  --color-nexa-red: #ef4136;
+
+  /* On dark surfaces */
+  --color-ink-text-muted: rgba(255, 255, 255, 0.55);
+  --color-ink-border: rgba(255, 255, 255, 0.14);
+
+  /* Three radii. That's the whole set. */
+  --radius-pill: 999px;
+  --radius-card: 12px;
+  --radius-image: 8px;
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-h: 56px;
 }
 
 html {
-  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
+  font-weight: 400;
 }
 
-/* Section divider */
-.section-divider {
-  height: 1px;
-  background: var(--color-border);
+/* Lenis owns the scroll — native smooth scrolling would fight it */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
-/* Tag pills - minimal */
-.tag-pill {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 500;
-  color: #666;
-  border: 1px solid #e5e5e5;
-  border-radius: 999px;
-  padding: 4px 12px;
-  letter-spacing: 0.01em;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
+@layer components {
+  /* ---- Type scale ------------------------------------------------------
+     The reference runs weight 500 for every heading and pulls tracking to
+     roughly -5% (-3% on the hero, which is large enough to need less).    */
+
+  .t-display {
+    font-weight: 500;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+
+  .t-h1 {
+    font-weight: 500;
+    font-size: clamp(2rem, 4.4vw, 3rem);
+    line-height: 1.04;
+    letter-spacing: -0.05em;
+  }
+
+  .t-h2 {
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+  }
+
+  .t-h3 {
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.05em;
+  }
+
+  .t-h4 {
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.05em;
+  }
+
+  .t-body {
+    font-weight: 400;
+    font-size: clamp(0.95rem, 1.1vw, 1.0625rem);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    color: var(--color-text-muted);
+  }
+
+  .t-body-lg {
+    font-weight: 400;
+    font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+
+  /* Small uppercase section label — over every section on the reference */
+  .t-eyebrow {
+    font-weight: 500;
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+  }
+
+  /* ---- Layout ---------------------------------------------------------- */
+
+  .shell {
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 4rem;
+    }
+  }
+
+  .section-y {
+    padding-block: clamp(4.5rem, 10vw, 9rem);
+  }
+
+  .hairline {
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  /* ---- Controls -------------------------------------------------------- */
+
+  /* Black circular arrow button — the reference's signature affordance */
+  .arrow-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: none;
+    border-radius: var(--radius-pill);
+    background: var(--color-ink);
+    color: #fff;
+    transition: transform 400ms var(--ease-out-expo),
+      background-color 300ms ease;
+  }
+
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 0.5rem 0.5rem 1.125rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: var(--color-mist);
+    color: var(--color-ink);
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+  .btn-pill:hover {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-pill:hover .arrow-dot {
+    background: var(--color-nexa-red);
+    transform: translateX(2px);
+  }
+
+  .btn-pill-accent {
+    background: var(--color-nexa-red);
+    color: #fff;
+  }
+  .btn-pill-accent .arrow-dot {
+    background: #fff;
+    color: var(--color-nexa-red);
+  }
+  .btn-pill-accent:hover {
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .btn-pill-accent:hover .arrow-dot {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  /* Nav link with a wipe-in underline */
+  .nav-link {
+    position: relative;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--color-text-muted);
+    transition: color 300ms ease;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 450ms var(--ease-out-expo);
+  }
+  .nav-link:hover,
+  .nav-link[data-active="true"] {
+    color: var(--color-ink);
+  }
+  .nav-link:hover::after,
+  .nav-link[data-active="true"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .tag-pill {
+    display: inline-block;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    padding: 0.3125rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+  }
+
+  .tag-pill-ink {
+    border-color: var(--color-ink-border);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ---- Media ----------------------------------------------------------- */
+
+  .media {
+    overflow: hidden;
+    border-radius: var(--radius-image);
+    background: var(--color-mist);
+  }
+  .media img,
+  .media video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media-zoom img,
+  .media-zoom video {
+    transition: transform 900ms var(--ease-out-expo);
+  }
+  .group:hover .media-zoom img,
+  .group:hover .media-zoom video {
+    transform: scale(1.04);
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+@layer utilities {
+  /* Reveal primitive — GSAP clears these once the element enters view.
+     Declared here so there is never a flash of positioned content. */
+  [data-reveal] {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+  }
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .marquee-mask {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-/* Selection */
 ::selection {
   background: var(--color-nexa-red);
   color: #fff;
 }
 
-/* Nav underline reveal */
-.nav-link .nav-underline {
+::-webkit-scrollbar {
   width: 0;
-  transition: width 350ms cubic-bezier(0.6, 0.05, 0.2, 1);
-}
-.nav-link:hover .nav-underline,
-.nav-link[data-active="true"] .nav-underline {
-  width: 100%;
-}
-
-/* Ping animation (for CTA dot) */
-@keyframes nexa-ping {
-  75%, 100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
-}
-.animate-ping {
-  animation: nexa-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-/* Hero — bold red background field with mouse-tracked spotlight */
-.hero-red {
-  position: relative;
-  background: #ef4136;
-  overflow: hidden;
-  isolation: isolate;
-}
-/* Base ambient gradient sheen on top of the red field */
-.hero-red::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(
-      ellipse 80% 60% at 20% 0%,
-      rgba(255, 120, 80, 0.55) 0%,
-      rgba(239, 65, 54, 0) 60%
-    ),
-    radial-gradient(
-      ellipse 60% 80% at 100% 100%,
-      rgba(180, 20, 20, 0.6) 0%,
-      rgba(239, 65, 54, 0) 60%
-    );
-  pointer-events: none;
-  z-index: 0;
-}
-/* Mouse-tracked bright spotlight */
-.hero-spotlight {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-}
-.hero-spotlight::before {
-  content: "";
-  position: absolute;
-  width: 60vw;
-  height: 60vw;
-  max-width: 800px;
-  max-height: 800px;
-  left: var(--mx, 50%);
-  top: var(--my, 50%);
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 230, 200, 0.65) 0%,
-    rgba(255, 150, 100, 0.4) 25%,
-    rgba(239, 65, 54, 0) 60%
-  );
-  filter: blur(20px);
-  mix-blend-mode: screen;
-  transition: left 500ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              top 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.hero-spotlight::after {
-  content: "";
-  position: absolute;
-  width: 35vw;
-  height: 35vw;
-  max-width: 500px;
-  max-height: 500px;
-  left: calc(var(--mx, 50%) - 150px);
-  top: calc(var(--my, 50%) + 100px);
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle at center,
-    rgba(140, 20, 30, 0.55) 0%,
-    rgba(140, 20, 30, 0.2) 35%,
-    rgba(239, 65, 54, 0) 65%
-  );
-  filter: blur(30px);
-  mix-blend-mode: multiply;
-  transition: left 800ms cubic-bezier(0.2, 0.8, 0.2, 1),
-              top 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* Hero word hover — colour shift on individual words */
-.hero-word {
-  display: inline-block;
-  transition: color 350ms ease, transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform, color;
-}
-.hero-word:hover {
-  color: #1a1a1a;
-  transform: translateY(-4px);
-}
-.hero-word em {
-  font-style: italic;
+  height: 0;
 }

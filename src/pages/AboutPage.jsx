@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "../components/PageHero";
+import { asset } from "../lib/asset";
+import { Asterisk } from "../components/ui";
 
+// PLACEHOLDER — real figures to be added. Blank rather than invented.
 const stats = [
-  { value: "150+", label: "Projects Delivered" },
-  { value: "50+", label: "Happy Clients" },
-  { value: "8+", label: "Years Experience" },
+  { value: null, label: "Projects Delivered" },
+  { value: null, label: "Happy Clients" },
+  { value: null, label: "Years Experience" },
   { value: "100%", label: "Irish Owned" },
 ];
 
@@ -17,11 +20,11 @@ const values = [
   { number: "04", title: "Continuous Growth", description: "We don't just launch and leave. We optimise, iterate, and evolve." },
 ];
 
+// PLACEHOLDER — real names and portraits to be added. Left blank rather than
+// filled with invented colleagues and stock photographs of unrelated people.
 const team = [
-  { name: "Kieran Duffy", role: "Creative Director", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" },
-  { name: "Aoife Murphy", role: "Lead Designer", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80" },
-  { name: "Ciaran Walsh", role: "Head of Development", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80" },
-  { name: "Siobhan Kelly", role: "Marketing Strategist", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=800&q=80" },
+  { name: null, role: "Founder & Creative Director", image: null },
+  { name: null, role: "Design Director", image: null },
 ];
 
 export default function AboutPage() {
@@ -29,7 +32,7 @@ export default function AboutPage() {
     <>
       <PageHero
         tag="About Us"
-        title={<>A creative agency with a <em>digital-first</em> mindset.</>}
+        title={<>A creative agency with a digital-first mindset.</>}
         subtitle="We partner with ambitious businesses to create powerful brand identities, build high-performance websites, and run digital campaigns that deliver."
       />
 
@@ -73,10 +76,10 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="aspect-[21/9] overflow-hidden bg-bg-dark mb-16 md:mb-24"
+              className="aspect-[21/9] overflow-hidden bg-ink mb-16 md:mb-24"
             >
               <img
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=2400&q=80"
+                src={asset("projects/whatsexposed/we-conference.jpg")}
                 alt="Our studio"
                 className="w-full h-full object-cover"
               />
@@ -93,10 +96,11 @@ export default function AboutPage() {
                   transition={{ delay: 0.1 + i * 0.05 }}
                 >
                   <div
-                    style={{ fontFamily: "var(--font-serif)" }}
-                    className="text-4xl md:text-5xl lg:text-6xl font-normal text-text mb-2 tracking-[-0.02em]"
+                    className="text-4xl md:text-5xl lg:text-6xl font-medium text-text mb-2 tracking-[-0.05em]"
                   >
-                    {stat.value}
+                    {stat.value ?? (
+                      <span className="text-border-strong">—</span>
+                    )}
                   </div>
                   <div className="text-text-muted text-xs md:text-sm font-medium tracking-wide uppercase">{stat.label}</div>
                 </motion.div>
@@ -120,10 +124,9 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                style={{ fontFamily: "var(--font-serif)" }}
-                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-normal text-text leading-[1.05] tracking-[-0.02em]"
+                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-medium text-text leading-[1.05] tracking-[-0.05em]"
               >
-                What <em>drives</em> us.
+                What drives us.
               </motion.h2>
             </div>
           </div>
@@ -141,8 +144,7 @@ export default function AboutPage() {
                 <div className="flex items-baseline gap-4 mb-3">
                   <span className="text-text-muted text-xs font-medium tracking-[0.12em]">{v.number}</span>
                   <h3
-                    style={{ fontFamily: "var(--font-serif)" }}
-                    className="text-2xl md:text-3xl font-normal text-text"
+                    className="text-2xl md:text-3xl font-medium text-text"
                   >
                     {v.title}
                   </h3>
@@ -168,38 +170,40 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                style={{ fontFamily: "var(--font-serif)" }}
-                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-normal text-text leading-[1.05] tracking-[-0.02em]"
+                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-medium text-text leading-[1.05] tracking-[-0.05em]"
               >
-                The people behind <em>Nexa</em>.
+                The people behind Nexa.
               </motion.h2>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
             {team.map((member, i) => (
               <motion.div
-                key={member.name}
+                key={member.role}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
                 className="group"
               >
-                <div className="aspect-[3/4] overflow-hidden mb-4 bg-bg-dark">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-700 ease-out"
-                  />
+                <div className="media mb-5 flex aspect-[4/5] items-center justify-center bg-bone">
+                  {member.image ? (
+                    <img
+                      src={member.image}
+                      alt={member.name ?? ""}
+                      className="h-full w-full object-cover grayscale transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:grayscale-0"
+                    />
+                  ) : (
+                    <Asterisk className="h-8 w-8 text-black/10" />
+                  )}
                 </div>
-                <h3
-                  style={{ fontFamily: "var(--font-serif)" }}
-                  className="text-xl md:text-2xl font-normal text-text mb-1"
-                >
-                  {member.name}
+                <h3 className="t-h4">
+                  {member.name ?? (
+                    <span className="text-text-light">Name to be added</span>
+                  )}
                 </h3>
-                <p className="text-text-muted text-xs md:text-sm">{member.role}</p>
+                <p className="t-body mt-1">{member.role}</p>
               </motion.div>
             ))}
           </div>
@@ -210,20 +214,19 @@ export default function AboutPage() {
       <section className="pb-20 md:pb-32">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
           <Link to="/contact" className="block group">
-            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-bg-dark">
+            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-ink">
               <img
-                src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=2400&q=80"
+                src={asset("projects/quinnit/qi-server.jpg")}
                 alt="Work together"
                 className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16">
                 <h2
-                  style={{ fontFamily: "var(--font-serif)" }}
-                  className="text-[32px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-normal text-white leading-[0.95] tracking-[-0.02em] mb-6 md:mb-8 max-w-4xl"
+                  className="text-[32px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-medium text-white leading-[0.95] tracking-[-0.05em] mb-6 md:mb-8 max-w-4xl"
                 >
                   Let's work <br />
-                  <em>together</em>.
+                  together.
                 </h2>
                 <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
                   Get in Touch

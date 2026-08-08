@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "../components/PageHero";
+import { asset } from "../lib/asset";
 
 const services = [
   {
@@ -9,63 +10,63 @@ const services = [
     title: "Branding & Identity",
     description: "Logo design, brand strategy, and visual identity systems that make your business unforgettable.",
     features: ["Logo & visual identity", "Brand strategy & positioning", "Brand guidelines", "Packaging & collateral"],
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b8?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-core.jpg"),
   },
   {
     number: "02",
     title: "Web Design & Development",
     description: "Stunning, responsive websites built for performance, accessibility, and conversion.",
     features: ["Custom website design", "Responsive development", "E-commerce solutions", "CMS integration"],
-    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-web-1.jpg"),
   },
   {
     number: "03",
     title: "Website Maintenance",
     description: "Ongoing support, updates, security monitoring, and performance optimisation.",
     features: ["Security updates", "Performance optimisation", "Content updates", "Uptime monitoring"],
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80",
+    image: asset("projects/quinnit/qi-tablet.jpg"),
   },
   {
     number: "04",
     title: "SEO",
     description: "Data-driven search engine optimisation to boost your rankings and organic traffic.",
     features: ["Technical SEO audits", "On-page & off-page SEO", "Keyword research", "Monthly reporting"],
-    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1600&q=80",
+    image: asset("projects/quinnit/qi-widescreen.jpg"),
   },
   {
     number: "05",
     title: "AI-Powered SEO",
     description: "Next-gen AI tools and strategies to stay ahead of search algorithm changes.",
     features: ["AI content optimisation", "Predictive analysis", "Automated tracking", "Competitor analysis"],
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-grid-1.jpg"),
   },
   {
     number: "06",
     title: "Google Ads",
     description: "High-ROI Google Ads campaigns with precise targeting and continuous optimisation.",
     features: ["Search & display", "Shopping & PMax", "Conversion tracking", "A/B testing"],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-banner.jpg"),
   },
   {
     number: "07",
     title: "Meta Ads",
     description: "Facebook and Instagram advertising that reaches the right audience and drives results.",
     features: ["Campaign strategy", "Audience targeting", "Creative production", "Funnel optimisation"],
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-social.jpg"),
   },
   {
     number: "08",
     title: "Social Media Marketing",
     description: "Content strategy, community management, and campaigns that build engagement.",
     features: ["Content calendar", "Community management", "Influencer partnerships", "Analytics"],
-    image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=1600&q=80",
+    image: asset("projects/quinnit/qi-social.jpg"),
   },
   {
     number: "09",
     title: "Video Production",
     description: "Professional video content for social, web, and advertising that tells your story.",
     features: ["Brand & promo videos", "Social content", "Testimonials", "Motion graphics"],
-    image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&q=80",
+    image: asset("projects/whatsexposed/we-poster.jpg"),
   },
 ];
 
@@ -81,7 +82,7 @@ export default function ServicesPage() {
     <>
       <PageHero
         tag="Our Services"
-        title={<>Everything you need to <em>grow online</em>.</>}
+        title={<>Everything you need to grow online.</>}
         subtitle="From brand strategy to performance marketing, we offer a full suite of digital services to help your business thrive."
       />
 
@@ -106,8 +107,7 @@ export default function ServicesPage() {
                   </div>
                   <div className="md:col-span-4">
                     <h3
-                      style={{ fontFamily: "var(--font-serif)" }}
-                      className="text-3xl md:text-4xl lg:text-5xl font-normal text-text leading-[1.05] tracking-[-0.02em]"
+                      className="text-3xl md:text-4xl lg:text-5xl font-medium text-text leading-[1.05] tracking-[-0.05em]"
                     >
                       {service.title}
                     </h3>
@@ -126,7 +126,7 @@ export default function ServicesPage() {
                     </ul>
                   </div>
                   <div className="md:col-span-3">
-                    <div className="aspect-[4/3] overflow-hidden bg-bg-dark">
+                    <div className="aspect-[4/3] overflow-hidden bg-ink">
                       <img
                         src={service.image}
                         alt={service.title}
@@ -155,10 +155,9 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                style={{ fontFamily: "var(--font-serif)" }}
-                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-normal text-text leading-[1.05] tracking-[-0.02em]"
+                className="md:col-span-9 text-[32px] sm:text-[44px] md:text-[56px] lg:text-[68px] font-medium text-text leading-[1.05] tracking-[-0.05em]"
               >
-                How we <em>work</em>.
+                How we work.
               </motion.h2>
             </div>
           </div>
@@ -176,8 +175,7 @@ export default function ServicesPage() {
                 <div className="flex items-baseline gap-4 mb-3">
                   <span className="text-text-muted text-xs font-medium tracking-[0.12em]">{item.step}</span>
                   <h3
-                    style={{ fontFamily: "var(--font-serif)" }}
-                    className="text-2xl md:text-3xl font-normal text-text"
+                    className="text-2xl md:text-3xl font-medium text-text"
                   >
                     {item.title}
                   </h3>
@@ -193,20 +191,19 @@ export default function ServicesPage() {
       <section className="pb-20 md:pb-32">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
           <Link to="/contact" className="block group">
-            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-bg-dark">
+            <div className="relative aspect-[16/10] md:aspect-[21/9] overflow-hidden bg-ink">
               <img
-                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=2400&q=80"
+                src={asset("projects/quinnit/qi-office.jpg")}
                 alt="Get started"
                 className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-1000 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16">
                 <h2
-                  style={{ fontFamily: "var(--font-serif)" }}
-                  className="text-[32px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-normal text-white leading-[0.95] tracking-[-0.02em] mb-6 md:mb-8 max-w-4xl"
+                  className="text-[32px] sm:text-[48px] md:text-[64px] lg:text-[80px] font-medium text-white leading-[0.95] tracking-[-0.05em] mb-6 md:mb-8 max-w-4xl"
                 >
                   Let's find the right <br />
-                  <em>solution</em>.
+                  solution.
                 </h2>
                 <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
                   Get a Free Consultation
