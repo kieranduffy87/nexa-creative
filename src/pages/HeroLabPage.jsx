@@ -1,6 +1,11 @@
-import { useState } from "react";
-import { HeroObject } from "../components/HeroObject";
+import { lazy, Suspense, useState } from "react";
 import { ArrowIcon, Eyebrow } from "../components/ui";
+
+// Lazy here too, or three gets pulled into the main bundle and the homepage
+// pays for a route it never loads.
+const HeroObject = lazy(() =>
+  import("../components/HeroObject").then((m) => ({ default: m.HeroObject })),
+);
 
 /**
  * Not linked from the site. A scratch route for comparing hero treatments
@@ -71,7 +76,9 @@ export default function HeroLabPage() {
       >
         {/* Full opacity at every width — this is a lab, not the real layout */}
         <div className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full lg:w-[46%]">
-          <HeroObject variant={obj} dark={onDark} className="h-full w-full" />
+          <Suspense fallback={null}>
+            <HeroObject variant={obj} dark={onDark} className="h-full w-full" />
+          </Suspense>
         </div>
 
         <div className="shell relative z-10 flex min-h-[100svh] flex-col justify-end pb-16 pt-36 md:pb-20">
