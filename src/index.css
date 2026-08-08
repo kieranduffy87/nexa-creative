@@ -337,6 +337,7 @@ html.lenis body {
   /* ---- Media ----------------------------------------------------------- */
 
   .media {
+    position: relative;
     overflow: hidden;
     border-radius: var(--radius-image);
     background: var(--color-mist);
@@ -347,6 +348,23 @@ html.lenis body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Parallax needs overscan: the element is taller than its frame and centred
+     on it, so travel in either direction stays covered.
+
+     Absolutely positioned on purpose. A percentage `margin-top` resolves
+     against the container's WIDTH, which on a wide frame pushed the video far
+     further than intended and exposed the opposite edge. A percentage `top` on
+     an absolutely positioned box resolves against height, which is what this
+     actually means. */
+  .media-parallax {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -5%;
+    width: 100%;
+    height: 110% !important;
   }
 
   .media-zoom img,

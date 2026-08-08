@@ -474,7 +474,7 @@ export const projects = [
     client: "Gallagher Kitchens",
     sector: "Bespoke Joinery & Retail",
     tags: ["Brand Identity", "Digital Design", "Signage"],
-    accent: "#12100e",
+    accent: "#022321",
 
     thumb: gk("gk-kitchen-1.jpg"),
     heroVideo: gk("gk-web.mp4"),
@@ -502,7 +502,7 @@ export const projects = [
         kind: "video",
         src: gk("gk-3dlogo.mp4"),
         poster: gk("gk-3dlogo-poster.jpg"),
-        bg: "#022017",
+        bg: "#022321",
         caption: "The contemporised crest, rendered and turned in light.",
       },
       {
@@ -626,7 +626,7 @@ export const projects = [
     ],
 
     palette: [
-      { name: "Company Green", hex: "#003D3B" },
+      { name: "Company Green", hex: "#022321" },
       { name: "Company Ink", hex: "#072334" },
       { name: "Copper 01", hex: "#FDCB9D" },
       { name: "Copper 02", hex: "#FBBC8F" },

@@ -136,7 +136,6 @@ export default function ProjectPage() {
 
   const meta = [
     { label: "Client", value: project.client },
-    { label: "Year", value: project.year },
     { label: "Sector", value: project.sector },
   ];
 
@@ -183,6 +182,7 @@ export default function ProjectPage() {
           >
             <video
               ref={heroRef}
+              className="media-parallax"
               src={project.heroVideo}
               poster={project.heroPoster}
               autoPlay

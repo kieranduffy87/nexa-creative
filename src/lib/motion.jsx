@@ -127,8 +127,10 @@ export function useParallax(ref, distance = 80) {
     if (!el || reducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      gsap.to(el, {
-        yPercent: distance / 10,
+      // Symmetric about centre: paired with .media-parallax overscan this
+      // never lets the frame's background show through at an edge.
+      gsap.fromTo(el, { yPercent: -distance / 20 }, {
+        yPercent: distance / 20,
         ease: "none",
         scrollTrigger: {
           trigger: el.parentElement ?? el,

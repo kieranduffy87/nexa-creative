@@ -70,7 +70,7 @@ export function Navbar() {
             className="shrink-0 text-nexa-red transition-colors duration-300 hover:text-text"
             aria-label="Nexa Creative home"
           >
-            <NexaLogo className="h-5 w-auto" />
+            <NexaLogo className="h-6 w-auto" />
           </Link>
 
           <nav className="hidden items-center gap-7 md:flex">

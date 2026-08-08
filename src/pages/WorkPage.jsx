@@ -63,7 +63,6 @@ export default function WorkPage() {
                           {t}
                         </span>
                       ))}
-                      <span className="tag-pill">{p.year}</span>
                     </div>
                   </div>
                 </div>
