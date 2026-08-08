@@ -477,8 +477,8 @@ export const projects = [
     accent: "#12100e",
 
     thumb: gk("gk-kitchen-1.jpg"),
-    heroVideo: gk("gk-hero.mp4"),
-    heroPoster: gk("gk-kitchen-1.jpg"),
+    heroVideo: gk("gk-web.mp4"),
+    heroPoster: gk("gk-web-poster.jpg"),
 
     summary:
       "For over thirty-two years, family-run Gallagher Kitchens has designed and built bespoke kitchens and wardrobes from its Dublin showrooms. To grow beyond its local base, the company needed a new identity and a digital presence that could carry its craftsmanship to Leinster and beyond.",
@@ -531,8 +531,8 @@ export const projects = [
         kind: "video",
         src: gk("gk-web.mp4"),
         poster: gk("gk-web-poster.jpg"),
-        bg: "#12100e",
-        caption: "The live site, top to bottom.",
+        bg: "#96857b",
+        caption: "The site in use.",
       },
       {
         type: "text",
