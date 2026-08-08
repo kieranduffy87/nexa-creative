@@ -626,8 +626,8 @@ export const projects = [
     ],
 
     palette: [
-      { name: "Company Green", hex: "#022321" },
-      { name: "Company Ink", hex: "#072334" },
+      { name: "Company Green 01", hex: "#022321" },
+      { name: "Company Green 02", hex: "#003D3B" },
       { name: "Copper 01", hex: "#FDCB9D" },
       { name: "Copper 02", hex: "#FBBC8F" },
       { name: "Copper 03", hex: "#D88561" },
