@@ -704,6 +704,12 @@ export const projects = [
         ],
       },
       {
+        type: "media",
+        kind: "image",
+        src: cc("cc-guidelines.jpg"),
+        caption: "Pages from the brand guidelines.",
+      },
+      {
         type: "media-grid",
         cols: 2,
         items: [
@@ -747,6 +753,11 @@ export const projects = [
           "A menswear brand is judged in the hand. The identity extends into the pieces a customer actually touches: a swing tag on the sleeve, a woven label at the collar, a carrier bag down Prospect Avenue, a garment bag that travels to the hotel on the morning of the wedding.",
           "The same system covers the parts of the business that have nothing to do with cloth. Sponsorship hoardings, charity campaigns and ambassador content all come out of one set of rules, so the company looks the same size on a stadium boarding as it does on its own shopfront.",
         ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: cc("cc-stadium.jpg"),
       },
       {
         type: "media-grid",
