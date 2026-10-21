@@ -717,7 +717,7 @@ export const projects = [
         src: cc("cc-tablet.mp4"),
         poster: cc("cc-tablet-poster.jpg"),
         bg: "#0d0d0d",
-        caption: "The live site, top to bottom.",
+        caption: "The About page, top to bottom.",
       },
       {
         type: "media",
