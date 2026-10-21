@@ -3,6 +3,7 @@ import { asset } from "../lib/asset";
 const we = (f) => asset(`projects/whatsexposed/${f}`);
 const qi = (f) => asset(`projects/quinnit/${f}`);
 const gk = (f) => asset(`projects/gallagher/${f}`);
+const cc = (f) => asset(`projects/collar-and-cuff/${f}`);
 
 export const projects = [
   {
@@ -638,6 +639,179 @@ export const projects = [
       { name: "Heritage", body: "thirty-two years, redrawn not discarded" },
       { name: "Restraint", body: "gold for emphasis, never for show" },
       { name: "Presence", body: "the fleet is the campaign" },
+    ],
+  },
+  {
+    slug: "collar-and-cuff",
+    name: "Collar & Cuff",
+    tagline: "If it's not Collar & Cuff, it's not good enough",
+    year: "2017",
+    client: "Collar & Cuff",
+    sector: "Menswear & Tailoring",
+    tags: ["Brand Identity", "Web Design", "Print & Packaging"],
+    accent: "#0d0d0d",
+
+    thumb: cc("cc-shopfront.jpg"),
+    heroVideo: cc("cc-web.mp4"),
+    heroPoster: cc("cc-web-poster.jpg"),
+
+    summary:
+      "Collar & Cuff is a Dublin menswear house in Glasnevin that dresses men for the days that matter: weddings, communions, black tie. We built the brand from the crest up, then carried it across a shopfront, a swing tag, a sponsor's hoarding and a website, so that a customer meets the same company whether they find it on a phone or walk past the window.",
+
+    scope: [
+      "Brand Strategy",
+      "Brand Identity",
+      "Brand Guidelines",
+      "Web Design & Development",
+      "Print & Packaging",
+      "Signage & Environment",
+      "Social Media",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "image",
+        src: cc("cc-shopfront.jpg"),
+      },
+      {
+        type: "text",
+        title: "A mark made by a tailor",
+        body: [
+          "Menswear branding reaches for the same props every time: scissors, a mannequin, a bow tie. We drew a shield instead, with a C monogram pierced by a single tailor's needle. It reads as a house mark rather than a fashion logo, which is the right claim for a company whose customers arrive for a fitting and come back for the next occasion.",
+          "The construction is tight enough to survive both ends of the scale. At eight millimetres it still reads as a crest on a woven collar label; at two metres it holds the fascia above a Georgian shopfront without thickening or filling in.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: cc("cc-swing-tag.jpg") },
+          { kind: "image", src: cc("cc-woven-label.jpg") },
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: cc("cc-cards.jpg"),
+      },
+      {
+        type: "text",
+        title: "Black, gold and nothing else",
+        body: [
+          "The palette is deliberately short: a deep ink black as ground, white for clarity, and a single antique gold that does all the talking. No secondary colours, no tints beyond a lighter gold for gradient work on screen.",
+          "A short palette is what lets a small company look consistent without a design team. Because there is only one metal and one ground, a swing tag printed in one city and a hoarding printed in another still agree with each other, and the gold means something every time it appears rather than becoming wallpaper.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: cc("cc-stationery.jpg") },
+          { kind: "image", src: cc("cc-voucher.jpg") },
+        ],
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: cc("cc-web.mp4"),
+        poster: cc("cc-web-poster.jpg"),
+        bg: "#0d0d0d",
+        caption: "The live site, top to bottom.",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: cc("cc-web-mobile.jpg"),
+      },
+      {
+        type: "text",
+        title: "A site that sells a fitting, not a product",
+        body: [
+          "Nobody buys a wedding suit from a grid of thumbnails. The site is organised by occasion rather than by stock, so a father booking a communion suit and a groom six months out from a wedding each land somewhere that speaks to them directly.",
+          "Everything is built around one action. Book an appointment sits in the hero, repeats at the foot of every section and follows the page on mobile, because the conversion that matters is a person standing in the fitting room, not an order in a basket.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: cc("cc-fitting-room.jpg") },
+          { kind: "image", src: cc("cc-door-vinyl.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "The estate it lives in",
+        body: [
+          "A menswear brand is judged in the hand. The identity extends into the pieces a customer actually touches: a swing tag on the sleeve, a woven label at the collar, a carrier bag down Prospect Avenue, a garment bag that travels to the hotel on the morning of the wedding.",
+          "The same system covers the parts of the business that have nothing to do with cloth. Sponsorship hoardings, charity campaigns and ambassador content all come out of one set of rules, so the company looks the same size on a stadium boarding as it does on its own shopfront.",
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: cc("cc-carrier-bag.jpg") },
+          { kind: "image", src: cc("cc-garment-bag.jpg") },
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: cc("cc-box.jpg"),
+      },
+    ],
+
+    process: [
+      {
+        title: "Positioning",
+        body: "A house for the occasions men dress up for, rather than a shop that happens to sell suits.",
+      },
+      {
+        title: "Crest & wordmark",
+        body: "A shield with a C monogram pierced by a tailor's needle, paired with a serif wordmark and a letterspaced DUBLIN.",
+      },
+      {
+        title: "Identity system",
+        body: "One metal, one ground, four lockups, and guidelines that fix construction, clearspace and minimum sizes.",
+      },
+      {
+        title: "Digital platform",
+        body: "An occasion-led site built around a single action: book an appointment.",
+      },
+      {
+        title: "Applied estate",
+        body: "Shopfront and door vinyl, fitting room, print, packaging, swing tags, woven labels and sponsorship.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "A needle, not a pair of scissors",
+        body: "The category defaults to shears, mannequins and bow ties, which is why so much menswear branding is interchangeable. A needle is the quieter instrument and the more accurate one: it is what actually alters a garment to a person. Harder to read at a glance than a pair of scissors, and far harder to confuse with anyone else once it is learned.",
+      },
+      {
+        title: "One metal, used sparingly",
+        body: "Gold is the obvious choice for a tailor and the easiest to overdo. Holding it to a single antique tone, with no second accent anywhere in the system, keeps the brand on the right side of the line between considered and gaudy. The restraint is also practical: one foil, one thread colour, one vinyl, which is cheaper to produce and harder to get wrong.",
+      },
+      {
+        title: "Design for the smallest application first",
+        body: "The crest was drawn to hold at the size of a woven collar label and then scaled up, rather than drawn large and shrunk. That decision set the weight of every line in the mark. It cost time at the start and it is the reason the identity never needed a simplified version for small sizes.",
+      },
+    ],
+
+    palette: [
+      { name: "Ink Black", hex: "#0D0D0D" },
+      { name: "Antique Gold", hex: "#A58242" },
+      { name: "Light Gold", hex: "#CCB28A" },
+      { name: "White", hex: "#FFFFFF" },
+    ],
+
+    principles: [
+      { name: "Craft", body: "a tailor's mark, not a fashion logo" },
+      { name: "Restraint", body: "one metal, used sparingly" },
+      { name: "Occasion", body: "dressed for the day that matters" },
     ],
   },
 ];

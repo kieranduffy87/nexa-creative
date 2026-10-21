@@ -4,9 +4,22 @@
     {
       "name": "nexa-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5173,
       "cwd": "/Users/kieranduffy/Downloads/nexa-creative"
+    },
+    {
+      "name": "nexa",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5176,
+      "url": "http://localhost:5176"
     }
   ]
 }
