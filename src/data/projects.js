@@ -739,6 +739,14 @@ export const projects = [
         ],
       },
       {
+        type: "media",
+        kind: "video",
+        src: cc("cc-phones.mp4"),
+        poster: cc("cc-phones-poster.jpg"),
+        bg: "#0d0d0d",
+        caption: "The homepage, and an appointment being booked.",
+      },
+      {
         type: "media-grid",
         cols: 2,
         items: [
