@@ -652,8 +652,8 @@ export const projects = [
     accent: "#0d0d0d",
 
     thumb: cc("cc-shopfront.jpg"),
-    heroVideo: cc("cc-tablet.mp4"),
-    heroPoster: cc("cc-tablet-poster.jpg"),
+    heroVideo: cc("cc-laptop.mp4"),
+    heroPoster: cc("cc-laptop-poster.jpg"),
 
     summary:
       "Collar & Cuff is a Dublin menswear house in Glasnevin that dresses men for the days that matter: weddings, communions, black tie. We built the brand from the crest up, then carried it across a shopfront, a swing tag, a sponsor's hoarding and a website, so that a customer meets the same company whether they find it on a phone or walk past the window.",
@@ -714,8 +714,8 @@ export const projects = [
       {
         type: "media",
         kind: "video",
-        src: cc("cc-web.mp4"),
-        poster: cc("cc-web-poster.jpg"),
+        src: cc("cc-tablet.mp4"),
+        poster: cc("cc-tablet-poster.jpg"),
         bg: "#0d0d0d",
         caption: "The live site, top to bottom.",
       },
