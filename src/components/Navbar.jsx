@@ -6,6 +6,7 @@ import { ArrowIcon } from "./ui";
 import { useTheme } from "../lib/theme";
 import { useDock } from "../lib/dock";
 import { projects } from "../data/projects";
+import { asset } from "../lib/asset";
 
 const EMAIL = "hello@nexacreative.ie";
 const BAR = 64; // closed dock height, px
@@ -26,37 +27,94 @@ function Thumb({ src, className = "" }) {
   );
 }
 
-/** What the closed dock offers, which depends on where the visitor is. */
+/** What the closed dock offers, which depends on where the visitor is. One
+    short label, as on mubien: the thumbnail beside it says which project. */
 function ctaFor(pathname, reel) {
   if (pathname === "/" && reel) {
-    const s = reel.slide;
-    if (s.kind === "project") {
-      return {
-        to: `/work/${s.project.slug}`,
-        label: "View case study",
-        sub: s.project.name,
-        thumb: s.project.thumb,
-      };
-    }
-    return { to: "/work", label: "See the work", sub: "Selected projects", thumb: null };
+    const p = reel.slide.project;
+    return { to: `/work/${p.slug}`, label: "View case study", thumb: p.thumb };
   }
 
   const m = pathname.match(/^\/work\/([^/]+)/);
   if (m) {
     const k = projects.findIndex((p) => p.slug === m[1]);
     const next = projects[(k + 1) % projects.length];
-    return {
-      to: `/work/${next.slug}`,
-      label: "Next case study",
-      sub: next.name,
-      thumb: next.thumb,
-    };
+    return { to: `/work/${next.slug}`, label: "Next case study", thumb: next.thumb };
   }
 
   if (pathname.startsWith("/contact")) {
-    return { to: "/work", label: "See the work", sub: "Selected projects", thumb: null };
+    return { to: "/work", label: "See the work", thumb: null };
   }
-  return { to: "/contact", label: "Start a project", sub: "Tell us about it", thumb: null };
+  return { to: "/contact", label: "Start a project", thumb: null };
+}
+
+/**
+ * The showreel, full screen over everything. Opened from the menu's reel card;
+ * Esc, the close button or a click outside the video closes it. The file only
+ * loads when it is first played.
+ */
+function ShowreelPlayer({ open, onClose }) {
+  const videoRef = useRef(null);
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!open) {
+      v?.pause();
+      return undefined;
+    }
+    if (v) {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    }
+    closeRef.current?.focus({ preventScroll: true });
+    window.__lenis?.stop();
+    const onKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.__lenis?.start();
+    };
+  }, [open, onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Nexa Creative showreel"
+      aria-hidden={!open}
+      inert={!open}
+      onClick={onClose}
+      className={`fixed inset-0 z-[60] flex items-center justify-center bg-black/90 px-[calc(var(--frame-inset)*2)] py-20 backdrop-blur-sm transition-opacity duration-500 ${
+        open ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+    >
+      {/* Room above for the close button, so it never sits on the picture */}
+      <video
+        ref={videoRef}
+        src={asset("showreel/nexa-showreel.mp4")}
+        poster={asset("showreel/nexa-showreel-poster.jpg")}
+        controls
+        playsInline
+        preload="none"
+        onClick={(e) => e.stopPropagation()}
+        className={`aspect-video max-h-full w-full max-w-[calc((100svh-10rem)*16/9)] rounded-[var(--panel-radius)] bg-black transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          open ? "scale-100" : "scale-95"
+        }`}
+      />
+      <button
+        ref={closeRef}
+        type="button"
+        onClick={onClose}
+        aria-label="Close showreel"
+        className="absolute right-[calc(var(--frame-inset)*2)] top-[calc(var(--frame-inset)*2)] flex h-12 w-12 items-center justify-center rounded-[12px] bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/25"
+      >
+        <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
+          <path d="m2 2 10 10M12 2 2 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        </svg>
+      </button>
+    </div>
+  );
 }
 
 /** Analogue Dublin clock. Minutes are all a studio clock needs. */
@@ -200,14 +258,29 @@ export function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
-  const { reel } = useDock();
+  const { reel, setMenuOpen } = useDock();
   const cta = ctaFor(pathname, reel);
+  const [playerOpen, setPlayerOpen] = useState(false);
 
   const panelRef = useRef(null);
   const menuBtnRef = useRef(null);
-  const latest = projects[projects.length - 1];
+  const previewRef = useRef(null);
 
   const close = useCallback(() => setOpen(false), []);
+  const closePlayer = useCallback(() => {
+    setPlayerOpen(false);
+    menuBtnRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  useEffect(() => setMenuOpen(open || playerOpen), [open, playerOpen, setMenuOpen]);
+
+  // The reel card's preview only runs while the menu is open to see it
+  useEffect(() => {
+    const v = previewRef.current;
+    if (!v) return;
+    if (open && !reducedMotion()) v.play().catch(() => {});
+    else v.pause();
+  }, [open]);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -262,9 +335,11 @@ export function Navbar() {
 
   const wasOpen = useRef(false);
   useEffect(() => {
-    if (wasOpen.current && !open) menuBtnRef.current?.focus({ preventScroll: true });
+    // Closing the menu hands focus back to its button, unless it closed to
+    // open the showreel, which takes focus itself (and returns it on close)
+    if (wasOpen.current && !open && !playerOpen) menuBtnRef.current?.focus({ preventScroll: true });
     wasOpen.current = open;
-  }, [open]);
+  }, [open, playerOpen]);
 
   return (
     <>
@@ -344,31 +419,42 @@ export function Navbar() {
                 </span>
               </button>
 
-              {/* Latest work, the dock's answer to a showreel card */}
-              <Link
-                to={`/work/${latest.slug}`}
-                onClick={close}
-                className="dock-item group relative col-span-2 flex h-36 items-end overflow-hidden rounded-[14px] p-3.5 text-white"
-                style={{ background: latest.accent }}
+              {/* The showreel, as on mubien: a live preview that opens the
+                  full reel over everything */}
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  setPlayerOpen(true);
+                }}
+                className="dock-item group relative col-span-2 flex h-36 items-end overflow-hidden rounded-[14px] bg-black p-3.5 text-left text-white"
               >
-                <img
-                  src={latest.thumb}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+                <video
+                  ref={previewRef}
+                  src={asset("showreel/nexa-showreel-preview.mp4")}
+                  poster={asset("showreel/nexa-showreel-preview-poster.jpg")}
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                 <span className="relative">
                   <span className="block text-[11px] uppercase tracking-[0.14em] text-white/60">
-                    Latest work
+                    Showreel 2026
                   </span>
                   <span className="mt-1.5 block text-[15px] leading-none tracking-[-0.02em]">
-                    {latest.name}
+                    Play reel
                   </span>
                 </span>
-                <span className="relative ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition-transform duration-500 group-hover:translate-x-0.5">
-                  <ArrowIcon className="h-3 w-3" />
+                <span className="relative ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition-transform duration-500 group-hover:scale-110">
+                  <svg viewBox="0 0 12 12" className="ml-0.5 h-3 w-3" fill="currentColor" aria-hidden="true">
+                    <path d="M3 1.8v8.4L10 6z" />
+                  </svg>
                 </span>
-              </Link>
+              </button>
 
               <div className="dock-item col-span-2">
                 <SlideToContact
@@ -397,33 +483,37 @@ export function Navbar() {
 
           {/* ── Closed: the bar ── */}
           <div
-            className={`flex items-center gap-3 rounded-[20px] bg-bg p-2 shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-opacity duration-200 ${
+            className={`relative flex items-center gap-3 overflow-hidden rounded-[20px] bg-bg p-2 shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-opacity duration-200 ${
               open ? "pointer-events-none opacity-0" : "opacity-100"
             }`}
             style={{ height: BAR }}
           >
+            {/* The reel's countdown to its next slide, filling behind the
+                bar as on mubien. The reel writes --reel-progress directly. */}
+            {pathname === "/" && reel && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 origin-left bg-mist"
+                style={{ transform: "scaleX(var(--reel-progress, 0))" }}
+              />
+            )}
             <Link
               to="/"
               aria-label="Nexa Creative home"
               tabIndex={open ? -1 : undefined}
-              className="shrink-0 pl-2 text-nexa-red transition-colors duration-300 hover:text-text"
+              className="relative shrink-0 pl-2 text-nexa-red transition-colors duration-300 hover:text-text"
             >
               <NexaLogo className="h-5 w-auto" />
             </Link>
-            <span className="h-7 w-px shrink-0 bg-border" aria-hidden="true" />
+            <span className="relative h-7 w-px shrink-0 bg-border" aria-hidden="true" />
             <Link
               to={cta.to}
-              className="group flex min-w-0 flex-1 items-center gap-3"
+              className="group relative flex min-w-0 flex-1 items-center gap-3"
               tabIndex={open ? -1 : undefined}
             >
               <Thumb src={cta.thumb} className="hidden h-12 w-12 shrink-0 rounded-[12px] sm:block" />
-              <span className="min-w-0">
-                <span key={cta.label} className="swap-in block truncate text-[14px] leading-none tracking-[-0.02em]">
-                  {cta.label}
-                </span>
-                <span key={cta.sub} className="swap-in mt-1.5 block truncate text-[11px] leading-none text-text-light">
-                  {cta.sub}
-                </span>
+              <span key={cta.label} className="swap-in min-w-0 truncate text-[14px] leading-none tracking-[-0.02em]">
+                {cta.label}
               </span>
               <ArrowIcon className="ml-auto h-3 w-3 shrink-0 text-text-light transition-transform duration-500 group-hover:translate-x-0.5" />
             </Link>
@@ -435,7 +525,7 @@ export function Navbar() {
               aria-controls="dock-panel"
               aria-label="Open menu"
               tabIndex={open ? -1 : undefined}
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
+              className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
             >
               <span className="flex flex-col gap-[5px]">
                 <span className="block h-px w-4 bg-current" />
@@ -445,6 +535,8 @@ export function Navbar() {
           </div>
         </div>
       </nav>
+
+      <ShowreelPlayer open={playerOpen} onClose={closePlayer} />
     </>
   );
 }

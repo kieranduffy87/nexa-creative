@@ -26,6 +26,7 @@ const TILT = 0.8; // how far round-the-back cards rise; the camera looks down on
 // exactly behind the front one, so it would never be seen.
 const RADIUS = 15; // card corner on screen while zoomed out, px
 const SCROLL_PER_SLIDE = 0.7; // viewport heights of scroll per slide
+const DWELL = 7; // seconds a slide holds before the reel moves on by itself
 
 const lerp = (a, b, t) => a + (b - a) * t;
 const pad = (n) => String(n).padStart(2, "0");
@@ -42,6 +43,13 @@ const reducedMotion = () =>
  * step plays a complete transition rather than scrubbing one, so the ring is
  * never left half-turned. After the last slide the pin releases and the rest
  * of the homepage scrolls as normal.
+ *
+ * Left alone, it also moves on by itself every DWELL seconds, as mubien's
+ * does, and the nav bar fills behind its label as the countdown runs. It does
+ * that by scrolling within the pinned range (nothing on screen moves except
+ * the reel), so the pin stays the one source of truth for the slide. It holds
+ * while the menu is open, while the tab is hidden, once the visitor has
+ * scrolled past it, and when paused; it never runs under reduced motion.
  */
 export function HeroReel() {
   const sectionRef = useRef(null);
@@ -54,7 +62,12 @@ export function HeroReel() {
 
   const [active, setActive] = useState(0);
   const [moving, setMoving] = useState(false);
-  const { setReel } = useDock();
+  const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(true);
+  const [pageVisible, setPageVisible] = useState(true);
+  const [reduce] = useState(reducedMotion);
+  const dwellRef = useRef(null);
+  const { setReel, menuOpen } = useDock();
 
   /* ── Layout of every card for the current angle and zoom ──────────── */
 
@@ -183,6 +196,7 @@ export function HeroReel() {
         const i = Math.round(self.progress * last);
         if (i !== targetRef.current) go(i);
       },
+      onToggle: (self) => setInView(self.isActive),
     });
     stRef.current = st;
 
@@ -237,6 +251,61 @@ export function HeroReel() {
   }, [active, setReel]);
 
   useEffect(() => () => setReel(null), [setReel]);
+
+  /* ── Auto-advance ────────────────────────────────────────────────── */
+
+  useEffect(() => {
+    const onVis = () => setPageVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  const setProgress = (v) =>
+    document.documentElement.style.setProperty("--reel-progress", v.toFixed(4));
+
+  // One countdown per settled slide. It restarts from zero whenever a new
+  // slide lands, and only pauses (rather than restarting) when something
+  // briefly holds it, so opening and closing the menu does not reset it.
+  useEffect(() => {
+    if (reduce) return undefined;
+    const d = dwellRef.current;
+
+    if (moving) {
+      d?.tween.kill();
+      dwellRef.current = null;
+      setProgress(0);
+      return undefined;
+    }
+
+    const held = paused || menuOpen || !pageVisible || !inView;
+    if (d && d.index === active) {
+      if (held) d.tween.pause();
+      else d.tween.resume();
+      return undefined;
+    }
+
+    d?.tween.kill();
+    const state = { p: 0 };
+    setProgress(0);
+    const tween = gsap.to(state, {
+      p: 1,
+      duration: DWELL,
+      ease: "none",
+      paused: held,
+      onUpdate: () => setProgress(state.p),
+      onComplete: () => jump((targetRef.current + 1) % N),
+    });
+    dwellRef.current = { tween, index: active };
+    return undefined;
+  }, [active, moving, paused, menuOpen, pageVisible, inView, reduce, jump]);
+
+  useEffect(
+    () => () => {
+      dwellRef.current?.tween.kill();
+      document.documentElement.style.removeProperty("--reel-progress");
+    },
+    [],
+  );
 
   const slide = SLIDES[active];
 
@@ -329,6 +398,23 @@ export function HeroReel() {
               <path d="M7.5 2.5 4 6l3.5 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
+          {!reduce && (
+            <button
+              type="button"
+              onClick={() => setPaused((v) => !v)}
+              aria-label={paused ? "Play slideshow" : "Pause slideshow"}
+              aria-pressed={paused}
+              className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-black/35 text-white backdrop-blur-md transition-colors hover:bg-black/55"
+            >
+              <svg viewBox="0 0 12 12" className="h-3 w-3" fill="currentColor" aria-hidden="true">
+                {paused ? (
+                  <path d="M3.5 2.2v7.6L9.6 6z" />
+                ) : (
+                  <path d="M3 2.5h2v7H3zM7 2.5h2v7H7z" />
+                )}
+              </svg>
+            </button>
+          )}
           <button
             type="button"
             onClick={() => jump(targetRef.current + 1)}

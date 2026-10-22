@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Showreel render intermediates
+tools/showreel/seq/
+tools/showreel/img/
+tools/showreel/frames/
+tools/showreel/counts.json
+tools/showreel/gsap.min.js

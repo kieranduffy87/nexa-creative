@@ -1,0 +1,29 @@
+{
+  "seq": [
+    ["w1",  "whatsexposed/we-hero.mp4",          1.0, 0.6],
+    ["w2",  "quinnit/qi-web.mp4",                4.0, 0.6],
+    ["w3",  "gallagher/gk-3dlogo.mp4",           2.0, 0.6],
+    ["we3d","whatsexposed/we-3dlogo.mp4",        1.0, 2.4],
+    ["weh", "whatsexposed/we-hero.mp4",          0.0, 2.4],
+    ["wew", "whatsexposed/we-web-motion.mp4",    0.0, 2.4],
+    ["qia", "quinnit/qi-animation.mp4",          2.0, 2.4],
+    ["qil", "quinnit/qi-3dlayers-logo.mp4",      3.0, 2.4],
+    ["qiw", "quinnit/qi-web.mp4",                3.0, 2.4],
+    ["gk3", "gallagher/gk-3dlogo.mp4",           0.5, 2.4],
+    ["gkw", "gallagher/gk-web.mp4",              3.0, 2.4],
+    ["ccl", "collar-and-cuff/cc-laptop.mp4",     3.0, 2.4],
+    ["ccp", "collar-and-cuff/cc-phones.mp4",     6.0, 1.9],
+    ["cct", "collar-and-cuff/cc-tablet-top.mp4", 3.0, 2.4],
+    ["o1",  "whatsexposed/we-hero.mp4",          2.0, 2.8],
+    ["o2",  "quinnit/qi-3dlayers.mp4",           2.0, 2.8],
+    ["o3",  "gallagher/gk-3dlogo.mp4",           4.0, 2.8],
+    ["o4",  "collar-and-cuff/cc-laptop.mp4",     6.0, 2.8]
+  ],
+  "img": [
+    "whatsexposed/we-billboard.jpg", "whatsexposed/we-social.jpg", "whatsexposed/we-lanyard.jpg",
+    "quinnit/qi-van-1.jpg", "quinnit/qi-cards.jpg", "quinnit/qi-wallsign.jpg", "quinnit/qi-tshirt.jpg",
+    "gallagher/gk-kitchen-1.jpg", "gallagher/gk-kitchen-3.jpg", "gallagher/gk-vans.jpg", "gallagher/gk-cards-desk.jpg",
+    "collar-and-cuff/cc-shopfront.jpg", "collar-and-cuff/cc-swing-tag.jpg", "collar-and-cuff/cc-woven-label.jpg",
+    "collar-and-cuff/cc-stadium.jpg", "collar-and-cuff/cc-carrier-bag.jpg", "collar-and-cuff/cc-box.jpg"
+  ]
+}

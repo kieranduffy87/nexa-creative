@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=block" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; background: #000; overflow: hidden; }
+  body { font-family: "DM Sans", sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+  #stage { position: absolute; inset: 0; overflow: hidden; background: #000; }
+  .layer { position: absolute; inset: 0; overflow: hidden; visibility: hidden; }
+  .layer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .dim::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
+  .word { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+          font-size: 230px; font-weight: 500; letter-spacing: -0.055em; line-height: 1; visibility: hidden; }
+  .title { position: absolute; left: 96px; bottom: 112px; visibility: hidden; }
+  .title .idx { font-size: 22px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); overflow: hidden; }
+  .title .name { font-size: 132px; font-weight: 400; letter-spacing: -0.05em; line-height: 1; margin-top: 18px; overflow: hidden; padding-bottom: 8px; }
+  .title span { display: inline-block; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0) 45%); }
+  .chrome { position: absolute; font-size: 18px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.75); visibility: hidden; z-index: 50; }
+  .bar { position: absolute; top: 0; bottom: 0; background: #000; }
+  .red { background: #ef4136; }
+  .card { position: absolute; overflow: hidden; border-radius: 22px; }
+  .card img { width: 100%; height: 100%; object-fit: cover; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="gsap.min.js"></script>
+<script>
+const FPS = 30, DURATION = 37;
+const stage = document.getElementById("stage");
+const tl = gsap.timeline({ paused: true });
+const seqLayers = [];      // { img, id, start, count }
+let counts = {};
+
+const LOGO = `<svg viewBox="0 0 271.6 72.45" style="width:100%;height:100%"><path fill="#ef4136" d="M0,0V72.45H72.46V0ZM29,58H14.49V14.49L29,29Zm29,0h0L43.47,43.47v-29H58Z"/><g class="letters" fill="#fff"><polygon points="127.28 17.93 127.28 40.19 108.61 17.94 108.61 17.93 101.57 17.93 101.57 51.14 108.61 51.14 108.61 28.88 127.28 51.13 127.28 51.14 134.32 51.14 134.32 17.93 127.28 17.93"/><polygon points="226.8 17.93 217.61 17.93 217.61 17.94 208.27 29.07 198.94 17.94 198.94 17.93 189.75 17.93 203.68 34.54 189.75 51.14 198.94 51.14 198.94 51.13 208.27 40.01 217.61 51.13 217.61 51.14 226.8 51.14 212.87 34.54 226.8 17.93"/><polygon points="176.38 24.97 176.38 17.93 155.91 17.93 151.22 17.93 148.87 17.93 148.87 51.14 151.22 51.14 155.91 51.14 176.38 51.14 176.38 44.1 155.91 44.1 155.91 38.06 176.38 38.06 176.38 31.02 155.91 31.02 155.91 24.97 176.38 24.97"/><path d="M256.11,17.93H248L232.52,51.14h7.77l3.09-6.62h17.36l3.09,6.62h7.77Zm-9.45,19.55,5.4-11.58,5.4,11.58Z"/></g></svg>`;
+
+/* ── builders ───────────────────────────────────────────────────────── */
+
+function el(html, parent = stage) {
+  const t = document.createElement("template"); t.innerHTML = html.trim();
+  const n = t.content.firstChild; parent.appendChild(n); return n;
+}
+// Visible exactly within [a, b)
+function span(node, a, b) {
+  tl.set(node, { visibility: "visible" }, a);
+  tl.set(node, { visibility: "hidden" }, b);
+}
+function seq(id, a, b, { dim = false, z = 1 } = {}) {
+  const n = el(`<div class="layer${dim ? " dim" : ""}" style="z-index:${z}"><img></div>`);
+  seqLayers.push({ img: n.querySelector("img"), id, start: a, node: n });
+  span(n, a, b); return n;
+}
+function still(file, a, b, { z = 1 } = {}) {
+  const n = el(`<div class="layer" style="z-index:${z}"><img src="img/${file}"></div>`);
+  span(n, a, b); return n;
+}
+function title(idx, name, a, b) {
+  const n = el(`<div class="title" style="z-index:40"><div class="idx"><span>${idx}</span></div><div class="name"><span>${name}</span></div></div>`);
+  const shade = el(`<div class="shade" style="z-index:39;visibility:hidden"></div>`);
+  span(n, a, b); span(shade, a, b);
+  const [i, nm] = n.querySelectorAll("span");
+  tl.fromTo(shade, { opacity: 0 }, { opacity: 1, duration: 0.5 }, a);
+  tl.fromTo(i, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: "expo.out" }, a + 0.05);
+  tl.fromTo(nm, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.out" }, a + 0.12);
+  tl.to([nm, i], { yPercent: -110, duration: 0.45, ease: "expo.in", stagger: 0.05 }, b - 0.5);
+  tl.to(shade, { opacity: 0, duration: 0.4 }, b - 0.45);
+}
+function push(n, a, b, from = 1.0, to = 1.08) {
+  tl.fromTo(n.querySelector("img") || n, { scale: from }, { scale: to, duration: b - a, ease: "none" }, a);
+}
+function word(text, a, b, cls = "") {
+  const n = el(`<div class="word ${cls}" style="z-index:30">${text}</div>`);
+  span(n, a, b);
+  tl.fromTo(n, { scale: 1.12, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "expo.out" }, a);
+  return n;
+}
+function flashes(files, a, step) {
+  files.forEach((f, k) => {
+    const n = still(f, a + k * step, a + (k + 1) * step);
+    push(n, a + k * step, a + (k + 1) * step, 1.06, 1.0);
+  });
+}
+
+/* ── 0 · Open ────────────────────────────────────────────────────────── */
+const logo = el(`<div style="position:absolute;left:50%;top:50%;width:760px;height:203px;margin:-101px 0 0 -380px;z-index:20;visibility:hidden">${LOGO}</div>`);
+span(logo, 0, 2.0);
+const letters = logo.querySelector(".letters");
+tl.fromTo(logo, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "expo.out" }, 0.15);
+tl.fromTo(letters, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "expo.inOut" }, 0.55);
+tl.to(logo, { scale: 1.6, opacity: 0, duration: 0.45, ease: "expo.in" }, 1.55);
+
+seq("w1", 2.0, 2.5, { dim: true }); word("Brand.", 2.0, 2.5);
+seq("w2", 2.5, 3.0, { dim: true }); word("Digital.", 2.5, 3.0);
+seq("w3", 3.0, 3.5, { dim: true }); word("Motion.", 3.0, 3.5);
+const redA = el(`<div class="layer red" style="z-index:2"></div>`); span(redA, 3.5, 4.0);
+const nd = el(`<div class="word" style="z-index:30;font-size:120px">Nexa Creative</div>`); span(nd, 3.5, 4.0);
+tl.fromTo(nd, { letterSpacing: "0.02em", opacity: 0 }, { letterSpacing: "-0.05em", opacity: 1, duration: 0.45, ease: "expo.out" }, 3.5);
+
+/* ── 1 · WhatsExposed ────────────────────────────────────────────────── */
+const we3d = seq("we3d", 4.0, 6.3); push(we3d, 4.0, 6.3, 1.0, 1.1);
+title("01 / Cybersecurity", "WhatsExposed", 4.3, 7.8);
+// slice wipe: five bars close over the logo, open on the hero
+const weh = seq("weh", 6.0, 8.0); push(weh, 6.0, 8.0, 1.08, 1.0);
+for (let k = 0; k < 5; k++) {
+  const b = el(`<div class="bar" style="left:${k * 384}px;width:386px;z-index:35;visibility:hidden"></div>`);
+  span(b, 5.65, 6.45);
+  tl.fromTo(b, { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.3, ease: "expo.in" }, 5.65 + k * 0.03);
+  tl.to(b, { scaleY: 0, transformOrigin: "50% 0%", duration: 0.35, ease: "expo.out" }, 6.05 + k * 0.03);
+}
+// three-up of the estate
+["we-billboard.jpg", "we-social.jpg", "we-lanyard.jpg"].forEach((f, k) => {
+  const n = el(`<div class="layer" style="left:${k * 640}px;width:640px;right:auto;z-index:5"><img src="img/${f}"></div>`);
+  span(n, 8.0 + k * 0.08, 9.05);
+  tl.fromTo(n, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.45, ease: "expo.out" }, 8.0 + k * 0.08);
+  push(n, 8.0, 9.05, 1.12, 1.0);
+});
+const wew = seq("wew", 9.0, 11.2); push(wew, 9.0, 11.2, 1.0, 1.08);
+// red sweep across into Quinn
+const sweep = el(`<div class="layer red" style="z-index:36"></div>`); span(sweep, 10.6, 11.45);
+tl.fromTo(sweep, { xPercent: -100 }, { xPercent: 0, duration: 0.4, ease: "expo.in" }, 10.6);
+tl.to(sweep, { xPercent: 100, duration: 0.45, ease: "expo.out" }, 11.0);
+
+/* ── 2 · Quinn IT ────────────────────────────────────────────────────── */
+const qia = seq("qia", 11.0, 13.0); push(qia, 11.0, 13.0, 1.0, 1.06);
+title("02 / Technology", "Quinn IT", 11.4, 14.8);
+const qil = seq("qil", 13.0, 15.0);
+tl.fromTo(qil.querySelector("img"), { scale: 1.18 }, { scale: 1.0, duration: 0.6, ease: "expo.out" }, 13.0);
+flashes(["qi-van-1.jpg", "qi-cards.jpg", "qi-wallsign.jpg", "qi-tshirt.jpg"], 15.0, 0.25);
+const qiw = seq("qiw", 16.0, 18.0); push(qiw, 16.0, 18.0, 1.0, 1.06);
+tl.fromTo(qiw, { clipPath: "circle(80% at 50% 50%)" }, { clipPath: "circle(0% at 50% 50%)", duration: 0.45, ease: "expo.in" }, 17.55);
+
+/* ── 3 · Gallagher Kitchens ──────────────────────────────────────────── */
+const gk3 = seq("gk3", 18.0, 20.0);
+tl.fromTo(gk3, { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(80% at 50% 50%)", duration: 0.6, ease: "expo.out" }, 18.0);
+title("03 / Interiors", "Gallagher Kitchens", 18.4, 21.8);
+const k1 = still("gk-kitchen-1.jpg", 20.0, 21.45); push(k1, 20.0, 21.45, 1.0, 1.08);
+const k3 = still("gk-kitchen-3.jpg", 21.0, 22.0, { z: 2 }); push(k3, 21.0, 22.0, 1.06, 1.0);
+tl.fromTo(k3, { xPercent: 100 }, { xPercent: 0, duration: 0.45, ease: "expo.out" }, 21.0);
+tl.to(k1, { xPercent: -30, duration: 0.45, ease: "expo.out" }, 21.0);
+const vl = el(`<div class="layer" style="width:960px;right:auto;z-index:3"><img src="img/gk-vans.jpg"></div>`); span(vl, 22.0, 23.0);
+const vr = el(`<div class="layer" style="left:960px;width:960px;right:auto;z-index:3"><img src="img/gk-cards-desk.jpg"></div>`); span(vr, 22.0, 23.0);
+tl.fromTo(vl, { yPercent: -100 }, { yPercent: 0, duration: 0.5, ease: "expo.out" }, 22.0);
+tl.fromTo(vr, { yPercent: 100 }, { yPercent: 0, duration: 0.5, ease: "expo.out" }, 22.0);
+const gkw = seq("gkw", 23.0, 25.0); push(gkw, 23.0, 25.0, 1.0, 1.06);
+tl.to(gkw, { clipPath: "inset(0 0 100% 0)", duration: 0.4, ease: "expo.in" }, 24.6);
+
+/* ── 4 · Collar & Cuff ───────────────────────────────────────────────── */
+const ccl = seq("ccl", 25.0, 27.0); push(ccl, 25.0, 27.0, 1.04, 1.0);
+tl.fromTo(ccl, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.5, ease: "expo.out" }, 25.0);
+title("04 / Menswear", "Collar &amp; Cuff", 25.4, 28.3);
+const ccp = seq("ccp", 27.0, 28.5); push(ccp, 27.0, 28.5, 1.0, 1.05);
+flashes(["cc-shopfront.jpg", "cc-swing-tag.jpg", "cc-woven-label.jpg", "cc-stadium.jpg", "cc-carrier-bag.jpg", "cc-box.jpg"], 28.5, 0.25);
+const cct = seq("cct", 30.0, 32.2); push(cct, 30.0, 32.2, 1.0, 1.08);
+
+/* ── 5 · Outro ───────────────────────────────────────────────────────── */
+const grid = el(`<div class="layer" style="z-index:10"></div>`); span(grid, 32.0, 34.6);
+const W = 860, H = 484, G = 28, X0 = (1920 - W * 2 - G) / 2, Y0 = (1080 - H * 2 - G) / 2;
+["o1", "o2", "o3", "o4"].forEach((id, k) => {
+  const c = el(`<div class="card" style="left:${X0 + (k % 2) * (W + G)}px;top:${Y0 + Math.floor(k / 2) * (H + G)}px;width:${W}px;height:${H}px"><img></div>`, grid);
+  seqLayers.push({ img: c.querySelector("img"), id, start: 32.0, node: grid });
+  tl.fromTo(c, { scale: 0.86, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "expo.out" }, 32.0 + k * 0.09);
+});
+tl.fromTo(cct, { scale: 1 }, { scale: 0.5, opacity: 0, duration: 0.4, ease: "expo.in" }, 31.8);
+tl.to(grid, { scale: 0.82, opacity: 0, duration: 0.55, ease: "expo.in" }, 34.05);
+const end = el(`<div style="position:absolute;inset:0;z-index:20;visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center">
+  <div class="endlogo" style="width:560px;height:150px">${LOGO}</div>
+  <div class="tag" style="margin-top:46px;font-size:34px;letter-spacing:-0.02em;color:rgba(255,255,255,0.85)">Brand and digital design that earns attention.</div>
+  <div class="url" style="margin-top:20px;font-size:20px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45)">nexacreative.ie</div></div>`);
+span(end, 34.4, DURATION + 1);
+tl.fromTo(end.querySelector(".endlogo"), { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: "expo.out" }, 34.4);
+tl.fromTo(end.querySelector(".tag"), { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" }, 34.9);
+tl.fromTo(end.querySelector(".url"), { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "expo.out" }, 35.2);
+
+/* ── Chrome: the reel's own furniture ────────────────────────────────── */
+const tlbl = el(`<div class="chrome" style="left:56px;top:48px">Nexa Creative</div>`);
+const trbl = el(`<div class="chrome" style="right:56px;top:48px">Showreel 2026</div>`);
+const tc = el(`<div class="chrome" style="right:56px;bottom:48px;font-variant-numeric:tabular-nums">00:00</div>`);
+[tlbl, trbl, tc].forEach((n) => span(n, 2.0, 34.0));
+
+tl.set({}, {}, DURATION); // pin the length
+
+/* ── render one frame ───────────────────────────────────────────────── */
+window.renderAt = async (t) => {
+  tl.seek(t, false);
+  tc.textContent = `00:${String(Math.floor(t)).padStart(2, "0")}`;
+  const waits = [];
+  for (const L of seqLayers) {
+    if (getComputedStyle(L.node).visibility !== "visible") continue;
+    const n = Math.max(1, Math.min(counts[L.id], Math.floor((t - L.start) * FPS) + 1));
+    const src = `seq/${L.id}/f${String(n).padStart(4, "0")}.jpg`;
+    if (!L.img.getAttribute("src") || !L.img.getAttribute("src").endsWith(src)) L.img.src = src;
+  }
+  for (const img of document.images) {
+    if (!img.getAttribute("src")) continue;
+    const vis = img.closest(".layer,.card,div[style*='z-index']");
+    waits.push(img.decode().catch(() => {}));
+  }
+  await Promise.all(waits);
+  return t;
+};
+window.ready = (async () => {
+  counts = await (await fetch("counts.json")).json();
+  await document.fonts.ready;
+  await renderAt(0);
+  return { duration: DURATION, fps: FPS };
+})();
+</script>
+</body>
+</html>
