@@ -1,19 +1,10 @@
-import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "../lib/motion";
 import { projects } from "../data/projects";
 import { useDock } from "../lib/dock";
 
-// Three.js is ~700kB and nothing above the fold depends on it arriving first,
-// so the glass loads as its own chunk after the page has painted.
-const NexaGlassScene = lazy(() =>
-  import("./NexaGlassScene").then((m) => ({ default: m.NexaGlassScene })),
-);
-
-const SLIDES = [
-  { kind: "intro", key: "intro" },
-  ...projects.map((p) => ({ kind: "project", key: p.slug, project: p })),
-];
+const SLIDES = projects.map((p) => ({ kind: "project", key: p.slug, project: p }));
 const N = SLIDES.length;
 
 /* ── Ring geometry ──────────────────────────────────────────────────────
@@ -30,6 +21,9 @@ const N = SLIDES.length;
 const RING = 1.4; // ring radius, in frame widths
 const LENS = 1.2; // perspective: smaller = steeper falloff to the back
 const OVERVIEW = 0.34; // camera scale with the whole ring in view
+const TILT = 0.8; // how far round-the-back cards rise; the camera looks down on
+// the ring a little. With four cards a level ring would park the back card
+// exactly behind the front one, so it would never be seen.
 const RADIUS = 15; // card corner on screen while zoomed out, px
 const SCROLL_PER_SLIDE = 0.7; // viewport heights of scroll per slide
 
@@ -39,10 +33,10 @@ const reducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
- * The homepage hero as a reel of the work. The glass mark is the first slide,
- * then each case study full-bleed. On arrival the ring spins in and settles on
- * the first slide; after that, each scroll step zooms out to the ring, spins
- * it to the next card and zooms back in.
+ * The homepage hero as a reel of the work, each case study full-bleed. On
+ * arrival the ring spins in and settles on the first project; after that, each
+ * scroll step zooms out to the ring, spins it to the next card and zooms back
+ * in.
  *
  * Scroll drives it: the section pins for one short step per slide, and each
  * step plays a complete transition rather than scrubbing one, so the ring is
@@ -68,6 +62,7 @@ export function HeroReel() {
     const section = sectionRef.current;
     if (!section) return;
     const W = section.clientWidth;
+    const H = section.clientHeight;
     const { angle, zoom } = ringRef.current;
     const camera = lerp(OVERVIEW, 1, zoom);
 
@@ -81,13 +76,14 @@ export function HeroReel() {
       const depth = LENS / (LENS + RING * (1 - Math.cos(theta))); // 1 at the front
       const scale = camera * depth;
       const x = Math.sin(theta) * RING * W * camera;
+      const y = -((1 - Math.cos(theta)) / 2) * H * camera * TILT;
 
       // Corners stay ~15px on screen at any size, except the front card,
       // which squares off as it fills the frame
       const front = Math.max(0, 1 - Math.abs(d));
       const r = (RADIUS / scale) * (1 - zoom * front);
 
-      card.style.transform = `translate3d(${x.toFixed(1)}px,0,0) scale(${scale.toFixed(4)})`;
+      card.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) scale(${scale.toFixed(4)})`;
       card.style.borderRadius = `${r.toFixed(1)}px`;
       card.style.zIndex = String(Math.round(depth * 100));
     });
@@ -141,7 +137,7 @@ export function HeroReel() {
       render();
     } else {
       // Arrive zoomed out with the ring already turning, spin about a turn
-      // and a quarter, and settle into the first slide.
+      // and a quarter, and settle on the first project.
       ring.angle = -N * 1.25;
       ring.zoom = 0;
       render();
@@ -253,6 +249,10 @@ export function HeroReel() {
       tabIndex={-1}
       onKeyDown={onKeyDown}
     >
+      <h1 className="sr-only">
+        Nexa Creative, a Dublin studio for brand and digital design
+      </h1>
+
       {/* ── The ring ──────────────────────────────────────────────── */}
       {SLIDES.map((s, k) => (
         <div
@@ -262,34 +262,21 @@ export function HeroReel() {
           style={{ transformOrigin: "50% 50%" }}
           aria-hidden={k !== active}
         >
-          {s.kind === "intro" ? (
-            <div className="hero-bg-dark hero-grain absolute inset-0">
-              <Suspense fallback={null}>
-                <NexaGlassScene variant="shards" className="h-full w-full" />
-              </Suspense>
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(100deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.25) 32%, rgba(0,0,0,0) 55%)",
-                }}
-              />
-            </div>
-          ) : (
-            <div className="absolute inset-0" style={{ background: s.project.accent }}>
-              <video
-                ref={(el) => (videosRef.current[k] = el)}
-                src={s.project.heroVideo}
-                poster={s.project.heroPoster}
-                muted
-                loop
-                playsInline
-                preload={k === 1 ? "auto" : "metadata"}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/5 to-transparent" />
-            </div>
-          )}
+          <div className="absolute inset-0" style={{ background: s.project.accent }}>
+            <video
+              ref={(el) => (videosRef.current[k] = el)}
+              src={s.project.heroVideo}
+              poster={s.project.heroPoster}
+              muted
+              loop
+              playsInline
+              preload={k === 0 ? "auto" : "metadata"}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/5 to-transparent" />
+            {/* Phones carry the name low-left, so it needs ground to sit on */}
+            <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/45 to-transparent md:hidden" />
+          </div>
         </div>
       ))}
 
@@ -310,27 +297,19 @@ export function HeroReel() {
             zooms back in, so nothing reads at thumbnail size. Placement and
             the enter/leave motion are on separate elements because both are
             translates and would overwrite each other on one. */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 md:px-8" aria-live="polite">
+        <div
+          className="absolute inset-x-0 bottom-16 px-5 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:px-8"
+          aria-live="polite"
+        >
           <div
             key={slide.key}
             className={`transition-[opacity,transform] duration-500 ${
               moving ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"
             }`}
           >
-            {slide.kind === "intro" ? (
-              <>
-                <h1 className="max-w-[15ch] text-[clamp(1.75rem,2.6vw,2.5rem)] font-normal leading-[1.06] tracking-[-0.035em]">
-                  Brand and digital design that earns attention.
-                </h1>
-                <p className="mt-4 max-w-[30ch] text-[13px] leading-snug text-white/60">
-                  A Dublin studio for identities, websites and motion.
-                </p>
-              </>
-            ) : (
-              <h2 className="max-w-[14ch] text-[clamp(1.75rem,2.6vw,2.5rem)] font-normal leading-[1.06] tracking-[-0.035em]">
-                {slide.project.name}
-              </h2>
-            )}
+            <h2 className="max-w-[14ch] text-[clamp(1.75rem,2.6vw,2.5rem)] font-normal leading-[1.06] tracking-[-0.035em]">
+              {slide.project.name}
+            </h2>
           </div>
         </div>
 

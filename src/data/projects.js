@@ -720,8 +720,8 @@ export const projects = [
       {
         type: "media",
         kind: "video",
-        src: cc("cc-tablet.mp4"),
-        poster: cc("cc-tablet-poster.jpg"),
+        src: cc("cc-tablet-top.mp4"),
+        poster: cc("cc-tablet-top-poster.jpg"),
         bg: "#0d0d0d",
         caption: "The About page, top to bottom.",
       },

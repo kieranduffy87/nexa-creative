@@ -277,16 +277,19 @@ export function Navbar() {
         }`}
       />
 
+      {/* Inset twice the frame inset: the panels sit one inset inside the
+          viewport, so the bar sits the same distance inside the panel as the
+          panel sits inside the frame. */}
       <nav
         aria-label="Main"
-        className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 sm:top-4"
+        className="pointer-events-none fixed inset-x-0 top-[calc(var(--frame-inset)*2)] z-50 flex justify-center px-[calc(var(--frame-inset)*2)]"
       >
         <div className="pointer-events-auto relative w-full max-w-[29rem]">
           {/* ── Open: the panel, anchored to the bar's top edge ── */}
           <div
             ref={panelRef}
             id="dock-panel"
-            className="invisible absolute inset-x-0 top-0 max-h-[calc(100svh-1.5rem)] overflow-y-auto rounded-[20px] bg-bg p-2 opacity-0 shadow-[0_8px_40px_rgba(0,0,0,0.22)]"
+            className="invisible absolute inset-x-0 top-0 max-h-[calc(100svh-(var(--frame-inset)*4))] overflow-y-auto rounded-[20px] bg-bg p-2 opacity-0 shadow-[0_8px_40px_rgba(0,0,0,0.22)]"
             aria-hidden={!open}
             inert={!open}
           >
