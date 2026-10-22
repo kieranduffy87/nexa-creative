@@ -9,6 +9,7 @@ const NexaGlassScene = lazy(() =>
     default: m.NexaGlassScene,
   })),
 );
+import { HeroTicker } from "../components/HeroTicker";
 import {
   ArrowIcon,
   Asterisk,
@@ -164,15 +165,15 @@ export default function HomePage() {
             </PillButton>
           </Reveal>
 
-          <Reveal
-            variant="fade"
-            delay={0.3}
-            className="mt-14 max-w-md border-t border-white/15 pt-5"
-          >
+          <Reveal variant="fade" delay={0.3} className="mt-14 max-w-md">
             <p className="t-body !text-white/55">
               A Dublin studio building identities, websites and motion for
               companies that need to be taken seriously.
             </p>
+          </Reveal>
+
+          <Reveal variant="fade" delay={0.45} className="mt-12">
+            <HeroTicker />
           </Reveal>
         </div>
       </section>

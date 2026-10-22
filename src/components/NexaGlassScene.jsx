@@ -483,11 +483,20 @@ export function NexaGlassScene({ variant = "shards", className = "" }) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
+    // No WebGL means no scene, not a dead site. Without this the constructor
+    // throws during the effect and takes the whole route down with it, so a
+    // visitor whose browser or machine has WebGL disabled sees an error page
+    // instead of the homepage. The hero reads fine on its gradient alone.
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      return undefined;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = light ? 0.8 : 0.95;
