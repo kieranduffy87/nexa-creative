@@ -1,209 +1,447 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { NexaLogo } from "./NexaLogo";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { NexaLogo, NexaMark } from "./NexaLogo";
 import { ArrowIcon } from "./ui";
 import { useTheme } from "../lib/theme";
+import { useDock } from "../lib/dock";
+import { projects } from "../data/projects";
 
-const LINKS = [
-  { to: "/work", label: "Work", sub: "Selected projects" },
-  { to: "/services", label: "Services", sub: "What we do" },
-  { to: "/about", label: "About", sub: "The studio" },
-  { to: "/contact", label: "Contact", sub: "Start a project" },
-];
+const EMAIL = "hello@nexacreative.ie";
+const BAR = 64; // closed dock height, px
 
-/**
- * Three tiles hanging from the top edge rather than one bar: the mark on the
- * left, the links in the middle, the utilities on the right. Each tile keeps
- * the rounded-bottom shape, so the nav still reads as attached to the top of
- * the page, but it now spans the full width the way the hero does.
- *
- * Because every tile carries its own ground, none of them need to know what
- * they are sitting over.
- */
-function Tile({ className = "", children }) {
+const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ── Small parts ──────────────────────────────────────────────────────── */
+
+/** The Nexa mark, used wherever the dock has no project to show. The tile is
+    neutral and the mark sits inside it, so its square corners stay square. */
+function MarkTile({ className = "" }) {
   return (
-    <div
-      className={`pointer-events-auto flex items-center rounded-b-2xl bg-bg shadow-[0_0_16px_rgba(0,0,0,0.08)] ${className}`}
-    >
-      {children}
-    </div>
+    <span className={`flex items-center justify-center bg-mist text-nexa-red ${className}`}>
+      <NexaMark className="h-[46%] w-[46%]" />
+    </span>
   );
 }
 
-/** Dublin wall clock. The studio is in one place and says so. */
-function Clock() {
-  const [now, setNow] = useState(() => new Date());
+function Thumb({ src, className = "" }) {
+  if (!src) return <MarkTile className={className} />;
+  return (
+    <span className={`block overflow-hidden ${className}`}>
+      <img key={src} src={src} alt="" className="swap-in h-full w-full object-cover" />
+    </span>
+  );
+}
 
+/** What the closed dock offers, which depends on where the visitor is. */
+function ctaFor(pathname, reel) {
+  if (pathname === "/" && reel) {
+    const s = reel.slide;
+    if (s.kind === "project") {
+      return {
+        to: `/work/${s.project.slug}`,
+        label: "View case study",
+        sub: s.project.name,
+        thumb: s.project.thumb,
+      };
+    }
+    return { to: "/work", label: "See the work", sub: "Selected projects", thumb: null };
+  }
+
+  const m = pathname.match(/^\/work\/([^/]+)/);
+  if (m) {
+    const k = projects.findIndex((p) => p.slug === m[1]);
+    const next = projects[(k + 1) % projects.length];
+    return {
+      to: `/work/${next.slug}`,
+      label: "Next case study",
+      sub: next.name,
+      thumb: next.thumb,
+    };
+  }
+
+  if (pathname.startsWith("/contact")) {
+    return { to: "/work", label: "See the work", sub: "Selected projects", thumb: null };
+  }
+  return { to: "/contact", label: "Start a project", sub: "Tell us about it", thumb: null };
+}
+
+/** Analogue Dublin clock. Minutes are all a studio clock needs. */
+function ClockTile() {
+  const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
+    const id = setInterval(() => setNow(new Date()), 15000);
     return () => clearInterval(id);
   }, []);
 
-  const time = new Intl.DateTimeFormat("en-IE", {
+  const parts = new Intl.DateTimeFormat("en-IE", {
     timeZone: "Europe/Dublin",
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
-  }).format(now);
+  }).formatToParts(now);
+  const h = +parts.find((p) => p.type === "hour").value;
+  const m = +parts.find((p) => p.type === "minute").value;
+  const minuteAngle = m * 6;
+  const hourAngle = (h % 12) * 30 + m * 0.5;
 
   return (
-    <div className="hidden flex-col justify-center pr-1 text-right leading-none lg:flex">
-      <span className="text-[10px] uppercase tracking-[0.14em] text-text-light">
-        Dublin
-      </span>
-      <span className="mt-1 text-[13px] tabular-nums tracking-[-0.01em] text-text">
-        {time}
+    <div className="flex aspect-square flex-col items-center justify-center rounded-full bg-mist">
+      <svg viewBox="0 0 40 40" className="h-[38%] w-[38%] text-text" aria-hidden="true">
+        {[0, 90, 180, 270].map((a) => (
+          <circle key={a} cx={20 + 17 * Math.sin((a * Math.PI) / 180)} cy={20 - 17 * Math.cos((a * Math.PI) / 180)} r="0.9" fill="currentColor" opacity="0.4" />
+        ))}
+        <line x1="20" y1="20" x2="20" y2="10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" transform={`rotate(${hourAngle} 20 20)`} />
+        <line x1="20" y1="20" x2="20" y2="5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" transform={`rotate(${minuteAngle} 20 20)`} />
+        <circle cx="20" cy="20" r="1.6" className="fill-nexa-red" />
+      </svg>
+      <span className="mt-2 text-[12px] leading-none tracking-[-0.01em]">Dublin</span>
+      <span className="mt-1 text-[11px] tabular-nums leading-none text-text-light">
+        {pad2(h)}:{pad2(m)}
       </span>
     </div>
   );
 }
+const pad2 = (n) => String(n).padStart(2, "0");
 
-function ThemeToggle({ theme, onToggle }) {
-  const dark = theme === "dark";
+/**
+ * Drag the knob across to get to the contact page. Keyboard users get the
+ * same destination from Enter or Space on the knob: the slide is the fun part,
+ * not a gate.
+ */
+function SlideToContact({ onDone }) {
+  const trackRef = useRef(null);
+  const knobRef = useRef(null);
+  const labelRef = useRef(null);
+  const drag = useRef(null);
+
+  const max = () => trackRef.current.clientWidth - knobRef.current.offsetWidth - 8;
+
+  const setX = (x) => {
+    gsap.set(knobRef.current, { x });
+    gsap.set(labelRef.current, { opacity: 1 - Math.min(1, x / (max() * 0.6)) });
+  };
+
+  const onPointerDown = (e) => {
+    knobRef.current.setPointerCapture(e.pointerId);
+    drag.current = { start: e.clientX, x: gsap.getProperty(knobRef.current, "x") };
+  };
+  const onPointerMove = (e) => {
+    if (!drag.current) return;
+    const x = Math.max(0, Math.min(max(), drag.current.x + e.clientX - drag.current.start));
+    setX(x);
+  };
+  const onPointerUp = () => {
+    if (!drag.current) return;
+    drag.current = null;
+    const x = gsap.getProperty(knobRef.current, "x");
+    if (x > max() * 0.82) {
+      gsap.to(knobRef.current, { x: max(), duration: 0.18, ease: "power2.out", onComplete: onDone });
+    } else {
+      gsap.to(knobRef.current, { x: 0, duration: 0.5, ease: "elastic.out(1, 0.6)" });
+      gsap.to(labelRef.current, { opacity: 1, duration: 0.3 });
+    }
+  };
+
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      aria-pressed={dark}
-      title={dark ? "Light theme" : "Dark theme"}
-      className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
-    >
-      <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px]" aria-hidden="true">
-        {dark ? (
-          <path
-            d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-        ) : (
-          <g stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
-            <circle cx="10" cy="10" r="3.6" />
-            <path d="M10 1.6v2M10 16.4v2M18.4 10h-2M3.6 10h-2M15.9 4.1l-1.4 1.4M5.5 14.5l-1.4 1.4M15.9 15.9l-1.4-1.4M5.5 5.5 4.1 4.1" />
-          </g>
-        )}
-      </svg>
-    </button>
+    <div ref={trackRef} className="relative flex h-14 items-center rounded-full bg-mist p-1">
+      <span
+        ref={labelRef}
+        className="pointer-events-none absolute inset-0 flex items-center justify-center pl-10 text-[13px] tracking-[-0.01em] text-text-muted"
+      >
+        Slide to contact us
+      </span>
+      <button
+        ref={knobRef}
+        type="button"
+        aria-label="Contact us"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onDone();
+          }
+        }}
+        className="relative z-10 flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full bg-bg text-nexa-red shadow-[0_2px_10px_rgba(0,0,0,0.12)] active:cursor-grabbing"
+      >
+        <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" aria-hidden="true">
+          <rect x="2.5" y="4.5" width="15" height="11" rx="2" stroke="currentColor" strokeWidth="1.4" />
+          <path d="m3 5.5 7 5 7-5" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+        </svg>
+      </button>
+    </div>
   );
 }
 
+function NavTile({ to, label, sub, onClick }) {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="dock-item group flex h-28 flex-col justify-end rounded-[14px] bg-mist p-3.5 transition-colors duration-300 hover:bg-contrast hover:text-contrast-on"
+    >
+      <span className="text-[14px] leading-none tracking-[-0.02em]">{label}</span>
+      <span className="mt-1.5 text-[11px] leading-none text-text-light transition-colors group-hover:text-contrast-on/60">
+        {sub}
+      </span>
+    </Link>
+  );
+}
+
+/* ── The dock ─────────────────────────────────────────────────────────── */
+
+/**
+ * Site navigation as a dock at the foot of the screen, after mubien.com. Closed,
+ * it is one useful action for wherever you are: on the homepage it follows the
+ * reel and opens the project on screen; on a case study it offers the next.
+ * Open, it grows upwards out of itself into a stack of tiles.
+ *
+ * The only thing left at the top is the mark, which is the way home.
+ */
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  const { reel } = useDock();
+  const cta = ctaFor(pathname, reel);
+
+  const panelRef = useRef(null);
+  const menuBtnRef = useRef(null);
+  const latest = projects[projects.length - 1];
+
+  const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => setOpen(false), [pathname]);
 
+  // Esc closes; page scroll stops underneath while it is open
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    window.__lenis?.stop();
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.__lenis?.start();
+    };
+  }, [open]);
+
+  // Grow out of the bar: a clip reveal from the bar's own height upwards,
+  // then the tiles settle in after it
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    const items = panel.querySelectorAll(".dock-item");
+    const h = panel.offsetHeight;
+
+    if (reducedMotion()) {
+      gsap.set(panel, { clipPath: "none", autoAlpha: open ? 1 : 0 });
+      gsap.set(items, { clearProps: "all" });
+    } else if (open) {
+      gsap.set(panel, { autoAlpha: 1 });
+      gsap.fromTo(
+        panel,
+        { clipPath: `inset(${h - BAR}px 0px 0px 0px round 20px)` },
+        { clipPath: "inset(0px 0px 0px 0px round 20px)", duration: 0.55, ease: "power4.out" },
+      );
+      gsap.fromTo(
+        items,
+        { y: 14, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.035, delay: 0.08 },
+      );
+    } else {
+      gsap.to(panel, {
+        clipPath: `inset(${h - BAR}px 0px 0px 0px round 20px)`,
+        duration: 0.35,
+        ease: "power3.in",
+        onComplete: () => gsap.set(panel, { autoAlpha: 0 }),
+      });
+    }
+
+    if (open) {
+      panel.querySelector("a,button")?.focus({ preventScroll: true });
+    }
+  }, [open]);
+
+  const wasOpen = useRef(false);
+  useEffect(() => {
+    if (wasOpen.current && !open) menuBtnRef.current?.focus({ preventScroll: true });
+    wasOpen.current = open;
+  }, [open]);
+
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
-      <div className="flex items-start justify-between gap-3 px-3 sm:px-4">
-        <Tile className="h-14 px-4">
-          <Link
-            to="/"
-            className="shrink-0 text-nexa-red transition-colors duration-300 hover:text-text"
-            aria-label="Nexa Creative home"
-          >
-            <NexaLogo className="h-6 w-auto" />
-          </Link>
-        </Tile>
-
-        {/* Each link carries what it actually leads to, so the nav says more
-            than four words. The sublabel is decorative: the link text alone
-            is the accessible name. */}
-        <Tile className="hidden h-[4.5rem] gap-7 px-6 md:flex">
-          {LINKS.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className="group flex flex-col justify-center leading-none"
-              data-active={pathname.startsWith(l.to) ? "true" : "false"}
-            >
-              <span
-                className="nav-link"
-                data-active={pathname.startsWith(l.to) ? "true" : "false"}
-              >
-                {l.label}
-              </span>
-              <span
-                aria-hidden="true"
-                className="mt-1.5 text-[10px] uppercase tracking-[0.14em] text-text-light transition-colors duration-300 group-hover:text-text-muted"
-              >
-                {l.sub}
-              </span>
-            </NavLink>
-          ))}
-        </Tile>
-
-        <Tile className="h-14 gap-2 px-2 lg:gap-4 lg:pl-5">
-          <Clock />
-          <ThemeToggle theme={theme} onToggle={toggle} />
-
-          <Link
-            to="/contact"
-            className="group hidden h-10 items-center gap-2.5 rounded-[12px] bg-contrast py-1 pl-1 pr-3 text-[13px] font-medium tracking-[-0.02em] text-contrast-on transition-colors duration-300 hover:bg-nexa-red hover:text-white sm:inline-flex"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-nexa-red text-white transition-colors duration-300 group-hover:bg-white group-hover:text-nexa-red">
-              <ArrowIcon />
-            </span>
-            Let&apos;s talk
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on md:hidden"
-          >
-            <span className="flex flex-col gap-[3px]">
-              <span
-                className={`block h-px w-4 bg-current transition-transform duration-300 ${
-                  open ? "translate-y-[4px] rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`block h-px w-4 bg-current transition-opacity duration-200 ${
-                  open ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`block h-px w-4 bg-current transition-transform duration-300 ${
-                  open ? "-translate-y-[4px] -rotate-45" : ""
-                }`}
-              />
-            </span>
-          </button>
-        </Tile>
+    <>
+      {/* The mark, hanging from the top-left corner of the frame */}
+      <div className="pointer-events-none fixed left-3 top-0 z-50 sm:left-4">
+        <Link
+          to="/"
+          aria-label="Nexa Creative home"
+          className="pointer-events-auto flex h-14 items-center rounded-b-2xl bg-bg px-4 text-nexa-red shadow-[0_0_16px_rgba(0,0,0,0.08)] transition-colors duration-300 hover:text-text"
+        >
+          <NexaLogo className="h-6 w-auto" />
+        </Link>
       </div>
 
-      {/* Mobile sheet */}
+      {/* Dim the page behind the open dock */}
       <div
-        className={`pointer-events-auto overflow-hidden px-3 transition-[max-height,opacity] duration-500 sm:px-4 md:hidden ${
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        onClick={close}
+        aria-hidden="true"
+        className={`fixed inset-0 z-40 bg-black/35 backdrop-blur-[2px] transition-opacity duration-500 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
+      />
+
+      <nav
+        aria-label="Main"
+        className="pointer-events-none fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 sm:bottom-4"
       >
-        <nav className="mt-2 rounded-2xl bg-bg p-2 shadow-[0_0_16px_rgba(0,0,0,0.08)]">
-          {LINKS.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className="flex items-center justify-between rounded-[10px] px-4 py-3 transition-colors hover:bg-mist"
+        <div className="pointer-events-auto relative w-full max-w-[22.5rem]">
+          {/* ── Open: the panel, anchored to the bar's bottom edge ── */}
+          <div
+            ref={panelRef}
+            id="dock-panel"
+            className="invisible absolute inset-x-0 bottom-0 max-h-[calc(100svh-1.5rem)] overflow-y-auto rounded-[20px] bg-bg p-2 opacity-0 shadow-[0_8px_40px_rgba(0,0,0,0.22)]"
+            aria-hidden={!open}
+            inert={!open}
+          >
+            <div className="grid grid-cols-2 gap-2">
+              <NavTile to="/work" label="Work" sub="Selected projects" onClick={close} />
+              <NavTile to="/services" label="Services" sub="What we do" onClick={close} />
+              <NavTile to="/about" label="About" sub="The studio" onClick={close} />
+              <button
+                type="button"
+                onClick={toggle}
+                aria-pressed={theme === "dark"}
+                className="dock-item group flex h-28 flex-col justify-between rounded-[14px] bg-mist p-3.5 text-left transition-colors duration-300 hover:bg-contrast hover:text-contrast-on"
+              >
+                <svg viewBox="0 0 20 20" fill="none" className="h-[18px] w-[18px] self-end" aria-hidden="true">
+                  {theme === "dark" ? (
+                    <path d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+                  ) : (
+                    <g stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+                      <circle cx="10" cy="10" r="3.6" />
+                      <path d="M10 1.6v2M10 16.4v2M18.4 10h-2M3.6 10h-2M15.9 4.1l-1.4 1.4M5.5 14.5l-1.4 1.4M15.9 15.9l-1.4-1.4M5.5 5.5 4.1 4.1" />
+                    </g>
+                  )}
+                </svg>
+                <span>
+                  <span className="block text-[14px] leading-none tracking-[-0.02em]">Appearance</span>
+                  <span className="mt-1.5 block text-[11px] leading-none text-text-light transition-colors group-hover:text-contrast-on/60">
+                    {theme === "dark" ? "Dark" : "Light"}
+                  </span>
+                </span>
+              </button>
+
+              {/* Latest work, the dock's answer to a showreel card */}
+              <Link
+                to={`/work/${latest.slug}`}
+                onClick={close}
+                className="dock-item group relative col-span-2 flex h-36 items-end overflow-hidden rounded-[14px] p-3.5 text-white"
+                style={{ background: latest.accent }}
+              >
+                <img
+                  src={latest.thumb}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <span className="relative">
+                  <span className="block text-[11px] uppercase tracking-[0.14em] text-white/60">
+                    Latest work
+                  </span>
+                  <span className="mt-1.5 block text-[15px] leading-none tracking-[-0.02em]">
+                    {latest.name}
+                  </span>
+                </span>
+                <span className="relative ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition-transform duration-500 group-hover:translate-x-0.5">
+                  <ArrowIcon className="h-3 w-3" />
+                </span>
+              </Link>
+
+              <div className="dock-item col-span-2">
+                <SlideToContact
+                  onDone={() => {
+                    close();
+                    navigate("/contact");
+                  }}
+                />
+              </div>
+
+              <div className="dock-item">
+                <ClockTile />
+              </div>
+              <a
+                href={`mailto:${EMAIL}`}
+                className="dock-item group flex aspect-square flex-col justify-end rounded-[14px] bg-mist p-3.5 transition-colors duration-300 hover:bg-contrast hover:text-contrast-on"
+              >
+                <span className="text-[14px] leading-none tracking-[-0.02em]">Email</span>
+                <span className="mt-1.5 break-all text-[11px] leading-snug text-text-light transition-colors group-hover:text-contrast-on/60">
+                  {EMAIL}
+                </span>
+              </a>
+            </div>
+
+            {/* Same footprint as the closed bar, so closing lands in place */}
+            <div className="mt-2 flex h-12 items-center justify-between">
+              <MarkTile className="h-12 w-12 rounded-[12px]" />
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Close menu"
+                className="flex h-12 w-12 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
+              >
+                <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
+                  <path d="m2 2 10 10M12 2 2 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* ── Closed: the bar ── */}
+          <div
+            className={`flex items-center gap-3 rounded-[20px] bg-bg p-2 shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-opacity duration-200 ${
+              open ? "pointer-events-none opacity-0" : "opacity-100"
+            }`}
+            style={{ height: BAR }}
+          >
+            <Link
+              to={cta.to}
+              className="group flex min-w-0 flex-1 items-center gap-3"
+              tabIndex={open ? -1 : undefined}
             >
-              <span className="flex flex-col leading-none">
-                <span className="text-[15px] tracking-[-0.02em]">{l.label}</span>
-                <span
-                  aria-hidden="true"
-                  className="mt-1.5 text-[10px] uppercase tracking-[0.14em] text-text-light"
-                >
-                  {l.sub}
+              <Thumb src={cta.thumb} className="h-12 w-12 shrink-0 rounded-[12px]" />
+              <span className="min-w-0">
+                <span key={cta.label} className="swap-in block truncate text-[14px] leading-none tracking-[-0.02em]">
+                  {cta.label}
+                </span>
+                <span key={cta.sub} className="swap-in mt-1.5 block truncate text-[11px] leading-none text-text-light">
+                  {cta.sub}
                 </span>
               </span>
-              <ArrowIcon className="h-3 w-3 text-text-light" />
-            </NavLink>
-          ))}
-        </nav>
-      </div>
-    </header>
+              <ArrowIcon className="ml-auto h-3 w-3 shrink-0 text-text-light transition-transform duration-500 group-hover:translate-x-0.5" />
+            </Link>
+            <button
+              ref={menuBtnRef}
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-expanded={open}
+              aria-controls="dock-panel"
+              aria-label="Open menu"
+              tabIndex={open ? -1 : undefined}
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
+            >
+              <span className="flex flex-col gap-[5px]">
+                <span className="block h-px w-4 bg-current" />
+                <span className="block h-px w-4 bg-current" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }

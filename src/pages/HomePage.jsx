@@ -1,15 +1,6 @@
-import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Reveal } from "../lib/motion";
-
-// Three.js is ~700kB of the bundle and nothing above the fold depends on it,
-// so it loads as its own chunk after the page has painted.
-const NexaGlassScene = lazy(() =>
-  import("../components/NexaGlassScene").then((m) => ({
-    default: m.NexaGlassScene,
-  })),
-);
-import { HeroTicker } from "../components/HeroTicker";
+import { HeroReel } from "../components/HeroReel";
 import {
   ArrowIcon,
   Asterisk,
@@ -125,58 +116,8 @@ function ServiceIcon({ kind }) {
 export default function HomePage() {
   return (
     <>
-      {/* ── 1. Hero ─────────────────────────────────────────────────────── */}
-      <section className="hero-bg-dark hero-grain relative overflow-hidden text-white">
-        {/* Full-bleed glass composition: the Nexa mark extruded from its own
-            path data, with glass fragments crowding in around it. */}
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <Suspense fallback={null}>
-            <NexaGlassScene variant="shards" className="h-full w-full" />
-          </Suspense>
-        </div>
-
-        {/* Legibility scrim, weighted to the left so the headline stays
-            readable without flattening the composition behind it */}
-        <div
-          className="pointer-events-none absolute inset-0 z-[1]"
-          style={{
-            background:
-              "linear-gradient(100deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 34%, rgba(0,0,0,0) 62%)",
-          }}
-        />
-
-        <div className="panel-full shell relative z-10 flex flex-col justify-end pb-16 pt-36 md:pb-20">
-          <Reveal duration={1.3} className="max-w-[46rem]">
-            <h1 className="t-display text-balance">
-              Brand and digital design
-              <br className="hidden sm:block" /> that earns attention.
-            </h1>
-          </Reveal>
-
-          <Reveal
-            delay={0.15}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <PillButton to="/contact" accent>
-              Start a project
-            </PillButton>
-            <PillButton to="/work" className="!bg-white/10 !text-white">
-              See the work
-            </PillButton>
-          </Reveal>
-
-          <Reveal variant="fade" delay={0.3} className="mt-14 max-w-md">
-            <p className="t-body !text-white/55">
-              A Dublin studio building identities, websites and motion for
-              companies that need to be taken seriously.
-            </p>
-          </Reveal>
-
-          <Reveal variant="fade" delay={0.45} className="mt-12">
-            <HeroTicker />
-          </Reveal>
-        </div>
-      </section>
+      {/* ── 1. Hero: the work, as a reel ─────────────────────────────── */}
+      <HeroReel />
 
       {/* ── 2. Studio statement ─────────────────────────────────────────── */}
       <section className="section-y">

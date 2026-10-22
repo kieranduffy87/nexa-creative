@@ -495,19 +495,15 @@ html.lenis body {
   }
 }
 
-/* Hero ticker: the dwell bar fills over one project's turn, and each new
-   project rises into place. Both are purely decorative, so reduced motion
-   leaves the bar full and swaps the text with no movement at all. */
-@keyframes hero-ticker-fill {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
+/* Text and thumbnails that swap in place (the dock's label, its project
+   tile) rise in as they change.
 
-@keyframes hero-ticker-swap {
+   No fill-mode: the resting style is the visible one, and the keyframes only
+   apply while the animation is actually running. With `both` an element holds
+   the from-state (opacity 0) whenever its animation has not started, so a
+   throttled or non-ticking animation clock would hide the text outright.
+   Text must not depend on an animation running to be readable. */
+@keyframes swap-in {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -518,18 +514,12 @@ html.lenis body {
   }
 }
 
-/* No fill-mode: the resting style is the visible one, and the keyframes only
-   apply while the animation is actually running. With `both` the span holds
-   the from-state (opacity 0) whenever the animation has not started, so a
-   throttled or non-ticking animation clock hides the project name outright.
-   Text must not depend on an animation running to be readable. */
-.hero-ticker-swap {
-  display: block;
-  animation: hero-ticker-swap 600ms var(--ease-out-expo);
+.swap-in {
+  animation: swap-in 600ms var(--ease-out-expo);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-ticker-swap {
+  .swap-in {
     animation: none;
   }
 }

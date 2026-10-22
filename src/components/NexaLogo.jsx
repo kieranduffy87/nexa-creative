@@ -38,3 +38,20 @@ export function NexaLogo({ className = "", color = "current" }) {
     </svg>
   );
 }
+
+/** The square mark on its own, from the same path as the full logo. */
+export function NexaMark({ className = "" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 72.46 72.45"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M0,0V72.45H72.46V0ZM29,58H14.49V14.49L29,29Zm29,0h0L43.47,43.47v-29H58Z"
+      />
+    </svg>
+  );
+}

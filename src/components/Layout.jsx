@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
+import { DockProvider } from "../lib/dock";
 import { useSmoothScroll, scrollToTop, ScrollTrigger } from "../lib/motion";
 
 export function Layout() {
@@ -16,12 +17,14 @@ export function Layout() {
   }, [pathname]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-bg">
-      <Navbar />
-      <main className="page-frame">
-        <Outlet />
-        <Footer />
-      </main>
-    </div>
+    <DockProvider>
+      <div className="relative min-h-screen w-full overflow-x-hidden bg-bg">
+        <Navbar />
+        <main className="page-frame">
+          <Outlet />
+          <Footer />
+        </main>
+      </div>
+    </DockProvider>
   );
 }
