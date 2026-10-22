@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Reveal } from "../lib/motion";
 import { HeroReel } from "../components/HeroReel";
+import { ShowreelSection } from "../components/ShowreelSection";
 import {
   ArrowIcon,
   Asterisk,
@@ -145,7 +146,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. Services ─────────────────────────────────────────────────── */}
+      {/* ── 3. Showreel ─────────────────────────────────────────────────── */}
+      <ShowreelSection />
+
+      {/* ── 4. Services ─────────────────────────────────────────────────── */}
       <section className="section-y">
         <div className="shell">
           <SectionHeader
@@ -175,7 +179,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 4. Case studies ─────────────────────────────────────────────── */}
+      {/* ── 5. Case studies ─────────────────────────────────────────────── */}
       <section className="section-y bg-bone">
         <div className="shell">
           <SectionHeader
@@ -228,7 +232,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. Approach ─────────────────────────────────────────────────── */}
+      {/* ── 6. Approach ─────────────────────────────────────────────────── */}
       <section className="section-y">
         <div className="shell">
           <SectionHeader
@@ -259,7 +263,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. How it works ─────────────────────────────────────────────── */}
+      {/* ── 7. How it works ─────────────────────────────────────────────── */}
       <section className="section-y bg-ink text-white">
         <div className="shell">
           <Reveal variant="fade" duration={0.8}>
@@ -289,7 +293,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 7. Closing CTA ──────────────────────────────────────────────── */}
+      {/* ── 8. Closing CTA ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-nexa-red text-white">
         <div className="shell relative z-10 py-24 text-center md:py-36">
           <Reveal duration={1.2}>

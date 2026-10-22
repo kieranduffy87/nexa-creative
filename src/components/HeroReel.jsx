@@ -246,9 +246,11 @@ export function HeroReel() {
     });
   }, [active]);
 
+  // inView lets the nav drop back to its page-level action once the visitor
+  // has scrolled past the reel, instead of offering a project off screen
   useEffect(() => {
-    setReel({ index: active, count: N, slide: SLIDES[active] });
-  }, [active, setReel]);
+    setReel({ index: active, count: N, slide: SLIDES[active], inView });
+  }, [active, inView, setReel]);
 
   useEffect(() => () => setReel(null), [setReel]);
 

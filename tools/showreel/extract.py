@@ -31,5 +31,14 @@ for rel in cfg["img"]:
     l, t = (im.width - 1920) // 2, (im.height - 1080) // 2
     im.crop((l, t, l + 1920, t + 1080)).save(os.path.join(HERE, "img", os.path.basename(rel)), quality=90)
 
+# The clean Collar & Cuff fitting room (generated without signage, so a title
+# can sit on it) lives here rather than in the case study's assets
+src = os.path.join(HERE, "stills", "cc-clean-source.png")
+im = Image.open(src).convert("RGB")
+s = max(1920 / im.width, 1080 / im.height)
+im = im.resize((round(im.width * s), round(im.height * s)), Image.LANCZOS)
+l, t = (im.width - 1920) // 2, (im.height - 1080) // 2
+im.crop((l, t, l + 1920, t + 1080)).save(os.path.join(HERE, "img", "cc-clean.jpg"), quality=90)
+
 json.dump(counts, open(os.path.join(HERE, "counts.json"), "w"))
 print(counts)

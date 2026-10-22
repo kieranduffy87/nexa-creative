@@ -15,6 +15,8 @@ const DockContext = createContext({
   setReel: () => {},
   menuOpen: false,
   setMenuOpen: () => {},
+  playerOpen: false,
+  setPlayerOpen: () => {},
 });
 
 export function DockProvider({ children }) {
@@ -22,7 +24,12 @@ export function DockProvider({ children }) {
   // The menu (or the showreel playing over everything) is up, so the reel
   // underneath should hold still rather than advance unseen
   const [menuOpen, setMenuOpen] = useState(false);
-  const value = useMemo(() => ({ reel, setReel, menuOpen, setMenuOpen }), [reel, menuOpen]);
+  // The showreel player lives in the nav, but the homepage opens it too
+  const [playerOpen, setPlayerOpen] = useState(false);
+  const value = useMemo(
+    () => ({ reel, setReel, menuOpen, setMenuOpen, playerOpen, setPlayerOpen }),
+    [reel, menuOpen, playerOpen],
+  );
   return <DockContext.Provider value={value}>{children}</DockContext.Provider>;
 }
 

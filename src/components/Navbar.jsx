@@ -30,7 +30,7 @@ function Thumb({ src, className = "" }) {
 /** What the closed dock offers, which depends on where the visitor is. One
     short label, as on mubien: the thumbnail beside it says which project. */
 function ctaFor(pathname, reel) {
-  if (pathname === "/" && reel) {
+  if (pathname === "/" && reel?.inView) {
     const p = reel.slide.project;
     return { to: `/work/${p.slug}`, label: "View case study", thumb: p.thumb };
   }
@@ -49,11 +49,14 @@ function ctaFor(pathname, reel) {
 }
 
 /**
- * The showreel, full screen over everything. Opened from the menu's reel card;
- * Esc, the close button or a click outside the video closes it. The file only
- * loads when it is first played.
+ * The showreel, with its score, full screen over everything. Opened from the
+ * menu's reel card or the homepage's showreel section; Esc, the close button or
+ * a click outside the video closes it. The file only loads when first played.
+ *
+ * Focus goes back to whatever opened it. When that was the menu card, the
+ * menu has closed by then (and is inert), so it falls back to the menu button.
  */
-function ShowreelPlayer({ open, onClose }) {
+function ShowreelPlayer({ open, onClose, fallbackFocusRef }) {
   const videoRef = useRef(null);
   const closeRef = useRef(null);
 
@@ -63,6 +66,7 @@ function ShowreelPlayer({ open, onClose }) {
       v?.pause();
       return undefined;
     }
+    const opener = document.activeElement;
     if (v) {
       v.currentTime = 0;
       v.play().catch(() => {});
@@ -74,8 +78,11 @@ function ShowreelPlayer({ open, onClose }) {
     return () => {
       window.removeEventListener("keydown", onKey);
       window.__lenis?.start();
+      const back =
+        opener && opener.isConnected && !opener.closest("[inert]") ? opener : fallbackFocusRef?.current;
+      back?.focus({ preventScroll: true });
     };
-  }, [open, onClose]);
+  }, [open, onClose, fallbackFocusRef]);
 
   return (
     <div
@@ -258,19 +265,15 @@ export function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
-  const { reel, setMenuOpen } = useDock();
+  const { reel, setMenuOpen, playerOpen, setPlayerOpen } = useDock();
   const cta = ctaFor(pathname, reel);
-  const [playerOpen, setPlayerOpen] = useState(false);
 
   const panelRef = useRef(null);
   const menuBtnRef = useRef(null);
   const previewRef = useRef(null);
 
   const close = useCallback(() => setOpen(false), []);
-  const closePlayer = useCallback(() => {
-    setPlayerOpen(false);
-    menuBtnRef.current?.focus({ preventScroll: true });
-  }, []);
+  const closePlayer = useCallback(() => setPlayerOpen(false), [setPlayerOpen]);
 
   useEffect(() => setMenuOpen(open || playerOpen), [open, playerOpen, setMenuOpen]);
 
@@ -490,7 +493,7 @@ export function Navbar() {
           >
             {/* The reel's countdown to its next slide, filling behind the
                 bar as on mubien. The reel writes --reel-progress directly. */}
-            {pathname === "/" && reel && (
+            {pathname === "/" && reel?.inView && (
               <span
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 origin-left bg-mist"
@@ -536,7 +539,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      <ShowreelPlayer open={playerOpen} onClose={closePlayer} />
+      <ShowreelPlayer open={playerOpen} onClose={closePlayer} fallbackFocusRef={menuBtnRef} />
     </>
   );
 }
