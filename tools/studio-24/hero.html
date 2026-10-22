@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  Studio 24 hero film. A paused GSAP timeline, seeked frame by frame.
+  ?fmt=p renders the 9:16 phone version from portrait crops of the same
+  photography (the 3000px originals, so nothing is upscaled).
+
+  Loops cleanly: the last crossfade brings the opening shot back in on its
+  first frame, held, so frame 360 is frame 0.
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #0d0d0d; overflow: hidden; }
+  #stage { position: absolute; inset: 0; overflow: hidden; background: #0d0d0d; }
+  .shot { position: absolute; inset: 0; overflow: hidden; opacity: 0; }
+  .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+  .grade { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.38) 100%); z-index: 50; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="grade"></div></div>
+<script src="gsap.min.js"></script>
+<script>
+const P = new URLSearchParams(location.search).get("fmt") === "p";
+const W = P ? 1080 : 1920, H = P ? 1920 : 1080, FPS = 30, DURATION = 12;
+document.documentElement.style.width = document.body.style.width = W + "px";
+document.documentElement.style.height = document.body.style.height = H + "px";
+const stage = document.getElementById("stage");
+const tl = gsap.timeline({ paused: true });
+const seqs = [];
+const CLIP_FRAMES = 151;
+
+function shot(src, a, b, { seq = false, from = 1, to = 1.09, dx = 0, z = 1, hold = false } = {}) {
+  const n = document.createElement("div");
+  n.className = "shot"; n.style.zIndex = z;
+  const img = document.createElement("img");
+  if (!seq) img.src = src;
+  n.appendChild(img); stage.appendChild(n);
+  if (seq) seqs.push({ img, start: a, node: n, hold });
+  // fade in over 0.45s, out with the next shot's fade
+  // the opening shot is simply on at frame 0; every other one fades in
+  // (a set at exactly 0 does not fire when seeking to 0, so it is visible
+  // by default instead, and the later set at b is what turns it off)
+  if (a <= 0) n.style.opacity = "1";
+  else { tl.set(n, { opacity: 0 }, 0); tl.to(n, { opacity: 1, duration: 0.45, ease: "power1.inOut" }, a); }
+  a = Math.max(0, a);
+  tl.set(n, { opacity: 0 }, b);
+  tl.fromTo(img, { scale: from, xPercent: 0 }, { scale: to, xPercent: dx, duration: b - a, ease: "none" }, a);
+  return n;
+}
+
+const I = (k) => `img/${k}${P ? "-p" : ""}.jpg`;
+// Opening shot: real motion on landscape, the portrait still on phones
+if (P) shot(I("clipper"), 0, 2.6, { from: 1.0, to: 1.07, dx: -1.2 });
+else shot("seq", 0, 2.6, { seq: true, from: 1.0, to: 1.04 });
+shot(I("razor"),    2.15, 4.6,  { from: 1.08, to: 1.0, dx: 1.5, z: 2 });
+shot(I("tools"),    4.15, 6.6,  { from: 1.0, to: 1.08, dx: -2, z: 3 });
+shot(I("range"),    6.15, 8.6,  { from: 1.06, to: 1.0, z: 4 });
+shot(I("scissor"),  8.15, 10.6, { from: 1.0, to: 1.08, dx: 1.5, z: 5 });
+shot(I("interior"), 10.15, 12.4, { from: 1.07, to: 1.0, dx: -1.5, z: 6 });
+// loop: the opening shot returns over the top on its held first frame
+if (P) shot(I("clipper"), 11.55, 12.4, { from: 1.0, to: 1.0, z: 7 });
+else shot("seq", 11.55, 12.4, { seq: true, from: 1.0, to: 1.0, z: 7, hold: true });
+tl.set({}, {}, DURATION);
+
+window.renderAt = async (t) => {
+  tl.seek(t, false);
+  for (const L of seqs) {
+    if (getComputedStyle(L.node).opacity === "0") continue;
+    const n = L.hold ? 1 : Math.max(1, Math.min(CLIP_FRAMES, Math.floor((t - Math.max(0, L.start)) * FPS) + 1));
+    const src = `seq/clip/f${String(n).padStart(4, "0")}.jpg`;
+    if (!L.img.getAttribute("src") || !L.img.getAttribute("src").endsWith(src)) L.img.src = src;
+  }
+  await Promise.all([...document.images].filter(i => i.getAttribute("src")).map(i => i.decode().catch(() => {})));
+  return t;
+};
+window.ready = (async () => { await renderAt(0); return { duration: DURATION, fps: FPS, w: W, h: H }; })();
+</script>
+</body>
+</html>

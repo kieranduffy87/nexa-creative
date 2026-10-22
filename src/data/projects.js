@@ -4,6 +4,7 @@ const we = (f) => asset(`projects/whatsexposed/${f}`);
 const qi = (f) => asset(`projects/quinnit/${f}`);
 const gk = (f) => asset(`projects/gallagher/${f}`);
 const cc = (f) => asset(`projects/collar-and-cuff/${f}`);
+const s24 = (f) => asset(`projects/studio-24/${f}`);
 
 export const projects = [
   {
@@ -839,6 +840,189 @@ export const projects = [
       { name: "Craft", body: "a tailor's mark, not a fashion logo" },
       { name: "Restraint", body: "one metal, used sparingly" },
       { name: "Occasion", body: "dressed for the day that matters" },
+    ],
+  },
+  {
+    slug: "studio-24",
+    name: "Studio 24",
+    tagline: "Experience grooming excellence",
+    year: "2018",
+    client: "Studio Twentyfour",
+    sector: "Barbering & Male Grooming",
+    tags: ["Brand Identity", "Packaging", "Print & Signage"],
+    accent: "#140b06",
+
+    thumb: s24("s24-interior.jpg"),
+    heroVideo: s24("s24-hero.mp4"),
+    heroPoster: s24("s24-hero-poster.jpg"),
+    heroVideoMobile: s24("s24-hero-mobile.mp4"),
+    heroPosterMobile: s24("s24-hero-mobile-poster.jpg"),
+
+    summary:
+      "Studio Twentyfour is a men's grooming studio in the Killinarden Enterprise Centre in Tallaght. We gave it a mark built from its own number, a colour you can see from the car park, and a system that runs from the price list on the wall to its own range of oils, clays and sprays on the shelf.",
+
+    scope: [
+      "Brand Identity",
+      "Badge & Wordmark",
+      "Product Range Packaging",
+      "Print & Signage",
+      "Interior Graphics",
+      "Social Media",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "video",
+        src: s24("s24-identity.mp4"),
+        poster: s24("s24-identity-poster.jpg"),
+        bg: "#0d0d0d",
+        caption: "The 24, the badge and the three colourways.",
+      },
+      {
+        type: "text",
+        title: "Two numbers, one stroke",
+        body: [
+          "The mark is a high contrast serif 24 in which the two figures share a line. The base of the 2 and the diagonal of the 4 are the same 45 degree stroke, so the number reads as a single drawn object rather than two characters set side by side. It is the kind of detail a barber appreciates: one clean line doing two jobs.",
+          "Set inside a ring of letterspaced capitals with Male Grooming written underneath in script, the 24 becomes a badge that sits naturally on a jar lid, a business card or the chest of a work tee. On its own, it is big enough to paint on a wall.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-interior.jpg"),
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: s24("s24-cards.jpg") },
+          { kind: "image", src: s24("s24-flyer.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "Orange you can see from the road",
+        body: [
+          "The studio sits in a business park, not on a high street, so nobody passes it by chance. The brand had to do the work a shop window would normally do. One saturated orange against black gives it a signal that carries across a car park and through a phone screen at thumbnail size.",
+          "Everything else stays out of the way. Black for ground, white for type, orange for the one thing on each piece that matters, whether that is the 24 on the wall, the contact strip on a flyer or the edge of the gift voucher.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-pricelist.jpg"),
+        caption: "The A3 price list, framed beside the orange wall.",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-voucher.jpg"),
+      },
+      {
+        type: "text",
+        title: "A range with the shop's name on it",
+        body: [
+          "A barbershop that sells its own product keeps the customer between visits. We designed the Studio 24 range as a family: amber glass for the beard oil, brushed aluminium for the sprays, black tins for the clays and pastes, each carrying the badge on the lid and the product name in the same letterspaced capitals.",
+          "The labels are deliberately quiet. The badge does the branding, so each label only has to say what is inside, which keeps a full shelf calm rather than shouting.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-range.jpg"),
+      },
+      {
+        type: "media-grid",
+        cols: 3,
+        items: [
+          { kind: "image", src: s24("s24-clay.jpg") },
+          { kind: "image", src: s24("s24-creme.jpg") },
+          { kind: "image", src: s24("s24-paste.jpg") },
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-cologne.jpg"),
+      },
+      {
+        type: "text",
+        title: "From the gate to the roll-up",
+        body: [
+          "The same system carries the signage on the unit, the banner on the railings, flyers and roll-up banners for the academy, which covers every aspect of barbering and male grooming.",
+          "The photography follows the brand's own light: warm, low and close to the work, with the orange coming from the room rather than a filter.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-shopfront.jpg"),
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: s24("s24-rollups.jpg"),
+        bg: "#c9c9c9",
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: s24("s24-clipper.jpg") },
+          { kind: "image", src: s24("s24-tools.jpg") },
+        ],
+      },
+    ],
+
+    process: [
+      {
+        title: "Positioning",
+        body: "A grooming studio rather than a quick cut, for a shop that has to be sought out.",
+      },
+      {
+        title: "Mark & badge",
+        body: "A serif 24 joined along one diagonal, set in a lettered ring with a script line beneath.",
+      },
+      {
+        title: "Colour & type",
+        body: "One orange, black and white, with letterspaced capitals and a single script accent.",
+      },
+      {
+        title: "Product range",
+        body: "Oils, sprays, colognes, clays and creams designed as one family under the badge.",
+      },
+      {
+        title: "Applied estate",
+        body: "Wall graphics, price list, vouchers, business cards, flyers, signage and roll-up banners.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "A number instead of a pole",
+        body: "Barbering has its stock imagery: the striped pole, crossed razors, a moustache. A shop called Studio 24 already owned something better, its number. Drawing the 24 so that the two figures share a stroke turned a name into a mark nobody else in the area could use.",
+      },
+      {
+        title: "One loud colour, everything else black",
+        body: "A unit in a business park gets no passing trade, so the brand needed a colour that works as a signal. Committing to a single orange, and keeping it off everything except the one element that matters on each piece, means it stays loud without the shop looking like a discount sign.",
+      },
+      {
+        title: "Let the badge brand the product",
+        body: "With the badge on every lid and cap, the labels were free to be plain. That made the range cheap to extend: a new product needs a name and a size, not a new design, and it still looks like it came from the same shelf.",
+      },
+    ],
+
+    palette: [
+      { name: "Twentyfour Orange", hex: "#FF671D" },
+      { name: "Black", hex: "#0D0D0D" },
+      { name: "White", hex: "#FFFFFF" },
+    ],
+
+    principles: [
+      { name: "Number", body: "the name is the mark" },
+      { name: "Signal", body: "one orange, seen from the road" },
+      { name: "Craft", body: "close to the work, warm in the light" },
     ],
   },
 ];

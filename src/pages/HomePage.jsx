@@ -185,16 +185,19 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Our work"
             title="Case studies."
-            body="Four brands built end to end: identity, guidelines, digital, motion and the applied estate."
+            body="Five brands built end to end: identity, guidelines, digital, motion and the applied estate."
             action={<PillButton to="/work">View all work</PillButton>}
           />
 
           <div className="mt-16 grid gap-6 md:grid-cols-2 md:gap-8">
-            {projects.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 0.08}>
+            {projects.map((p, i) => {
+              // an odd one out at the end takes the full row instead of half of it
+              const wide = projects.length % 2 === 1 && i === projects.length - 1;
+              return (
+              <Reveal key={p.slug} delay={i * 0.08} className={wide ? "md:col-span-2" : ""}>
                 <Link to={`/work/${p.slug}`} className="group block">
                   <div
-                    className="media media-zoom aspect-[4/3]"
+                    className={`media media-zoom aspect-[4/3] ${wide ? "md:aspect-[16/7]" : ""}`}
                     style={{ background: p.accent }}
                   >
                     <video
@@ -227,7 +230,8 @@ export default function HomePage() {
                   </div>
                 </Link>
               </Reveal>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

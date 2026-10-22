@@ -30,3 +30,6 @@ tools/showreel/frames/
 tools/showreel/counts.json
 tools/showreel/gsap.min.js
 tools/showreel/score.wav
+tools/studio-24/img/
+tools/studio-24/seq/
+tools/studio-24/gsap.min.js
