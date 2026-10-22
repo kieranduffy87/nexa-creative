@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import gsap from "gsap";
-import { NexaLogo, NexaMark } from "./NexaLogo";
+import { NexaLogo } from "./NexaLogo";
 import { ArrowIcon } from "./ui";
 import { useTheme } from "../lib/theme";
 import { useDock } from "../lib/dock";
@@ -15,18 +15,10 @@ const reducedMotion = () =>
 
 /* ── Small parts ──────────────────────────────────────────────────────── */
 
-/** The Nexa mark, used wherever the dock has no project to show. The tile is
-    neutral and the mark sits inside it, so its square corners stay square. */
-function MarkTile({ className = "" }) {
-  return (
-    <span className={`flex items-center justify-center bg-mist text-nexa-red ${className}`}>
-      <NexaMark className="h-[46%] w-[46%]" />
-    </span>
-  );
-}
-
 function Thumb({ src, className = "" }) {
-  if (!src) return <MarkTile className={className} />;
+  // The logo is always in the bar, so with no project to show there is
+  // nothing to add beside it
+  if (!src) return null;
   return (
     <span className={`block overflow-hidden ${className}`}>
       <img key={src} src={src} alt="" className="swap-in h-full w-full object-cover" />
@@ -87,8 +79,8 @@ function ClockTile() {
   const hourAngle = (h % 12) * 30 + m * 0.5;
 
   return (
-    <div className="flex aspect-square flex-col items-center justify-center rounded-full bg-mist">
-      <svg viewBox="0 0 40 40" className="h-[38%] w-[38%] text-text" aria-hidden="true">
+    <div className="flex h-28 items-center gap-3.5 rounded-[14px] bg-mist p-3.5">
+      <svg viewBox="0 0 40 40" className="h-14 w-14 shrink-0 rounded-full bg-bg p-1 text-text" aria-hidden="true">
         {[0, 90, 180, 270].map((a) => (
           <circle key={a} cx={20 + 17 * Math.sin((a * Math.PI) / 180)} cy={20 - 17 * Math.cos((a * Math.PI) / 180)} r="0.9" fill="currentColor" opacity="0.4" />
         ))}
@@ -96,9 +88,11 @@ function ClockTile() {
         <line x1="20" y1="20" x2="20" y2="5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" transform={`rotate(${minuteAngle} 20 20)`} />
         <circle cx="20" cy="20" r="1.6" className="fill-nexa-red" />
       </svg>
-      <span className="mt-2 text-[12px] leading-none tracking-[-0.01em]">Dublin</span>
-      <span className="mt-1 text-[11px] tabular-nums leading-none text-text-light">
-        {pad2(h)}:{pad2(m)}
+      <span className="flex flex-col self-end">
+        <span className="text-[14px] leading-none tracking-[-0.02em]">Dublin</span>
+        <span className="mt-1.5 text-[11px] tabular-nums leading-none text-text-light">
+          {pad2(h)}:{pad2(m)}
+        </span>
       </span>
     </div>
   );
@@ -195,12 +189,11 @@ function NavTile({ to, label, sub, onClick }) {
 /* ── The dock ─────────────────────────────────────────────────────────── */
 
 /**
- * Site navigation as a dock at the foot of the screen, after mubien.com. Closed,
- * it is one useful action for wherever you are: on the homepage it follows the
- * reel and opens the project on screen; on a case study it offers the next.
- * Open, it grows upwards out of itself into a stack of tiles.
- *
- * The only thing left at the top is the mark, which is the way home.
+ * Site navigation as a dock across the top of the frame, after mubien.com.
+ * Closed, it is the logo plus one useful action for wherever you are: on the
+ * homepage it follows the reel and opens the project on screen; on a case
+ * study it offers the next. Open, it grows downwards out of itself into a
+ * stack of tiles, with the logo staying where it was.
  */
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -230,7 +223,7 @@ export function Navbar() {
     };
   }, [open]);
 
-  // Grow out of the bar: a clip reveal from the bar's own height upwards,
+  // Grow out of the bar: a clip reveal from the bar's own height downwards,
   // then the tiles settle in after it
   useLayoutEffect(() => {
     const panel = panelRef.current;
@@ -245,17 +238,17 @@ export function Navbar() {
       gsap.set(panel, { autoAlpha: 1 });
       gsap.fromTo(
         panel,
-        { clipPath: `inset(${h - BAR}px 0px 0px 0px round 20px)` },
+        { clipPath: `inset(0px 0px ${h - BAR}px 0px round 20px)` },
         { clipPath: "inset(0px 0px 0px 0px round 20px)", duration: 0.55, ease: "power4.out" },
       );
       gsap.fromTo(
         items,
-        { y: 14, opacity: 0 },
+        { y: -10, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.45, ease: "power3.out", stagger: 0.035, delay: 0.08 },
       );
     } else {
       gsap.to(panel, {
-        clipPath: `inset(${h - BAR}px 0px 0px 0px round 20px)`,
+        clipPath: `inset(0px 0px ${h - BAR}px 0px round 20px)`,
         duration: 0.35,
         ease: "power3.in",
         onComplete: () => gsap.set(panel, { autoAlpha: 0 }),
@@ -263,7 +256,7 @@ export function Navbar() {
     }
 
     if (open) {
-      panel.querySelector("a,button")?.focus({ preventScroll: true });
+      panel.querySelector(".dock-item")?.focus({ preventScroll: true });
     }
   }, [open]);
 
@@ -275,17 +268,6 @@ export function Navbar() {
 
   return (
     <>
-      {/* The mark, hanging from the top-left corner of the frame */}
-      <div className="pointer-events-none fixed left-3 top-0 z-50 sm:left-4">
-        <Link
-          to="/"
-          aria-label="Nexa Creative home"
-          className="pointer-events-auto flex h-14 items-center rounded-b-2xl bg-bg px-4 text-nexa-red shadow-[0_0_16px_rgba(0,0,0,0.08)] transition-colors duration-300 hover:text-text"
-        >
-          <NexaLogo className="h-6 w-auto" />
-        </Link>
-      </div>
-
       {/* Dim the page behind the open dock */}
       <div
         onClick={close}
@@ -297,17 +279,40 @@ export function Navbar() {
 
       <nav
         aria-label="Main"
-        className="pointer-events-none fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 sm:bottom-4"
+        className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-3 sm:top-4"
       >
-        <div className="pointer-events-auto relative w-full max-w-[22.5rem]">
-          {/* ── Open: the panel, anchored to the bar's bottom edge ── */}
+        <div className="pointer-events-auto relative w-full max-w-[29rem]">
+          {/* ── Open: the panel, anchored to the bar's top edge ── */}
           <div
             ref={panelRef}
             id="dock-panel"
-            className="invisible absolute inset-x-0 bottom-0 max-h-[calc(100svh-1.5rem)] overflow-y-auto rounded-[20px] bg-bg p-2 opacity-0 shadow-[0_8px_40px_rgba(0,0,0,0.22)]"
+            className="invisible absolute inset-x-0 top-0 max-h-[calc(100svh-1.5rem)] overflow-y-auto rounded-[20px] bg-bg p-2 opacity-0 shadow-[0_8px_40px_rgba(0,0,0,0.22)]"
             aria-hidden={!open}
             inert={!open}
           >
+            {/* Same footprint as the closed bar, so opening and closing land
+                in place: the logo stays put, the menu button becomes close */}
+            <div className="mb-2 flex h-12 items-center justify-between pl-2">
+              <Link
+                to="/"
+                onClick={close}
+                aria-label="Nexa Creative home"
+                className="dock-head text-nexa-red transition-colors duration-300 hover:text-text"
+              >
+                <NexaLogo className="h-5 w-auto" />
+              </Link>
+              <button
+                type="button"
+                onClick={close}
+                aria-label="Close menu"
+                className="flex h-12 w-12 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
+              >
+                <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
+                  <path d="m2 2 10 10M12 2 2 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                </svg>
+              </button>
+            </div>
+
             <div className="grid grid-cols-2 gap-2">
               <NavTile to="/work" label="Work" sub="Selected projects" onClick={close} />
               <NavTile to="/services" label="Services" sub="What we do" onClick={close} />
@@ -376,7 +381,7 @@ export function Navbar() {
               </div>
               <a
                 href={`mailto:${EMAIL}`}
-                className="dock-item group flex aspect-square flex-col justify-end rounded-[14px] bg-mist p-3.5 transition-colors duration-300 hover:bg-contrast hover:text-contrast-on"
+                className="dock-item group flex h-28 flex-col justify-end rounded-[14px] bg-mist p-3.5 transition-colors duration-300 hover:bg-contrast hover:text-contrast-on"
               >
                 <span className="text-[14px] leading-none tracking-[-0.02em]">Email</span>
                 <span className="mt-1.5 break-all text-[11px] leading-snug text-text-light transition-colors group-hover:text-contrast-on/60">
@@ -385,20 +390,6 @@ export function Navbar() {
               </a>
             </div>
 
-            {/* Same footprint as the closed bar, so closing lands in place */}
-            <div className="mt-2 flex h-12 items-center justify-between">
-              <MarkTile className="h-12 w-12 rounded-[12px]" />
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Close menu"
-                className="flex h-12 w-12 items-center justify-center rounded-[12px] bg-mist text-text transition-colors hover:bg-contrast hover:text-contrast-on"
-              >
-                <svg viewBox="0 0 14 14" className="h-3.5 w-3.5" fill="none" aria-hidden="true">
-                  <path d="m2 2 10 10M12 2 2 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
           </div>
 
           {/* ── Closed: the bar ── */}
@@ -409,11 +400,20 @@ export function Navbar() {
             style={{ height: BAR }}
           >
             <Link
+              to="/"
+              aria-label="Nexa Creative home"
+              tabIndex={open ? -1 : undefined}
+              className="shrink-0 pl-2 text-nexa-red transition-colors duration-300 hover:text-text"
+            >
+              <NexaLogo className="h-5 w-auto" />
+            </Link>
+            <span className="h-7 w-px shrink-0 bg-border" aria-hidden="true" />
+            <Link
               to={cta.to}
               className="group flex min-w-0 flex-1 items-center gap-3"
               tabIndex={open ? -1 : undefined}
             >
-              <Thumb src={cta.thumb} className="h-12 w-12 shrink-0 rounded-[12px]" />
+              <Thumb src={cta.thumb} className="hidden h-12 w-12 shrink-0 rounded-[12px] sm:block" />
               <span className="min-w-0">
                 <span key={cta.label} className="swap-in block truncate text-[14px] leading-none tracking-[-0.02em]">
                   {cta.label}

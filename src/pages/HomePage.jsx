@@ -10,21 +10,8 @@ import {
   SectionHeader,
 } from "../components/ui";
 import { projects } from "../data/projects";
-import { asset } from "../lib/asset";
 
 /* --------------------------------------------------------------- content --- */
-
-const LOGOS = [
-  "Group-copy.svg",
-  "Group-1-copy.svg",
-  "Group-2-copy.svg",
-  "Group-3-copy.svg",
-  "Group-4-copy.svg",
-  "Group-5-copy.svg",
-  "Group-6-copy.svg",
-  "Group-567-copy.svg",
-  "Group-568-copy.svg",
-];
 
 const SERVICES = [
   {
@@ -158,34 +145,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. Clients ──────────────────────────────────────────────────── */}
-      <section className="border-y border-border bg-mist py-16 md:py-20">
-        <div className="shell">
-          <Reveal variant="fade">
-            <Eyebrow className="text-center">Clients</Eyebrow>
-            <h2 className="t-h2 mt-6 text-center text-balance">
-              Trusted by companies that cannot afford to look small.
-            </h2>
-          </Reveal>
-        </div>
-
-        <div className="marquee-mask mt-12 overflow-hidden">
-          <div className="marquee-track flex w-max items-center gap-16 px-8 md:gap-24">
-            {[...LOGOS, ...LOGOS].map((file, i) => (
-              <img
-                key={`${file}-${i}`}
-                src={asset(`logos/${file}`)}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                className="h-6 w-auto shrink-0 opacity-40 md:h-8"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. Services ─────────────────────────────────────────────────── */}
+      {/* ── 3. Services ─────────────────────────────────────────────────── */}
       <section className="section-y">
         <div className="shell">
           <SectionHeader
@@ -215,7 +175,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. Case studies ─────────────────────────────────────────────── */}
+      {/* ── 4. Case studies ─────────────────────────────────────────────── */}
       <section className="section-y bg-bone">
         <div className="shell">
           <SectionHeader
@@ -268,7 +228,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. Approach ─────────────────────────────────────────────────── */}
+      {/* ── 5. Approach ─────────────────────────────────────────────────── */}
       <section className="section-y">
         <div className="shell">
           <SectionHeader
@@ -299,7 +259,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 7. How it works ─────────────────────────────────────────────── */}
+      {/* ── 6. How it works ─────────────────────────────────────────────── */}
       <section className="section-y bg-ink text-white">
         <div className="shell">
           <Reveal variant="fade" duration={0.8}>
@@ -329,7 +289,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 8. Closing CTA ──────────────────────────────────────────────── */}
+      {/* ── 7. Closing CTA ──────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-nexa-red text-white">
         <div className="shell relative z-10 py-24 text-center md:py-36">
           <Reveal duration={1.2}>

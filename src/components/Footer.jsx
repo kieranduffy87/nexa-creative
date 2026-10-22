@@ -20,7 +20,7 @@ const SOCIALS = [
 export function Footer() {
   return (
     <footer className="bg-ink text-white">
-      <div className="shell pb-28 pt-16 md:pb-28 md:pt-20">
+      <div className="shell py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-12 md:gap-10">
           {/* Identity */}
           <div className="md:col-span-4">
