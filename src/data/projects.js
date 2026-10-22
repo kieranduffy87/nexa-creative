@@ -950,7 +950,7 @@ export const projects = [
         type: "text",
         title: "From the gate to the roll-up",
         body: [
-          "The same system carries the signage on the unit, the banner on the railings, flyers and roll-up banners for the academy, which covers every aspect of barbering and male grooming.",
+          "The same system carries the illuminated signage on the building, the lightbox at the entrance, flyers and roll-up banners for the academy, which covers every aspect of barbering and male grooming.",
           "The photography follows the brand's own light: warm, low and close to the work, with the orange coming from the room rather than a filter.",
         ],
       },
