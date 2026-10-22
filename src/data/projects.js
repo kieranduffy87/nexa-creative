@@ -20,6 +20,8 @@ export const projects = [
     thumb: we("we-overview.jpg"),
     heroVideo: we("we-hero.mp4"),
     heroPoster: we("we-overview.jpg"),
+    heroVideoMobile: we("we-hero-mobile.mp4"),
+    heroPosterMobile: we("we-hero-mobile-poster.jpg"),
 
     summary:
       "WhatsExposed is a cybersecurity company built on a simple promise: find what is exposed, then help fix it. We built the brand from the ground up: the mark and wordmark, the full identity toolkit and guidelines, the website, the campaign platform, and every piece of print, event and social material the company goes to market with.",
@@ -253,6 +255,8 @@ export const projects = [
     thumb: qi("qi-widescreen.jpg"),
     heroVideo: qi("qi-3dlayers-logo.mp4"),
     heroPoster: qi("qi-3dlayers.jpg"),
+    heroVideoMobile: qi("qi-hero-mobile.mp4"),
+    heroPosterMobile: qi("qi-hero-mobile-poster.jpg"),
 
     summary:
       "Quinn IT is a technology and digital services company: managed IT, managed security, and compliance work for businesses that cannot afford downtime. We built the brand from the mark up: a geometric identity in vibrant blue that holds together across 3D, motion, vehicle livery and the uniform the engineers actually turn up in.",
@@ -480,6 +484,8 @@ export const projects = [
     thumb: gk("gk-kitchen-1.jpg"),
     heroVideo: gk("gk-web.mp4"),
     heroPoster: gk("gk-web-poster.jpg"),
+    heroVideoMobile: gk("gk-hero-mobile.mp4"),
+    heroPosterMobile: gk("gk-hero-mobile-poster.jpg"),
 
     summary:
       "For over thirty-two years, family-run Gallagher Kitchens has designed and built bespoke kitchens and wardrobes from its Dublin showrooms. To grow beyond its local base, the company needed a new identity and a digital presence that could carry its craftsmanship to Leinster and beyond.",
@@ -654,6 +660,8 @@ export const projects = [
     thumb: cc("cc-shopfront.jpg"),
     heroVideo: cc("cc-laptop.mp4"),
     heroPoster: cc("cc-laptop-poster.jpg"),
+    heroVideoMobile: cc("cc-hero-mobile.mp4"),
+    heroPosterMobile: cc("cc-hero-mobile-poster.jpg"),
 
     summary:
       "Collar & Cuff is a Dublin menswear house in Glasnevin that dresses men for the days that matter: weddings, communions, black tie. We built the brand from the crest up, then carried it across a shopfront, a swing tag, a sponsor's hoarding and a website, so that a customer meets the same company whether they find it on a phone or walk past the window.",

@@ -63,9 +63,28 @@ export function HeroReel() {
   const [active, setActive] = useState(0);
   const [moving, setMoving] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [inView, setInView] = useState(true);
+  // Two different questions. `pinned`: is the page inside the reel's scroll
+  // range? Auto-advance moves the page within that range, so it only runs
+  // then; outside it, it could scroll a half-gone hero back into view.
+  // `onScreen`: is most of the reel visible? That is what the nav follows,
+  // and it stays true at the very end of the range, where ScrollTrigger has
+  // already counted the pin as left.
+  const [pinned, setPinned] = useState(true);
+  const [onScreen, setOnScreen] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
   const [reduce] = useState(reducedMotion);
+  // Portrait screens get portrait films: covering a tall card with a 16:9 film
+  // keeps only about a quarter of its width. Chosen by the screen's shape, not
+  // its size, so a tablet held upright gets them too.
+  const [portrait, setPortrait] = useState(
+    () => window.matchMedia("(max-aspect-ratio: 1/1)").matches,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(max-aspect-ratio: 1/1)");
+    const sync = () => setPortrait(mq.matches);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   const dwellRef = useRef(null);
   const { setReel, menuOpen } = useDock();
 
@@ -196,7 +215,7 @@ export function HeroReel() {
         const i = Math.round(self.progress * last);
         if (i !== targetRef.current) go(i);
       },
-      onToggle: (self) => setInView(self.isActive),
+      onToggle: (self) => setPinned(self.isActive),
     });
     stRef.current = st;
 
@@ -237,20 +256,29 @@ export function HeroReel() {
 
   /* ── Side effects of the live slide ─────────────────────────────── */
 
-  // Only the slide on screen plays; the rest hold their poster frame
+  // Only the slide on screen plays; the rest hold their poster frame. Re-run
+  // when the films swap for the screen's shape, since those are new elements.
   useEffect(() => {
     videosRef.current.forEach((v, k) => {
       if (!v) return;
       if (k === active) v.play().catch(() => {});
       else v.pause();
     });
-  }, [active]);
+  }, [active, portrait]);
 
-  // inView lets the nav drop back to its page-level action once the visitor
-  // has scrolled past the reel, instead of offering a project off screen
   useEffect(() => {
-    setReel({ index: active, count: N, slide: SLIDES[active], inView });
-  }, [active, inView, setReel]);
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.intersectionRatio >= 0.5), {
+      threshold: [0, 0.5, 1],
+    });
+    io.observe(sectionRef.current);
+    return () => io.disconnect();
+  }, []);
+
+  // The nav drops back to its page-level action once the reel is mostly off
+  // screen, instead of offering a project nobody can see
+  useEffect(() => {
+    setReel({ index: active, count: N, slide: SLIDES[active], inView: onScreen });
+  }, [active, onScreen, setReel]);
 
   useEffect(() => () => setReel(null), [setReel]);
 
@@ -279,7 +307,7 @@ export function HeroReel() {
       return undefined;
     }
 
-    const held = paused || menuOpen || !pageVisible || !inView;
+    const held = paused || menuOpen || !pageVisible || !pinned;
     if (d && d.index === active) {
       if (held) d.tween.pause();
       else d.tween.resume();
@@ -299,7 +327,7 @@ export function HeroReel() {
     });
     dwellRef.current = { tween, index: active };
     return undefined;
-  }, [active, moving, paused, menuOpen, pageVisible, inView, reduce, jump]);
+  }, [active, moving, paused, menuOpen, pageVisible, pinned, reduce, jump]);
 
   useEffect(
     () => () => {
@@ -335,9 +363,10 @@ export function HeroReel() {
         >
           <div className="absolute inset-0" style={{ background: s.project.accent }}>
             <video
+              key={portrait ? "portrait" : "landscape"}
               ref={(el) => (videosRef.current[k] = el)}
-              src={s.project.heroVideo}
-              poster={s.project.heroPoster}
+              src={(portrait && s.project.heroVideoMobile) || s.project.heroVideo}
+              poster={(portrait && s.project.heroPosterMobile) || s.project.heroPoster}
               muted
               loop
               playsInline
@@ -345,8 +374,10 @@ export function HeroReel() {
               className="absolute inset-0 h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/5 to-transparent" />
-            {/* Phones carry the name low-left, so it needs ground to sit on */}
-            <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/45 to-transparent md:hidden" />
+            {/* Portrait screens carry the name low-left, so it needs ground to
+                sit on. Keyed to the screen's shape, like the films themselves:
+                an upright tablet is a portrait screen, not a desktop. */}
+            <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/45 to-transparent landscape:md:hidden" />
           </div>
         </div>
       ))}
@@ -369,7 +400,7 @@ export function HeroReel() {
             the enter/leave motion are on separate elements because both are
             translates and would overwrite each other on one. */}
         <div
-          className="absolute inset-x-0 bottom-16 px-5 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:px-8"
+          className="absolute inset-x-0 bottom-16 px-5 md:px-8 landscape:md:bottom-auto landscape:md:top-1/2 landscape:md:-translate-y-1/2"
           aria-live="polite"
         >
           <div
