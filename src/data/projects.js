@@ -1339,7 +1339,7 @@ export const projects = [
     tags: ["Brand Identity", "Web Design", "Signage"],
     accent: "#362e48",
 
-    thumb: csh("csh-shopfront.jpg"),
+    thumb: csh("csh-shopfront-corner.jpg"),
     heroVideo: csh("csh-shopfront.mp4"),
     heroPoster: csh("csh-shopfront-poster.jpg"),
     heroVideoMobile: csh("csh-hero-mobile.mp4"),
@@ -1393,6 +1393,11 @@ export const projects = [
           "The store sits on a busy street opposite Lidl, so the frontage has to sell before anyone comes in. The fascia carries the lockup and a band of the star at scale; the windows name what is inside in plain words: Halal Meat & Poultry, Asian Grains & Spices, Fresh Fruit & Veg.",
           "Coral strips across the glass do the rest of the work: Order Online, the web address, and where to follow the shop. Every panel was drawn to the unit's own measurements.",
         ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: csh("csh-shopfront-corner.jpg"),
       },
       {
         type: "media",
