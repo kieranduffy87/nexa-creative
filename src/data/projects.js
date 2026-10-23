@@ -1404,7 +1404,7 @@ export const projects = [
         type: "media",
         kind: "image",
         src: csh("csh-flyers.jpg"),
-        caption: "Flyers, front and back.",
+        caption: "Opening flyers.",
       },
       {
         type: "text",
