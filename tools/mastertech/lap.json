@@ -1,0 +1,3 @@
+{"plate": "mt/gen/lap-a.png", "work": 3200, "screens": ["mt/rec/d-home"], "out": "mt/film/lap",
+ "size": [1920, 1080], "crop": [480, 288, 2240, 1260], "push": 1.04, "light": 0.25, "grow": 1.01,
+ "despill_boxes": [[1050, 1150, 2150, 1420]]}

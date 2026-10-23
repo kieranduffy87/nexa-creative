@@ -1,0 +1,2 @@
+{"plate": "mt/gen/ph2-a.png", "work": 3200, "screens": ["mt/rec/m-home", "mt/rec/m-projects"], "out": "mt/film/ph2",
+ "size": [1920, 1080], "crop": [480, 345, 2240, 1260], "push": 1.04, "light": 0.2, "grow": 1.01, "status": {"h": 54, "dpr": 3}, "despill_boxes": [[1050, 1360, 2200, 1786], [1150, 530, 2080, 600]]}

@@ -1,0 +1,2 @@
+{"plate": "mt/gen/tab-a.png", "work": 3200, "screens": ["mt/rec/t-hvac"], "out": "mt/film/tab",
+ "size": [1920, 1080], "crop": [0, 0, 3200, 1786], "push": 1.03, "light": 0.2, "grow": 1.008}

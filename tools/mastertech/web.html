@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden}
+.pages{width:3200px;height:2000px;background:#0f114c;position:relative;overflow:hidden}
+.glow{position:absolute;inset:0;background:radial-gradient(40% 50% at 15% 95%,rgba(255,92,30,.45),transparent 70%),radial-gradient(45% 50% at 90% 5%,rgba(0,120,196,.35),transparent 70%)}
+.pg{position:absolute;width:880px;border-radius:14px;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,20,.5)}
+.pg img{display:block;width:100%}
+.mob{width:3200px;height:2000px;background:#eceef3;position:relative;overflow:hidden}
+.ph{position:absolute;top:50%;width:520px;height:1126px;border-radius:64px;overflow:hidden;background:#fff;box-shadow:0 50px 90px rgba(15,17,76,.22);transform:translateY(-50%)}
+.ph img{display:block;width:100%}
+.mk{position:absolute;opacity:.07}
+</style></head><body><div id="root"></div>
+<script>
+const P=location.hash.slice(1);
+if(P==="pages"){
+  root.innerHTML=`<div class="pages"><div class="glow"></div>
+   <div class="pg" style="left:230px;top:170px;height:2200px"><img src="../site/d-hvac.jpg"></div>
+   <div class="pg" style="left:1160px;top:300px;height:2200px"><img src="../site/d-projects.jpg"></div>
+   <div class="pg" style="left:2090px;top:170px;height:2200px"><img src="../site/d-esg.jpg"></div>
+  </div>`;
+}
+if(P==="mobile"){
+  root.innerHTML=`<div class="mob">
+   ${["m-home","m-sectors","m-projects","m-esg"].map((n,i)=>`<div class="ph" style="left:${330+i*660}px;margin-top:${i%2?90:-90}px"><img src="../site/${n}.jpg"></div>`).join("")}
+  </div>`;
+}
+document.documentElement.style.cssText="width:3200px;height:2000px";
+window.ready=Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>[3200,2000]);
+</script></body></html>

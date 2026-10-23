@@ -6,6 +6,7 @@ const gk = (f) => asset(`projects/gallagher/${f}`);
 const cc = (f) => asset(`projects/collar-and-cuff/${f}`);
 const s24 = (f) => asset(`projects/studio-24/${f}`);
 const sb = (f) => asset(`projects/star-blinds/${f}`);
+const mt = (f) => asset(`projects/mastertech/${f}`);
 
 export const projects = [
   {
@@ -1186,6 +1187,145 @@ export const projects = [
       { name: "Heritage", body: "Dublin's oldest, said out loud" },
       { name: "Light", body: "a star cut like a louvre" },
       { name: "Visit", body: "every page ends at the door" },
+    ],
+  },
+  {
+    slug: "mastertech",
+    name: "Mastertech",
+    tagline: "A website as engineered as the work",
+    year: "2022",
+    client: "Mastertech Group",
+    sector: "HVAC & Building Services",
+    tags: ["Web Design", "Web Development", "UX"],
+    accent: "#0f114c",
+
+    thumb: mt("mt-laptop-poster.jpg"),
+    heroVideo: mt("mt-laptop.mp4"),
+    heroPoster: mt("mt-laptop-poster.jpg"),
+    heroVideoMobile: mt("mt-hero-mobile.mp4"),
+    heroPosterMobile: mt("mt-hero-mobile-poster.jpg"),
+
+    summary:
+      "Mastertech has been installing and maintaining HVAC and mechanical plant in Ireland since 1989, for clients from data centres to hospitals. We designed and built a website that finally matched the scale of that work: clear services, ten sectors, a library of real projects and the accreditations that win tenders, all on the company's own indigo and orange.",
+
+    scope: [
+      "UX & Information Architecture",
+      "Web Design",
+      "Web Development",
+      "Project Case Study System",
+      "Content Structure",
+      "Motion & Interaction",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "video",
+        src: mt("mt-webreel.mp4"),
+        poster: mt("mt-webreel-poster.jpg"),
+        bg: "#0f114c",
+        caption: "The site, page by page.",
+      },
+      {
+        type: "text",
+        title: "Built for the people who sign off contracts",
+        body: [
+          "Mastertech's customers are facilities managers, engineers and main contractors. They arrive with a question: can this company handle my site? The website is designed to answer it in the order they ask it. What do you do, which sectors have you worked in, show me a project like mine, and are you certified to do it.",
+          "We worked within the company's existing identity, the gradient square and the orange TECH, and built the site around it: a deep indigo that lets the photography of plant rooms and rooftops read clearly, with orange held back for the next step on every page.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: mt("mt-web-pages.jpg"),
+        bg: "#0f114c",
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: mt("mt-tablet.mp4"),
+        poster: mt("mt-tablet-poster.jpg"),
+        bg: "#f2f3f5",
+        caption: "The HVAC service page.",
+      },
+      {
+        type: "text",
+        title: "Projects as proof",
+        body: [
+          "In building services, a portfolio is the sales pitch. Every project has its own page with the client, the sector, what was installed and a gallery of the finished plant, and each one links on to related work. Pipework and pumps photographed on site do more to win a tender than any line of copy.",
+          "Services split into HVAC, MEP and Sustainable Solutions, and ten sectors from pharma to data centres each lead to the work done there. Accreditations, client testimonials and the company's ESG commitments sit where a procurement team would look for them.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: mt("mt-display.jpg"),
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: mt("mt-phones.mp4"),
+        poster: mt("mt-phones-poster.jpg"),
+        bg: "#e9ebef",
+        caption: "The homepage and the projects library on mobile.",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: mt("mt-web-mobile.jpg"),
+        bg: "#eceef3",
+      },
+    ],
+
+    process: [
+      {
+        title: "Discovery",
+        body: "Who hires a mechanical contractor, what they need to see before they shortlist one, and in what order.",
+      },
+      {
+        title: "Architecture",
+        body: "Services, sectors and projects as three connected libraries, with a page for every completed project.",
+      },
+      {
+        title: "Design",
+        body: "Indigo ground, orange for action, and site photography given room, built from the existing identity.",
+      },
+      {
+        title: "Build",
+        body: "WordPress with Elementor, so the team can add projects, news and roles without a developer.",
+      },
+      {
+        title: "Growth",
+        body: "Careers, news, ESG and energy-saving guides, so the site covers hiring and sustainability as well as sales.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "Lead with the work, not the claims",
+        body: "Every contractor says they are reliable and experienced. Very few show the plant room they finished last month. We gave projects their own pages and their own galleries, and pointed every service and sector at them, so the site proves the claims it makes.",
+      },
+      {
+        title: "Dark ground for industrial photography",
+        body: "Plant rooms and rooftops are busy, metallic and grey. On white they look cluttered; on deep indigo they look precise. The dark ground also carries the brand's gradient mark and orange without either one having to shout.",
+      },
+      {
+        title: "A site the team can keep feeding",
+        body: "A contractor's best marketing is its next job. The project, news and careers templates are built so Mastertech can publish completed work in minutes, and the site has kept growing since launch.",
+      },
+    ],
+
+    palette: [
+      { name: "Indigo", hex: "#0F114C" },
+      { name: "Signal Orange", hex: "#FF4900" },
+      { name: "Sky Blue", hex: "#0078C4" },
+      { name: "Mist", hex: "#ECEEF3" },
+    ],
+
+    principles: [
+      { name: "Proof", body: "show the plant room, not the promise" },
+      { name: "Order", body: "answer questions in the order they are asked" },
+      { name: "Momentum", body: "a site the team keeps publishing to" },
     ],
   },
 ];

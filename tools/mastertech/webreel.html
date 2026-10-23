@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  Mastertech website film, 12s, loops.
+  1. A tilted wall of the real pages, every column scrolling (0 - 4.6).
+     Each column moves exactly one page-length per loop, so t=12 is t=0.
+  2. The wall drops back; a browser window and two phones come forward,
+     each scrolling its page (4.2 - 8.8).
+  3. The logo, on the site's own indigo and orange-to-blue glow (8.8 - 11).
+  4. Back to the wall (11 - 12).
+-->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0f114c; font-family: Poppins, sans-serif; }
+  .abs { position: absolute; }
+  #glow { position: absolute; inset: -20%; background:
+      radial-gradient(40% 45% at 22% 78%, rgba(255, 92, 30, .55), transparent 70%),
+      radial-gradient(45% 50% at 82% 20%, rgba(0, 120, 196, .45), transparent 70%); }
+  #stage3d { position: absolute; inset: 0; perspective: 2400px; perspective-origin: 50% 40%; }
+  #wall { position: absolute; left: 50%; top: 50%; width: 3000px; height: 2400px; margin: -1200px 0 0 -1500px;
+    transform-style: preserve-3d; display: flex; gap: 44px; justify-content: center; }
+  .col { width: 420px; height: 100%; overflow: hidden; position: relative; }
+  .strip { position: absolute; left: 0; top: 0; width: 100%; }
+  .strip img { display: block; width: 100%; margin-bottom: 44px; border-radius: 10px; box-shadow: 0 30px 60px rgba(0,0,20,.45); }
+  #shade { position: absolute; inset: 0; background: #0f114c; opacity: 0; }
+  #browser { position: absolute; left: 50%; top: 50%; width: 1240px; height: 760px; margin: -380px 0 0 -620px;
+    border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 60px 120px rgba(0,0,30,.6); opacity: 0; }
+  #bar { height: 44px; background: #eef0f4; display: flex; align-items: center; padding: 0 18px; gap: 8px; }
+  #bar i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  #url { margin-left: 22px; flex: 1; max-width: 520px; height: 26px; border-radius: 13px; background: #fff;
+    font-size: 13px; color: #555; display: flex; align-items: center; padding-left: 14px; letter-spacing: .01em; }
+  #view { position: absolute; top: 44px; left: 0; right: 0; bottom: 0; overflow: hidden; }
+  #view img { width: 100%; display: block; }
+  .phone { position: absolute; top: 50%; width: 300px; height: 640px; margin-top: -320px; border-radius: 46px; background: #0a0a0c;
+    padding: 11px; box-shadow: 0 50px 100px rgba(0,0,30,.6); opacity: 0; }
+  .phone .scr { width: 100%; height: 100%; border-radius: 36px; overflow: hidden; position: relative; background: #fff; }
+  .phone img { width: 100%; display: block; }
+  #end { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 34px; opacity: 0; }
+  #end img { width: 760px; }
+  #end .u { color: rgba(255,255,255,.75); font-size: 30px; letter-spacing: .12em; }
+  #end .r { width: 90px; height: 3px; background: linear-gradient(90deg, #ff4900, #f9ae24, #00afe1); }
+</style>
+</head>
+<body>
+<div id="glow"></div>
+<div id="stage3d"><div id="wall"></div></div>
+<div id="shade"></div>
+<div id="browser"><div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><div id="url">mastertech.ie/projects</div></div><div id="view"><img id="bimg" src="../site/d-projects.jpg"></div></div>
+<div id="p1" class="phone" style="left:150px"><div class="scr"><img id="pimg1" src="../site/m-home.jpg"></div></div>
+<div id="p2" class="phone" style="right:150px"><div class="scr"><img id="pimg2" src="../site/m-services.jpg"></div></div>
+<div id="end"><img src="logo-white.svg"><div class="r"></div><div class="u">MASTERTECH.IE</div></div>
+<script src="gsap.min.js"></script>
+<script>
+const FPS = 30, DURATION = 12;
+const PAGES = [["d-home", "d-esg"], ["d-hvac", "d-sectors"], ["d-projects", "d-about"], ["d-project1", "d-services"], ["d-about", "d-home"], ["d-sectors", "d-hvac"]];
+const wall = document.getElementById("wall");
+const cols = [];
+window.ready = (async () => {
+  await document.fonts.ready;
+  for (const [a, b] of PAGES) {
+    const col = document.createElement("div"); col.className = "col";
+    const strip = document.createElement("div"); strip.className = "strip";
+    for (const n of [a, b, a, b]) { const im = new Image(); im.src = `../site/${n}.jpg`; strip.appendChild(im); }
+    col.appendChild(strip); wall.appendChild(col); cols.push(strip);
+  }
+  await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
+  // one period = page a + page b (+ gaps); columns alternate direction
+  const periods = cols.map((s) => { const ims = s.querySelectorAll("img"); return ims[0].offsetHeight + ims[1].offsetHeight + 88; });
+  const tl = gsap.timeline({ paused: true });
+  gsap.set(wall, { rotateX: 32, rotateZ: -14, rotateY: 0, z: -200 });
+  /* 1 · wall, camera drifts in */
+  tl.fromTo(wall, { z: -200, y: 0 }, { z: 120, y: -40, duration: 4.6, ease: "power1.inOut" }, 0);
+  /* 2 · wall drops back under shade; browser and phones forward */
+  tl.to("#shade", { opacity: 0.72, duration: 0.8, ease: "power2.inOut" }, 4.2);
+  tl.fromTo("#browser", { opacity: 0, y: 140, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, 4.4);
+  tl.fromTo("#p1", { opacity: 0, x: -120 }, { opacity: 1, x: 0, duration: 1.0, ease: "expo.out" }, 4.75);
+  tl.fromTo("#p2", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 1.0, ease: "expo.out" }, 4.85);
+  const scrollMax = (img, viewH) => -(img.offsetHeight - viewH) * 0.55;
+  tl.fromTo("#bimg", { y: 0 }, { y: () => scrollMax(document.getElementById("bimg"), 716), duration: 3.6, ease: "power2.inOut" }, 5.1);
+  tl.fromTo("#pimg1", { y: 0 }, { y: () => scrollMax(document.getElementById("pimg1"), 618) * 0.6, duration: 3.6, ease: "power2.inOut" }, 5.3);
+  tl.fromTo("#pimg2", { y: 0 }, { y: () => scrollMax(document.getElementById("pimg2"), 618) * 0.8, duration: 3.6, ease: "power2.inOut" }, 5.2);
+  /* 3 · logo */
+  tl.to(["#browser", "#p1", "#p2"], { opacity: 0, scale: 0.94, duration: 0.6, ease: "power2.in", stagger: 0.05 }, 8.8);
+  tl.to("#shade", { opacity: 1, duration: 0.6 }, 8.9);
+  tl.fromTo("#end", { opacity: 0, scale: 1.04 }, { opacity: 1, scale: 1, duration: 0.9, ease: "expo.out" }, 9.3);
+  tl.to("#glow", { scale: 1.08, duration: 2.0, ease: "none" }, 9.2);
+  /* 4 · back to the wall */
+  tl.to("#end", { opacity: 0, duration: 0.5 }, 11.0);
+  tl.set(wall, { z: -200, y: 0 }, 11.0);
+  tl.set("#glow", { scale: 1 }, 11.5);
+  tl.to("#shade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 11.1);
+  tl.set({}, {}, DURATION);
+  window.renderAt = async (t) => {
+    tl.seek(t, false);
+    cols.forEach((s, k) => {
+      const p = periods[k], dir = k % 2 ? 1 : -1;
+      let off = (t / DURATION) * p;            // exactly one period per loop
+      s.style.transform = `translateY(${dir < 0 ? -off : off - p}px)`;
+    });
+    return t;
+  };
+  await renderAt(0);
+  return { duration: DURATION, fps: FPS, w: 1920, h: 1080 };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+{"plate": "mt/gen/disp-b.png", "work": 3200, "screens": ["mt/rec/disp"], "out": "mt/film/disp",
+ "size": [2400, 1340], "crop": [0, 0, 3200, 1786], "push": 1.0, "light": 0.2, "grow": 1.008}
