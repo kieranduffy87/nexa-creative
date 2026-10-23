@@ -1402,12 +1402,6 @@ export const projects = [
       {
         type: "media",
         kind: "image",
-        src: csh("csh-signage.jpg"),
-        bg: "#f4efe8",
-      },
-      {
-        type: "media",
-        kind: "image",
         src: csh("csh-flyers.jpg"),
         caption: "Opening flyers.",
       },
