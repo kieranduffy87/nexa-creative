@@ -1102,6 +1102,11 @@ export const projects = [
         src: sb("sb-shopfront.jpg"),
       },
       {
+        type: "media",
+        kind: "image",
+        src: sb("sb-van.jpg"),
+      },
+      {
         type: "text",
         title: "A website that ends in a home visit",
         body: [
