@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  In-store screen loop, 1080 x 1920, 12s: the screen ad, then the purple flyer,
+  changing on the brand's curved wave, back to the ad so it loops.
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #362e48; }
+  .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+  .wave { position: absolute; left: 0; top: 2100px; width: 1080px; height: 2300px; }
+  .wave > svg.cap { position: absolute; left: 0; top: -150px; width: 1080px; height: 152px; display: block; }
+  .fill { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div id="a" class="scene"><img id="adimg" src="ad.jpg" style="width:1080px;height:1920px;display:block"></div>
+<div id="w1" class="wave" style="background:#362e48">
+  <svg class="cap" viewBox="0 0 1080 152" preserveAspectRatio="none"><path d="M0,152 L0,30 C380,150 720,150 1080,20 L1080,152 Z" fill="#362e48"/></svg>
+  <div class="fill" style="display:flex;align-items:center;justify-content:center"><img id="fl" src="flyer1.png" style="width:1080px"></div>
+</div>
+<div id="w2" class="wave" style="background:#dc4238">
+  <svg class="cap" viewBox="0 0 1080 152" preserveAspectRatio="none"><path d="M0,152 L0,110 C300,0 760,10 1080,120 L1080,152 Z" fill="#dc4238"/></svg>
+  <div class="fill" style="top:130px"><img id="ad2" src="ad.jpg" style="width:1080px;height:1920px;display:block"></div>
+</div>
+<script src="gsap.min.js"></script>
+<script>
+const FPS = 30, DURATION = 12;
+const tl = gsap.timeline({ paused: true });
+window.ready = (async () => {
+  await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
+  tl.fromTo("#adimg", { scale: 1 }, { scale: 1.07, duration: 5.6, ease: "none", transformOrigin: "50% 40%" }, 0);
+  tl.fromTo("#w1", { y: 0 }, { y: -2100, duration: 0.9, ease: "power3.inOut" }, 5.2);
+  tl.fromTo("#fl", { scale: 1.06 }, { scale: 1, duration: 5.0, ease: "power1.out" }, 5.4);
+  // back to the ad on a coral-edged wave, landing on frame 0's exact state
+  tl.fromTo("#w2", { y: 0 }, { y: -2230, duration: 0.9, ease: "power3.inOut" }, 11.1);
+  tl.set({}, {}, DURATION);
+  window.renderAt = async (t) => { tl.seek(t, false); return t; };
+  await renderAt(0);
+  return { duration: DURATION, fps: FPS, w: 1080, h: 1920 };
+})();
+</script>
+</body>
+</html>

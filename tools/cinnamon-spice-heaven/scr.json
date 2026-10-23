@@ -1,0 +1,2 @@
+{"plate": "cs/gen/scr-b.png", "work": 1800, "screens": ["cs/motion/f-scr"], "out": "cs/film/scr",
+ "size": [1080, 1920], "crop": [0, 12, 1800, 3200], "push": 1.03, "light": 0.15, "grow": 1.006}

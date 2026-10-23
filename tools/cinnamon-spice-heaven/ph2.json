@@ -1,0 +1,3 @@
+{"plate": "cs/gen/ph2-b.png", "work": 3200, "screens": ["cs/rec/m-home", "cs/rec/m-home-b"], "out": "cs/film/ph2",
+ "size": [1920, 1080], "crop": [480, 345, 2240, 1260], "push": 1.04, "light": 0.2, "grow": 1.01, "status": {"h": 54, "dpr": 3},
+ "despill_boxes": [[950, 1490, 2250, 1786]]}

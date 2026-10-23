@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{overflow:hidden}
+.page{width:3200px;height:2000px;position:relative;overflow:hidden}
+.card{position:absolute;overflow:hidden;box-shadow:0 30px 70px rgba(40,30,60,.18),0 6px 14px rgba(40,30,60,.08)}
+.card img{display:block;width:100%;height:100%;object-fit:cover}
+.ph{position:absolute;top:50%;width:560px;height:1212px;border-radius:68px;overflow:hidden;background:#fff;box-shadow:0 50px 90px rgba(30,20,50,.35);transform:translateY(-50%)}
+.ph img{display:block;width:100%}
+</style></head><body><div id="root"></div>
+<script>
+const P=location.hash.slice(1);
+const R=document.getElementById('root');
+if(P==="signage"){
+  // the shop's window and fascia artwork, laid out as a set
+  R.innerHTML=`<div class="page" style="background:#f4efe8">
+   <div class="card" style="left:200px;top:300px;width:2800px;height:240px"><img src="sign-01.png" style="object-fit:fill"></div>
+   <div class="card" style="left:200px;top:640px;width:880px;height:515px"><img src="sign-06.png"></div>
+   <div class="card" style="left:1160px;top:640px;width:880px;height:515px"><img src="sign-08.png"></div>
+   <div class="card" style="left:2120px;top:640px;width:880px;height:515px"><img src="sign-09.png"></div>
+   <div class="card" style="left:200px;top:1255px;width:1360px;height:417px"><img src="sign-03.png" style="object-fit:fill"></div>
+   <div class="card" style="left:1640px;top:1255px;width:1360px;height:417px"><img src="sign-05.png" style="object-fit:fill"></div>
+   <div class="card" style="left:200px;top:1650px;width:900px;height:170px;box-shadow:none;background:transparent"></div>
+  </div>`;
+}
+if(P==="social"){
+  R.innerHTML=`<div class="page" style="background:#ebe5dc">
+   ${["Group 34.jpg","Group 35.jpg","Group 36.jpg","Group 37.jpg"].map((f,i)=>`<div class="card" style="left:${200+i*720}px;top:${i%2?720:600}px;width:640px;height:640px;border-radius:18px"><img src="${f}"></div>`).join("")}
+  </div>`;
+}
+if(P==="mobile"){
+  R.innerHTML=`<div class="page" style="background:#362e48">
+   <div class="ph" style="left:560px;margin-top:-60px"><img src="m-rmhome.jpg"></div>
+   <div class="ph" style="left:1320px;margin-top:60px"><img src="m-rmhome.jpg" style="margin-top:-1320px"></div>
+   <div class="ph" style="left:2080px;margin-top:-60px"><img src="m-rmhome.jpg" style="margin-top:-2870px"></div>
+  </div>`;
+}
+if(P==="desktop"){
+  R.innerHTML=`<div class="page" style="background:#ebe5dc">
+   <div class="card" style="left:560px;top:150px;width:2080px;height:2400px;border-radius:16px"><img src="d-rhome.jpg" style="height:auto;object-fit:initial"></div>
+  </div>`;
+}
+document.documentElement.style.cssText="width:3200px;height:2000px";
+window.ready=Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>[3200,2000]);
+</script></body></html>

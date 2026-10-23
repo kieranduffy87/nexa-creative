@@ -7,6 +7,7 @@ const cc = (f) => asset(`projects/collar-and-cuff/${f}`);
 const s24 = (f) => asset(`projects/studio-24/${f}`);
 const sb = (f) => asset(`projects/star-blinds/${f}`);
 const mt = (f) => asset(`projects/mastertech/${f}`);
+const csh = (f) => asset(`projects/cinnamon-spice-heaven/${f}`);
 
 export const projects = [
   {
@@ -1326,6 +1327,175 @@ export const projects = [
       { name: "Proof", body: "show the plant room, not the promise" },
       { name: "Order", body: "answer questions in the order they are asked" },
       { name: "Momentum", body: "a site the team keeps publishing to" },
+    ],
+  },
+  {
+    slug: "cinnamon-spice-heaven",
+    name: "Cinnamon Spice Heaven",
+    tagline: "An Asian store with the warmth of its own kitchen",
+    year: "2021",
+    client: "Cinnamon Spice Heaven",
+    sector: "Asian Grocery & Halal Butcher",
+    tags: ["Brand Identity", "Web Design", "Signage"],
+    accent: "#362e48",
+
+    thumb: csh("csh-shopfront.jpg"),
+    heroVideo: csh("csh-shopfront.mp4"),
+    heroPoster: csh("csh-shopfront-poster.jpg"),
+    heroVideoMobile: csh("csh-hero-mobile.mp4"),
+    heroPosterMobile: csh("csh-hero-mobile-poster.jpg"),
+
+    summary:
+      "Cinnamon Spice Heaven is an Asian grocery and halal butcher on Killegland Street in Ashbourne, Co. Meath. We did everything: the brand, the shopfront and window graphics, the flyers and in-store screens, social, and an online shop with the whole range in one place.",
+
+    scope: [
+      "Brand Strategy",
+      "Brand Identity",
+      "Signage & Window Graphics",
+      "Print & Flyers",
+      "In-store Screens",
+      "Social Media",
+      "E-commerce Website",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "video",
+        src: csh("csh-identity.mp4"),
+        poster: csh("csh-identity-poster.jpg"),
+        bg: "#362e48",
+        caption: "The anise star, the lockup, the stamp and the colourways.",
+      },
+      {
+        type: "text",
+        title: "A star from the spice tin",
+        body: [
+          "The mark is star anise, drawn as eight petals around a point: four long, four short. It is the one spice that looks like a logo before anyone touches it, and it belongs to kitchens from India to Vietnam, which is exactly the range on the shelves.",
+          "We set it between Cinnamon and SpiceHeaven in a warm serif, with ASIAN STORE curving over it, and built a stamp version for anything round. Aubergine carries the brand, coral carries the spice, and cream gives the food photography room to breathe.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: csh("csh-bag.jpg"),
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: csh("csh-social.jpg"),
+        bg: "#ebe5dc",
+      },
+      {
+        type: "text",
+        title: "A shopfront that names the aisles",
+        body: [
+          "The store sits on a busy street opposite Lidl, so the frontage has to sell before anyone comes in. The fascia carries the lockup and a band of the star at scale; the windows name what is inside in plain words: Halal Meat & Poultry, Asian Grains & Spices, Fresh Fruit & Veg.",
+          "Coral strips across the glass do the rest of the work: Order Online, the web address, and where to follow the shop. Every panel was drawn to the unit's own measurements.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: csh("csh-signage.jpg"),
+        bg: "#f4efe8",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: csh("csh-flyers.jpg"),
+        caption: "Flyers, front and back.",
+      },
+      {
+        type: "text",
+        title: "The whole shop, online",
+        body: [
+          "The website is a full online shop. Ten departments, from Fresh Food and Frozen & Chilled to Spices, Rice, Flour, and Oils & Ghee, run across a navigation bar in the brand's aubergine, with the brands customers search for by name given a page of their own.",
+          "The homepage leads with the latest products and best sellers, and the reassurances a first-time customer looks for sit right above the footer: a way to ask a question, secure card payments and everyday discounts in store.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: csh("csh-laptop.mp4"),
+        poster: csh("csh-laptop-poster.jpg"),
+        bg: "#2a2030",
+        caption: "The online shop's homepage.",
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: csh("csh-phones.mp4"),
+        poster: csh("csh-phones-poster.jpg"),
+        bg: "#2a2030",
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: csh("csh-web-desktop.jpg") },
+          { kind: "image", src: csh("csh-web-mobile.jpg") },
+        ],
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: csh("csh-jersey-1.jpg") },
+          { kind: "image", src: csh("csh-jersey-2.jpg") },
+        ],
+      },
+    ],
+
+    process: [
+      {
+        title: "Brand proposal",
+        body: "Three concepts presented side by side; the anise star was the one that went forward.",
+      },
+      {
+        title: "Identity",
+        body: "The anise mark, a serif lockup with ASIAN STORE, a round stamp, and aubergine, coral and cream.",
+      },
+      {
+        title: "Shopfront",
+        body: "Fascia, window graphics and coral strips drawn to the unit's measurements.",
+      },
+      {
+        title: "Print & screens",
+        body: "Flyers, a portrait in-store screen ad, social profiles and covers.",
+      },
+      {
+        title: "Online shop",
+        body: "A WooCommerce store with ten departments, brand pages and card payments.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "Use a real spice as the mark",
+        body: "An Asian grocery can easily reach for borrowed ornament from one culture and leave out the rest. Star anise is shared by almost every cuisine on the shelves, and it is already a perfect geometric star. It made a mark that is specific to food and fair to everyone the shop serves.",
+      },
+      {
+        title: "Name the aisles on the glass",
+        body: "A specialist shop loses passers-by who are not sure what it sells. Rather than lifestyle imagery, the windows simply say Halal Meat & Poultry, Asian Grains & Spices and Fresh Fruit & Veg, in type large enough to read from across the street.",
+      },
+      {
+        title: "Aubergine, not saffron",
+        body: "Spice brands default to yellow and orange, which disappears against the food itself. A deep aubergine ground makes turmeric, chilli and coriander glow in every photograph, and lets a single coral do the selling.",
+      },
+    ],
+
+    palette: [
+      { name: "Aubergine", hex: "#362E48" },
+      { name: "Coral", hex: "#DC4238" },
+      { name: "Cream", hex: "#F4EFE8" },
+      { name: "White", hex: "#FFFFFF" },
+    ],
+
+    principles: [
+      { name: "Spice", body: "a mark from the kitchen, not a costume" },
+      { name: "Clarity", body: "say what is inside, from across the street" },
+      { name: "Warmth", body: "aubergine that makes the food glow" },
     ],
   },
 ];
