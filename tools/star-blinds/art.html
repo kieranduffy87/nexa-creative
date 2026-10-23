@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Nexa;src:url(NexaRegular.otf);font-weight:400}
+@font-face{font-family:Nexa;src:url(NexaBold.otf);font-weight:700}
+@font-face{font-family:Nexa;src:url(NexaLight.otf);font-weight:300}
+@font-face{font-family:Nexa;src:url(NexaBook.otf);font-weight:350}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1e355b;--gold:#b17f4a;--sand:#cbbba0;--paper:#f5f1ea}
+body{overflow:hidden}
+.piece{position:relative;overflow:hidden}
+.navy{background:var(--navy)}
+.paper{background:var(--paper)}
+.wm{position:absolute;opacity:.07}
+.t{font-family:Nexa;color:var(--navy)}
+</style></head><body>
+<div id="root"></div>
+<script>
+const P=location.hash.slice(1);
+const S={
+ "card-front":[1700,1100,`<div class="piece navy" style="width:1700px;height:1100px">
+   <img class="wm" src="star-white.svg" style="width:1250px;right:-330px;bottom:-380px">
+   <img src="stacked-light.svg" style="position:absolute;width:640px;left:530px;top:250px">
+ </div>`],
+ "card-back":[1700,1100,`<div class="piece paper" style="width:1700px;height:1100px">
+   <img src="land-dark.svg" style="position:absolute;width:560px;left:130px;top:130px">
+   <div style="position:absolute;left:130px;top:470px;width:120px;height:4px;background:linear-gradient(90deg,var(--gold),var(--sand))"></div>
+   <div class="t" style="position:absolute;left:130px;bottom:130px;font-size:46px;line-height:1.75;font-weight:350;letter-spacing:.02em">
+     12 &amp; 12A Belvedere Court, Dublin 1<br>01 874 1240<br>sales@starblinds.ie<br><b style="font-weight:700">starblinds.ie</b></div>
+   <img class="wm" src="star-navy.svg" style="width:520px;right:120px;bottom:120px;opacity:.06">
+ </div>`],
+ "fascia":[3600,352,`<div class="piece navy" style="width:3600px;height:352px">
+   <div style="position:absolute;inset:22px;border:3px solid rgba(203,187,160,.55)"></div>
+   <img src="land-light.svg" style="position:absolute;height:170px;left:50%;top:50%;transform:translate(-50%,-50%)">
+   <div class="t" style="position:absolute;left:150px;top:50%;transform:translateY(-50%);color:var(--sand);font-size:44px;letter-spacing:.35em;font-weight:400">BLINDS</div>
+   <div class="t" style="position:absolute;right:150px;top:50%;transform:translateY(-50%);color:var(--sand);font-size:44px;letter-spacing:.35em;font-weight:400">SHUTTERS</div>
+ </div>`],
+ "book":[2400,2000,`<div class="piece navy" style="width:2400px;height:2000px">
+   <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 2px,transparent 2px 5px),repeating-linear-gradient(90deg,rgba(0,0,0,.04) 0 2px,transparent 2px 6px)"></div>
+   <img src="star.svg" style="position:absolute;width:300px;left:1050px;top:560px">
+   <div class="t" style="position:absolute;left:0;right:0;top:960px;text-align:center;color:var(--sand);font-size:96px;letter-spacing:.32em;font-weight:400;padding-left:.32em">STAR BLINDS</div>
+   <div style="position:absolute;left:1140px;top:1130px;width:120px;height:3px;background:var(--sand);opacity:.7"></div>
+   <div class="t" style="position:absolute;left:0;right:0;top:1190px;text-align:center;color:var(--sand);font-size:44px;letter-spacing:.42em;font-weight:300;padding-left:.42em">FABRIC COLLECTION</div>
+ </div>`],
+};
+const [w,h,html]=S[P]; document.documentElement.style.cssText=`width:${w}px;height:${h}px`;
+document.getElementById('root').innerHTML=html;
+window.ready=Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>{}))]).then(()=>[w,h]);
+</script></body></html>

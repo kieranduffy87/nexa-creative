@@ -1,0 +1,2 @@
+{"plate": "sb/gen/lap-a.png", "work": 3200, "screens": ["sb/rec/d-home"], "out": "sb/film/lap",
+ "size": [1920, 1080], "crop": [480, 400, 2240, 1260], "push": 1.04, "light": 0.3, "grow": 1.012, "despill_boxes": [[700, 1262, 2500, 1760]]}

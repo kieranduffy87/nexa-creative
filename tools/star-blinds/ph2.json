@@ -1,0 +1,2 @@
+{"plate": "sb/gen/ph2-a.png", "work": 3200, "screens": ["sb/rec/m-home", "sb/rec/m-shutters"], "out": "sb/film/ph2",
+ "size": [1920, 1080], "crop": [480, 339, 2240, 1260], "push": 1.04, "light": 0.25, "grow": 1.01, "status": {"h": 54, "dpr": 3}}

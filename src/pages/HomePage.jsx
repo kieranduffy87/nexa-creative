@@ -185,7 +185,7 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Our work"
             title="Case studies."
-            body="Five brands built end to end: identity, guidelines, digital, motion and the applied estate."
+            body="Six brands built end to end: identity, guidelines, digital, motion and the applied estate."
             action={<PillButton to="/work">View all work</PillButton>}
           />
 

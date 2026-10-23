@@ -1,0 +1,2 @@
+{"plate": "sb/gen/tab-a.png", "work": 3200, "screens": ["sb/rec/t-roller"], "out": "sb/film/tab",
+ "size": [1920, 1080], "crop": [0, 0, 3200, 1786], "push": 1.03, "light": 0.25, "grow": 1.008}

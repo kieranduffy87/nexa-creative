@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden}
+.pages{width:3200px;height:2000px;background:#ece5d9;position:relative;overflow:hidden}
+.pg{position:absolute;width:880px;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px rgba(60,45,25,.18),0 8px 18px rgba(60,45,25,.10)}
+.pg img{display:block;width:100%}
+.mob{width:3200px;height:2000px;background:#1e355b;position:relative;overflow:hidden}
+.ph{position:absolute;top:50%;width:520px;height:1126px;border-radius:64px;overflow:hidden;background:#fff;box-shadow:0 50px 90px rgba(5,12,30,.45);transform:translateY(-50%)}
+.ph img{display:block;width:100%}
+.wm{position:absolute;opacity:.06}
+</style></head><body><div id="root"></div>
+<script>
+const P=location.hash.slice(1);
+if(P==="pages"){
+  root.innerHTML=`<div class="pages">
+   <div class="pg" style="left:230px;top:170px;height:2200px"><img src="../site/d-shutters.jpg"></div>
+   <div class="pg" style="left:1160px;top:300px;height:2200px"><img src="../site/d-roller.jpg"></div>
+   <div class="pg" style="left:2090px;top:170px;height:2200px"><img src="../site/d-seattle.jpg"></div>
+  </div>`;
+}
+if(P==="mobile"){
+  root.innerHTML=`<div class="mob">
+   <img class="wm" src="../art/star-white.svg" style="width:1900px;right:-420px;bottom:-560px">
+   ${["m-home","m-blinds","m-roller","m-seattle"].map((n,i)=>`<div class="ph" style="left:${330+i*660}px;margin-top:${i%2?90:-90}px"><img src="../site/${n}.jpg"></div>`).join("")}
+  </div>`;
+}
+document.documentElement.style.cssText="width:3200px;height:2000px";
+window.ready=Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))).then(()=>[3200,2000]);
+</script></body></html>

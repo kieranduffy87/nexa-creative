@@ -5,6 +5,7 @@ const qi = (f) => asset(`projects/quinnit/${f}`);
 const gk = (f) => asset(`projects/gallagher/${f}`);
 const cc = (f) => asset(`projects/collar-and-cuff/${f}`);
 const s24 = (f) => asset(`projects/studio-24/${f}`);
+const sb = (f) => asset(`projects/star-blinds/${f}`);
 
 export const projects = [
   {
@@ -1023,6 +1024,168 @@ export const projects = [
       { name: "Number", body: "the name is the mark" },
       { name: "Signal", body: "one orange, seen from the road" },
       { name: "Craft", body: "close to the work, warm in the light" },
+    ],
+  },
+  {
+    slug: "star-blinds",
+    name: "Star Blinds",
+    tagline: "Dublin's oldest blind company, made new",
+    year: "2022",
+    client: "Star Blinds",
+    sector: "Blinds & Shutters",
+    tags: ["Brand Identity", "Web Design", "Signage"],
+    accent: "#1e355b",
+
+    thumb: sb("sb-shopfront.jpg"),
+    heroVideo: sb("sb-laptop.mp4"),
+    heroPoster: sb("sb-laptop-poster.jpg"),
+    heroVideoMobile: sb("sb-hero-mobile.mp4"),
+    heroPosterMobile: sb("sb-hero-mobile-poster.jpg"),
+
+    summary:
+      "Star Blinds has made and fitted blinds and shutters in Dublin since 1975. We rebuilt the brand around a faceted star in navy and bronze, then designed and built a website that walks a homeowner from browsing fabrics and shutter styles to booking a free home visit.",
+
+    scope: [
+      "Brand Strategy",
+      "Brand Identity",
+      "Brand Guidelines",
+      "Information Architecture",
+      "Web Design & Development",
+      "Signage",
+      "Print & Stationery",
+      "Social Media",
+    ],
+
+    sections: [
+      {
+        type: "media",
+        kind: "video",
+        src: sb("sb-identity.mp4"),
+        poster: sb("sb-identity-poster.jpg"),
+        bg: "#1e355b",
+        caption: "The identity, cut together with the product: every transition is a blind.",
+      },
+      {
+        type: "text",
+        title: "A star cut like a louvre",
+        body: [
+          "The company already had the name, and nearly fifty years of trading behind it. What it lacked was a mark that looked as considered as the rooms it works in. We drew the star from four flat facets, each one an angled plane, the way a louvre or a slat catches light at a different angle to the one beside it.",
+          "It is set in bronze against a deep navy, with a geometric wordmark and ESTD. 1975 underneath. The date is not decoration: being Dublin's oldest blind company is the strongest thing Star Blinds can say about itself, so the identity says it every time.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: sb("sb-cards.jpg"),
+      },
+      {
+        type: "media-grid",
+        cols: 2,
+        items: [
+          { kind: "image", src: sb("sb-book.jpg") },
+          { kind: "image", src: sb("sb-social.jpg") },
+        ],
+      },
+      {
+        type: "text",
+        title: "Navy, bronze and a lot of daylight",
+        body: [
+          "Blinds and shutters are bought for the light they let into a room, so the palette had to sit comfortably beside oak, linen and white paintwork. Navy carries the brand, bronze carries the star and the calls to action, and sand softens the large panels where bronze would be too heavy.",
+          "The same three colours carry the signage, the stationery and every page of the website, so a customer who meets the fitter at the door recognises the company they booked online.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: sb("sb-shopfront.jpg"),
+      },
+      {
+        type: "text",
+        title: "A website that ends in a home visit",
+        body: [
+          "Nobody chooses a shutter from a thumbnail. The site is organised the way a fitter talks a customer through it: shutters or blinds first, then the range, then the details. Seven shutter ranges and fourteen kinds of blind each get their own page with what the product is good at, a gallery of rooms to get the look, and plain answers to the questions people ask before they commit.",
+          "Every route ends in the same place. Request a Free Home Visit sits in the navigation, at the foot of every page and as a three-step form that asks only what a fitter needs to know before calling round.",
+        ],
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: sb("sb-tablet.mp4"),
+        poster: sb("sb-tablet-poster.jpg"),
+        bg: "#e9e2d6",
+        caption: "A product page on tablet: Roller Blinds.",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: sb("sb-web-pages.jpg"),
+        bg: "#ece5d9",
+      },
+      {
+        type: "media",
+        kind: "video",
+        src: sb("sb-phones.mp4"),
+        poster: sb("sb-phones-poster.jpg"),
+        bg: "#efe9df",
+        caption: "The homepage and the shutters range on mobile.",
+      },
+      {
+        type: "media",
+        kind: "image",
+        src: sb("sb-web-mobile.jpg"),
+        bg: "#1e355b",
+      },
+    ],
+
+    process: [
+      {
+        title: "Brand proposal",
+        body: "Three concepts and an alternative, presented side by side before any one was developed.",
+      },
+      {
+        title: "Mark & wordmark",
+        body: "A four-facet star in bronze, a geometric wordmark and ESTD. 1975, in stacked and landscape lockups.",
+      },
+      {
+        title: "Identity system",
+        body: "Navy, bronze and sand, guidelines for clearspace and sizing, and a Star Shutters sub-brand from the same parts.",
+      },
+      {
+        title: "Sitemap",
+        body: "Every shutter range and blind type mapped to its own page, with the home visit as the end of every route.",
+      },
+      {
+        title: "Website",
+        body: "Designed and built in WordPress: product pages, inspiration galleries, FAQs, a three-step visit request and online payments.",
+      },
+    ],
+
+    decisions: [
+      {
+        title: "Lead with the date",
+        body: "Plenty of companies sell blinds in Dublin. Very few have been doing it since 1975. Rather than tuck the founding year into an About page, we put it in the lockup itself, so the longest track record in the city is the first thing a customer reads.",
+      },
+      {
+        title: "Facets, not a five-pointed sticker",
+        body: "A plain star is the first thing anyone draws for a name like this, and it looks like a rating. Building it from four angled planes gives it depth and a sense of light falling across it, which is exactly what the product does in a room.",
+      },
+      {
+        title: "One action on every page",
+        body: "The business closes sales in the customer's home, not online. So the site does not try to sell a blind from a product page; it tries to earn a visit. Every page offers the same next step, and the form behind it is three short steps long.",
+      },
+    ],
+
+    palette: [
+      { name: "Star Navy", hex: "#1E355B" },
+      { name: "Bronze", hex: "#B17F4A" },
+      { name: "Sand", hex: "#CBBBA0" },
+      { name: "White", hex: "#FFFFFF" },
+    ],
+
+    principles: [
+      { name: "Heritage", body: "Dublin's oldest, said out loud" },
+      { name: "Light", body: "a star cut like a louvre" },
+      { name: "Visit", body: "every page ends at the door" },
     ],
   },
 ];
